@@ -17,8 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_cagar_budaya');
             $table->foreign('id_cagar_budaya')->references('id_cagar_budaya')->on('cagar_budaya')->onDelete('cascade');
             
-            $table->unsignedBigInteger('id_pengguna');
-            $table->foreign('id_pengguna')->references('id_pengguna')->on('pengguna')->onDelete('cascade');
+            $table->unsignedBigInteger('id');
+            $table->foreign('id')->references('id')->on('users')->onDelete('cascade');
 
             $table->enum('kondisi', ['rusak ringan', 'rusak berat']);
             $table->date('tanggal_pengajuan');
