@@ -21,12 +21,9 @@ return new class extends Migration
                 ->on('cagar_budaya')
                 ->onDelete('cascade');
 
-            // Foreign Key ke tabel pengguna
-            $table->unsignedBigInteger('id_pengguna');
-            $table->foreign('id_pengguna')
-                ->references('id_pengguna')
-                ->on('pengguna')
-                ->onDelete('cascade');
+            // Foreign Key ke tabel users
+            $table->unsignedBigInteger('id');
+            $table->foreign('id')->references('id')->on('users')->onDelete('cascade');
 
             $table->enum('kepemilikan_asal', ['pemerintah', 'pribadi']);
             $table->enum('kepemilikan_tujuan', ['pemerintah', 'pribadi']);
