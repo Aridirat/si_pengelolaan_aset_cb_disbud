@@ -12,7 +12,7 @@ class Mutasi extends Model
 
     protected $fillable = [
         'id_cagar_budaya',
-        'id_pengguna',
+        'id',
         'kepemilikan_asal',
         'kepemilikan_tujuan',
         'tanggal_pengajuan',
@@ -35,8 +35,8 @@ class Mutasi extends Model
         return $this->belongsTo(CagarBudaya::class, 'id_cagar_budaya');
     }
 
-    public function pengguna()
+    public function user()
     {
-        return $this->belongsTo(Pengguna::class, 'id_pengguna');
+        return $this->belongsTo(User::class, 'id');
     }
 }

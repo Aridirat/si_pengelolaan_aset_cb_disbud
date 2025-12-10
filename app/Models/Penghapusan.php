@@ -12,7 +12,7 @@ class Penghapusan extends Model
 
     protected $fillable = [
         'id_cagar_budaya',
-        'id_pengguna',
+        'id',
         'kondisi',
         'alasan_penghapusan',
         'bukti_dokumentasi',
@@ -32,8 +32,8 @@ class Penghapusan extends Model
         return $this->belongsTo(CagarBudaya::class, 'id_cagar_budaya');
     }
 
-    public function pengguna()
+    public function user()
     {
-        return $this->belongsTo(Pengguna::class, 'id_pengguna');
+        return $this->belongsTo(User::class, 'id');
     }
 }

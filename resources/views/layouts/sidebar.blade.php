@@ -38,9 +38,9 @@
         ],
         (object) [
             "title" => "Pengguna", 
-            "path" => "pengguna", 
+            "path" => "user", 
             "icon" => "fas fa-users",
-            "active" => request()->is('pengguna*')
+            "active" => request()->is('user*')
         ],
     ];
 @endphp
@@ -63,22 +63,22 @@
                             nav-link 
                             text-base block 
                             hover:text-blue-300
-                            {{ $menu->active ? 'text-blue-500 font-bold' : 'text-gray-400' }}
+                            {{ $menu->active ? 'text-blue-400 font-bold' : 'text-gray-400' }}
                         ">
                         
                         <i class="nav-icon {{ $menu->icon }}"></i>
                         <span class="ml-2">{{ $menu->title }}</span>
 
                         @if($menu->active && request()->segment(2))
-                            @php
+                            {{-- @php
                                 $sub = request()->segment(2);
                                 $subLabel = match (true) {
                                     $sub === 'create' => 'Tambah',
                                     is_numeric($sub) => 'Edit',
                                     default => strtoupper($sub)
                                 };
-                            @endphp
-                            <span class="right badge badge-light text-dark">{{ $subLabel }}</span>
+                            @endphp --}}
+                            {{-- <span class="right badge badge-light text-dark">{{ $subLabel }}</span> --}}
                         @endif
 
                     </a>
