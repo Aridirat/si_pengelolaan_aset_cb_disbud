@@ -6,6 +6,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <title>Login Sistem</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body class="h-screen">
@@ -75,6 +77,29 @@
     </div>
   </div>
 </div>
+
+@if (session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil Masuk',
+        text: "{{ session('success') }}",
+        showConfirmButton: false,
+        timer: 1800
+    });
+</script>
+@endif
+
+@if (session('error'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal Masuk',
+        text: "{{ session('error') }}",
+        showConfirmButton: true,
+    });
+</script>
+@endif
 
 </body>
 </html>
