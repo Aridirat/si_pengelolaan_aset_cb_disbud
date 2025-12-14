@@ -26,9 +26,9 @@
         ],
         (object) [
             "title" => "Mutasi", 
-            "path" => "mutasi", 
+            "path" => "cb_mutasi", 
             "icon" => "fas fa-exchange-alt",
-            "active" => request()->is('mutasi*')
+            "active" => request()->is('cb_mutasi*')
         ],
         (object) [
             "title" => "Penghapusan", 
