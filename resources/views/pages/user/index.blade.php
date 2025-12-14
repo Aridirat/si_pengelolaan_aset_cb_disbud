@@ -8,12 +8,12 @@
     <h1 class="text-2xl font-semibold mb-6">Pengguna</h1>
 
     <!-- Card Container -->
-    <div class="bg-white p-6 rounded-xl shadow-sm">
+    <div class="bg-white p-6 rounded-lg shadow-sm">
 
         <!-- Header: Tombol Tambah & Cari -->
         <div class="flex justify-between items-center mb-6">
             <a href="{{ route('user.create') }}"
-               class="px-4 py-2 bg-blue-500 hover:bg-blue-800 text-white text-sm rounded-lg">
+            class="px-4 py-2 bg-blue-500 hover:bg-blue-800 text-white text-sm rounded-lg">
                 Tambah Pengguna
             </a>
 
@@ -45,7 +45,7 @@
 
                 <tbody>
                     @foreach($users as $i => $user)
-                    <tr class="border-none border-gray-300">
+                    <tr class="border-none hover:bg-gray-100">
                         <td class="py-3 text-center">{{ $users->firstItem() + $i }}</td>
                         <td class="py-3 w-10 text-center">{{ $user->id }}</td>
                         <td class="py-3 w-40 text-center">{{ $user->nama }}</td>
