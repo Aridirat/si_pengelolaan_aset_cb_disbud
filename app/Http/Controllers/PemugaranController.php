@@ -230,13 +230,7 @@ class PemugaranController extends Controller
         /* ======================
         | DATA TANDA TANGAN
         ====================== */
-        // $penandatangan = [
-        //     'nama' => 'Kepala Dinas Kebudayaan',
-        //     'jabatan' => 'Kepala Dinas',
-        //     'ttd' => public_path('ttd/ttd-kepala-dinas.png'), // simpan di public/ttd/
-        // ];
 
-        $tanggal = Carbon::now();
         $pdf = Pdf::loadView('pages.pemugaran.cetak_pdf', [
             'pemugaran' => $pemugaran,
             'totalBiaya' => $totalBiaya,
