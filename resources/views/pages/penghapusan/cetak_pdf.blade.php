@@ -8,54 +8,64 @@
         th, td { border: 1px solid #000; padding: 6px; text-align: center; }
         th { background: #f0f0f0; }
         .no-border, .no-border td { border: none; }
+        .text-right { text-align: right; }
 
         .total-row {
-        background-color: #f2f2f2;
+        background-color: #f2f2f2; 
         font-weight: bold;
         }
     </style>
 </head>
 <body>
-    {{-- Header --}}
-    <div class="header" style="text-align:center;">
-        <h2>LAPORAN DATA MUTASI CAGAR BUDAYA</h2>
-        <p>Dinas Kebudayaan Kabupaten Badung</p>
-        <p>Tanggal Cetak: {{ $tanggalIndonesia }}</p>
-    </div>
+
+{{-- Header --}}
+<div style="text-align:center;">
+    <h2>LAPORAN DATA PENGHAPUSAN CAGAR BUDAYA</h2>
+    <p>Dinas Kebudayaan Kabupaten Badung</p>
+    <p>Tanggal Cetak: {{ $tanggalIndonesia }}</p>
+</div>
+
+<br>
 
 <table>
     <thead>
         <tr>
             <th>No</th>
             <th>Nama Cagar Budaya</th>
-            <th>Kepemilikan Asal</th>
-            <th>Kepemilikan Tujuan</th>
-            <th>Tanggal Pengajuan</th>
-            <th>Status Mutasi</th>
+            <th>Kondisi</th>
+            <th>Alasan Penghapusan</th>
+            <th>Status Penghapusan</th>
             <th>Status Verifikasi</th>
+            <th>Tanggal Verifikasi</th>
             <th>Nilai Perolehan</th>
         </tr>
     </thead>
     <tbody>
-        @foreach ($mutasi as $item)
-        <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}</td>
-            <td>{{ ucfirst($item->kepemilikan_asal) }}</td>
-            <td>{{ ucfirst($item->kepemilikan_tujuan) }}</td>
-            <td>{{ \Carbon\Carbon::parse($item->tanggal_pengajuan)->format('d/m/Y') }}</td>
-            <td>{{ ucfirst($item->status_mutasi) }}</td>
-            <td>{{ ucfirst($item->status_verifikasi) }}</td>
-            <td style="text-align:right;">
-                Rp {{ number_format($item->cagarBudaya->nilai_perolehan ?? 0, 0, ',', '.') }}
-            </td>
-        </tr>
+        @foreach ($penghapusan as $item)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}</td>
+                <td>{{ ucfirst($item->kondisi) }}</td>
+                <td>{{ $item->alasan_penghapusan }}</td>
+                <td>{{ ucfirst($item->status_penghapusan) }}</td>
+                <td>{{ ucfirst($item->status_verifikasi) }}</td>
+                <td>
+                    {{ $item->tanggal_verifikasi
+                        ? \Carbon\Carbon::parse($item->tanggal_verifikasi)->format('d/m/Y')
+                        : '-' }}
+                </td>
+                <td class="text-right">
+                    Rp {{ number_format($item->cagarBudaya->nilai_perolehan ?? 0, 0, ',', '.') }}
+                </td>
+            </tr>
         @endforeach
 
         {{-- TOTAL --}}
         <tr class="total-row">
-            <td colspan="7" style="text-align:right;"><strong>TOTAL NILAI PEROLEHAN</strong></td>
-            <td style="text-align:right;">
+            <td colspan="7" class="text-right">
+                <strong>TOTAL NILAI PEROLEHAN</strong>
+            </td>
+            <td class="text-right">
                 <strong>
                     Rp {{ number_format($totalNilai, 0, ',', '.') }}
                 </strong>

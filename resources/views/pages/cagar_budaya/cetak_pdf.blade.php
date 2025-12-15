@@ -46,16 +46,16 @@ $tanggalIndonesia = Carbon::parse($tanggal)
             <td>{{ ucfirst($row->status_kepemilikan) }}</td>
             <td>{{ ucfirst($row->kondisi) }}</td>
             <td class="text-right">
-                {{ number_format($row->nilai_perolehan, 2, ',', '.') }}
+                {{ number_format($row->nilai_perolehan, 0, ',', '.') }}
             </td>
         </tr>
         @endforeach
 
         {{-- TOTAL --}}
-        <tr>
-            <th colspan="6" class="text-right">Total Nilai Perolehan</th>
+        <tr class="total-row">
+            <th colspan="6" class="text-right">TOTAL NILAI PEROLEHAN</th>
             <th class="text-right">
-                {{ number_format($totalNilai, 2, ',', '.') }}
+                {{ number_format($totalNilai, 0, ',', '.') }}
             </th>
         </tr>
     </tbody>
