@@ -59,4 +59,15 @@ Route::middleware([IsLogin::class])->group(function () {
     Route::put('/mutasi/{id}/verifikasi', [MutasiController::class, 'verifikasiUpdate'])->name('mutasi.verifikasi.update');
     Route::get('/mutasi/{mutasi}', [MutasiController::class, 'detail'])->name('mutasi.detail');
     Route::get('/mutasi/cetak/pdf',[MutasiController::class, 'cetakPdf'])->name('mutasi.cetak.pdf');
+
+    Route::get('/penghapusan', [App\Http\Controllers\PenghapusanController::class, 'index'])->name('penghapusan.index');
+    Route::get('/penghapusan/create', [App\Http\Controllers\PenghapusanController::class, 'create'])->name('penghapusan.create');
+    Route::post('/penghapusan', [App\Http\Controllers\PenghapusanController::class, 'store'])->name('penghapusan.store');
+    Route::get('/penghapusan/{penghapusan}/edit', [App\Http\Controllers\PenghapusanController::class, 'edit'])->name('penghapusan.edit');
+    Route::put('/penghapusan/{penghapusan}', [App\Http\Controllers\PenghapusanController::class, 'update'])->name('penghapusan.update');
+    Route::get('/penghapusan/{id}/verifikasi', [App\Http\Controllers\PenghapusanController::class, 'verifikasi'])->name('penghapusan.verifikasi');
+    Route::put('/penghapusan/{id}/verifikasi', [App\Http\Controllers\PenghapusanController::class, 'verifikasiUpdate'])->name('penghapusan.verifikasi.update');
+    Route::get('/penghapusan/{penghapusan}', [App\Http\Controllers\PenghapusanController::class, 'detail'])->name('penghapusan.detail');
+    Route::get('/penghapusan/cetak/pdf',[App\Http\Controllers\PenghapusanController::class, 'cetakPdf'])->name('penghapusan.cetak.pdf');
+
 });

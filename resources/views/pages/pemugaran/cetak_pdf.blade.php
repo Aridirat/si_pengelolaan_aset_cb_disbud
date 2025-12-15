@@ -11,6 +11,11 @@
         th { background-color: #f2f2f2; }
         .text-right { text-align: right; }
         .no-border { border: none; }
+
+        .total-row {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
     </style>
 </head>
 <body>
@@ -88,7 +93,7 @@ $tanggalIndonesia = Carbon::parse($tanggal)
                 </tr>
             @endforelse
             @if ($pemugaran->count())
-            <tr>
+            <tr class="total-row">
                 <td colspan="8" class="text-right" style="font-weight: bold;">
                     TOTAL BIAYA PEMUGARAN
                 </td>
