@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MutasiDataController;
 use App\Http\Controllers\PemugaranController;
+use App\Http\Controllers\MutasiController;
 use App\Http\Middleware\IsLogin;
 use App\Models\User;
 
@@ -49,4 +50,13 @@ Route::middleware([IsLogin::class])->group(function () {
     Route::get('/pemugaran/{pemugaran}', [PemugaranController::class, 'detail'])->name('pemugaran.detail');
     Route::get('/pemugaran/cetak/pdf',[PemugaranController::class, 'cetakPdf'])->name('pemugaran.cetak.pdf');
 
+    Route::get('/mutasi', [MutasiController::class, 'index'])->name('mutasi.index');
+    Route::get('/mutasi/create', [MutasiController::class, 'create'])->name('mutasi.create');
+    Route::post('/mutasi', [MutasiController::class, 'store'])->name('mutasi.store');
+    Route::get('/mutasi/{mutasi}/edit', [MutasiController::class, 'edit'])->name('mutasi.edit');
+    Route::put('/mutasi/{mutasi}', [MutasiController::class, 'update'])->name('mutasi.update');
+    Route::get('/mutasi/{id}/verifikasi', [MutasiController::class, 'verifikasi'])->name('mutasi.verifikasi');
+    Route::put('/mutasi/{id}/verifikasi', [MutasiController::class, 'verifikasiUpdate'])->name('mutasi.verifikasi.update');
+    Route::get('/mutasi/{mutasi}', [MutasiController::class, 'detail'])->name('mutasi.detail');
+    Route::get('/mutasi/cetak/pdf',[MutasiController::class, 'cetakPdf'])->name('mutasi.cetak.pdf');
 });

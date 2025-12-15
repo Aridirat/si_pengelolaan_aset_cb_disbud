@@ -4,122 +4,90 @@
 <div class="px-6 py-6">
 
     {{-- Kembali --}}
-    <a href="{{ route('pemugaran.index') }}"
+    <a href="{{ route('mutasi.index') }}"
        class="inline-flex items-center text-gray-700 mb-6 hover:text-gray-900">
         <i class="fas fa-arrow-left mr-2"></i> Kembali
     </a>
 
-    <form action="{{ route('pemugaran.verifikasi.update', $pemugaran->id_pemugaran) }}"
+    <form action="{{ route('mutasi.verifikasi.update', $mutasi->id_mutasi) }}"
           method="POST"
           enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
-        <div class="bg-white rounded-xl p-6 space-y-4">
+        <div class="bg-white rounded-xl p-6 grid grid-cols-2 gap-6">
 
-            {{-- Baris 1 --}}
-            <div class="grid grid-cols-3 gap-4 pb-4">
-                <div>
-                    <label class="text-sm font-medium">Status Pemugaran</label>
-                    <select name="status_pemugaran"
-                            class="w-full mt-1 border rounded-md p-2">
+            {{-- Status Mutasi --}}
+            <div>
+                <label class="text-sm font-medium">Status Mutasi</label>
+                <select name="status_mutasi" class="w-full mt-1 border rounded-md p-2">
+                    <option value="">Pilih status mutasi</option>
+                    @foreach (['pending','diproses','selesai'] as $status)
+                        <option value="{{ $status }}"
+                            {{ $mutasi->status_mutasi == $status ? 'selected' : '' }}>
+                            {{ ucfirst($status) }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('status_mutasi')
+                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-                        @php
-                            $currentStatusPemugaran =
-                                old('status_pemugaran')
-                                ?? $pemugaran->status_pemugaran
-                                ?? 'pending';
-                        @endphp
+            {{-- Status Verifikasi --}}
+            <div>
+                <label class="text-sm font-medium">Status Verifikasi</label>
+                <select name="status_verifikasi" class="w-full mt-1 border rounded-md p-2">
+                    <option value="">Pilih status verifikasi</option>
+                    @foreach (['menunggu','disetujui','ditolak'] as $status)
+                        <option value="{{ $status }}"
+                            {{ $mutasi->status_verifikasi == $status ? 'selected' : '' }}>
+                            {{ ucfirst($status) }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('status_verifikasi')
+                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-                        @foreach (['pending','diproses','selesai'] as $status)
-                            <option value="{{ $status }}"
-                                {{ $currentStatusPemugaran === $status ? 'selected' : '' }}>
-                                {{ $status }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-
-                <div>
-                    <label class="text-sm font-medium">Status Verifikasi</label>
-                    <select name="status_verifikasi"
-                            class="w-full mt-1 border rounded-md p-2">
-
-                        @php
-                            $currentStatusVerifikasi =
-                                old('status_verifikasi')
-                                ?? $pemugaran->status_verifikasi
-                                ?? 'menunggu';
-                        @endphp
-
-                        @foreach (['menunggu','ditolak','disetujui'] as $status)
-                            <option value="{{ $status }}"
-                                {{ $currentStatusVerifikasi === $status ? 'selected' : '' }}>
-                                {{ $status }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-
-                <div>
-                    <label class="text-sm font-medium">Tanggal Verifikasi</label>
-                    <input type="date"
-                           name="tanggal_verifikasi"
-                           value="{{ optional($pemugaran->tanggal_verifikasi)->format('Y-m-d') }}"
-                           class="w-full mt-1 border rounded-md p-2">
-                </div>
+            {{-- Tanggal Verifikasi --}}
+            <div>
+                <label class="text-sm font-medium">Tanggal Verifikasi</label>
+                <input type="date"
+                       name="tanggal_verifikasi"
+                       value="{{ optional($mutasi->tanggal_verifikasi)->format('Y-m-d') }}"
+                       class="w-full mt-1 border rounded-md p-2">
                 @error('tanggal_verifikasi')
                     <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
-            <hr>
-
-            {{-- Baris 2 --}}
-            <div class="grid grid-cols-3 gap-4 pt-3">
-                <div>
-                    <label class="text-sm font-medium">Tanggal Selesai</label>
-                    <input type="date"
-                           name="tanggal_selesai"
-                           value="{{ optional($pemugaran->tanggal_selesai)->format('Y-m-d') }}"
-                           class="w-full mt-1 border rounded-md p-2">
-                </div>
-
-                <div>
-                    <label class="text-sm font-medium">Bukti Dokumentasi</label>
-                    <input type="url"
-                           name="bukti_dokumentasi"
-                           value="{{ $pemugaran->bukti_dokumentasi }}"
-                           placeholder="Link Google Drive Dokumentasi"
-                           class="w-full mt-1 border rounded-md p-2">
-                </div>
-
-                <div>
+            {{-- Dokumen Pengesahan --}}
+            <div>
                     <div>
-                        <label class="block text-sm font-medium mb-1">
+                        <label class="block text-sm font-medium mb-2">
                             Laporan Pertanggungjawaban
                         </label>
                         <label id="dokumenLabel"
-                            class="flex items-center justify-center w-full px-3 py-3 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50
-                            {{ $pemugaran->laporan_pertanggungjawaban ? 'hidden' : '' }}">
-                                                    <i class="fas fa-paperclip text-2xl text-gray-400 mr-2"></i>
+                            class="flex items-center justify-center w-full px-2 py-1 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50
+                            {{ $mutasi->dokumen_pengesahan ? 'hidden' : '' }}">
+                                                    <i class="fas fa-paperclip text-xl text-gray-400 mr-2"></i>
                                                     <span class="text-sm text-gray-500">Klik untuk menambah dokumen</span>
                                                     <input type="file"
-                                                        name="laporan_pertanggungjawaban"
+                                                        name="dokumen_pengesahan"
                                                         accept="application/pdf"
                                                         class="hidden"
                                                         id="dokumenInput">
                         </label>
                         <div id="dokumenPreview"
                             class="flex items-center justify-between w-full px-2 py-1 border-2 border-dashed rounded-lg bg-gray-50 mt-2
-                            {{ empty($pemugaran->laporan_pertanggungjawaban) ? 'hidden' : '' }}">
+                            {{ empty($mutasi->dokumen_pengesahan) ? 'hidden' : '' }}">
 
                             <div class="flex items-center">
                                 <i class="fas fa-file-pdf text-2xl text-red-500 mr-2"></i>
                                 <span id="dokumenNama" class="text-sm text-gray-700 truncate max-w-45">
-                                    {{ $pemugaran->laporan_pertanggungjawaban ? basename($pemugaran->laporan_pertanggungjawaban) : '' }}
+                                    {{ $mutasi->dokumen_pengesahan ? basename($mutasi->dokumen_pengesahan) : '' }}
                                 </span>
                             </div>
 
@@ -173,17 +141,18 @@
                         });
                     </script>
                 </div>
-                </div>
 
                 {{-- Tombol --}}
-                <div class="flex justify-end pt-4">
+                <div class="flex justify-end col-start-2">
                     <button type="submit"
-                            class="px-6 py-2 bg-green-500 hover:bg-green-700 text-white rounded-md">
+                            class="px-6 py-2 bg-green-500 hover:bg-gray-700 text-white rounded-md">
                         Verifikasi
                     </button>
+                </div>
             </div>
 
-            </div>
+            
+            
 
         </div>
     </form>

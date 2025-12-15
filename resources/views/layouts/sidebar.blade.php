@@ -4,46 +4,47 @@
             "title" => "Dashboard", 
             "path" => "/dashboard", 
             "icon" => "fas fa-tachometer-alt",
-            "active" => request()->is('dashboard')
+            "active" => request()->segment(1) === 'dashboard'
         ],
         (object) [
             "title" => "Cagar Budaya", 
             "path" => "cagar_budaya", 
             "icon" => "fas fa-theater-masks",
-            "active" => request()->is('cagar_budaya*')
+            "active" => request()->segment(1) === 'cagar_budaya'
         ],
         (object) [
             "title" => "Mutasi Data", 
             "path" => "mutasi_data", 
             "icon" => "fas fa-landmark",
-            "active" => request()->is('mutasi_data*')
+            "active" => request()->segment(1) === 'mutasi_data'
         ],
         (object) [
             "title" => "Pemugaran", 
             "path" => "pemugaran", 
             "icon" => "fas fa-calendar-alt",
-            "active" => request()->is('pemugaran*')
+            "active" => request()->segment(1) === 'pemugaran'
         ],
         (object) [
             "title" => "Mutasi", 
-            "path" => "cb_mutasi", 
+            "path" => "mutasi", 
             "icon" => "fas fa-exchange-alt",
-            "active" => request()->is('cb_mutasi*')
+            "active" => request()->segment(1) === 'mutasi'
         ],
         (object) [
             "title" => "Penghapusan", 
             "path" => "penghapusan", 
             "icon" => "fas fa-trash-alt",
-            "active" => request()->is('penghapusan*')
+            "active" => request()->segment(1) === 'penghapusan'
         ],
         (object) [
             "title" => "Pengguna", 
             "path" => "user", 
             "icon" => "fas fa-users",
-            "active" => request()->is('user*')
+            "active" => request()->segment(1) === 'user'
         ],
     ];
 @endphp
+
 
 <aside class="w-64 min-h-screen bg-gray-700 shadow-md px-6 py-8">
     <div class="text-center mb-5">
