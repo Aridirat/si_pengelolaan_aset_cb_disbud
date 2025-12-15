@@ -27,6 +27,7 @@
 <body>
 
 <h2 style="text-align:center;">LAPORAN MUTASI DATA CAGAR BUDAYA</h2>
+<p style="text-align:center;">Dinas Kebudayaan Kabupaten Badung</p>
 <p style="text-align:center;">Tanggal Cetak: {{ $tanggal }}</p>
 
 <table class="">

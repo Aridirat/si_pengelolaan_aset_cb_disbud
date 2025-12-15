@@ -27,33 +27,33 @@
             {{-- DATA UTAMA --}}
             <div class="text-sm space-y-2">
                 <div class="pb-3">
-                    <span class="font-semibold">Nomor Cagar Budaya</span><br>
-                    {{ $data->id_cagar_budaya }}
+                    <p class="text-gray-500">Nomor Cagar Budaya</p>
+                    <p class="font-medium">{{ $data->id_cagar_budaya }}</p>
                 </div>
 
                 <div class="pb-3">
-                    <span class="font-semibold">Nama Cagar Budaya</span><br>
-                    {{ $data->nama_cagar_budaya }}
+                    <p class="text-gray-500">Nama Cagar Budaya</p>
+                    <p class="font-medium">{{ $data->nama_cagar_budaya }}</p>
                 </div>
 
                 <div class="pb-3">
-                    <span class="font-semibold">Kategori</span><br>
-                    {{ ucfirst($data->kategori) }}
+                    <p class="text-gray-500">Kategori</p>
+                    <p class="font-medium">{{ ucfirst($data->kategori) }}</p>
                 </div>
 
                 <div class="pb-3">
-                    <span class="font-semibold">Lokasi</span><br>
-                    {{ $data->lokasi }}
+                    <p class="text-gray-500">Lokasi</p>
+                    <p class="font-medium">{{ $data->lokasi }}
                 </div>
 
                 <div class="pb-3">
-                    <span class="font-semibold">Status Kepemilikan</span><br>
-                    {{ ucfirst($data->status_kepemilikan) }}
+                    <p class="text-gray-500">Status Kepemilikan</p>
+                    <p class="font-medium">{{ ucfirst($data->status_kepemilikan) }}</p>
                 </div>
 
                 <div class="pb-3">
-                    <span class="font-semibold">Kondisi Cagar Budaya</span><br>
-                    {{ ucfirst($data->kondisi) }}
+                    <p class="text-gray-500">Kondisi Cagar Budaya</p>
+                    <p class="font-medium">{{ ucfirst($data->kondisi) }}</p>
                 </div>
             </div>
         </div>
@@ -63,16 +63,16 @@
 
             {{-- TANGGAL --}}
             <div>
-                <span class="text-sm font-semibold">Tanggal Pencatatan</span>
-                <div class="bg-white rounded-md px-3 py-2 text-sm">
+                <p class="text-gray-500">Tanggal Pencatatan</p>
+                <div class="bg-white rounded-md py-2 text-sm font-medium">
                     {{ \Carbon\Carbon::parse($data->tanggal_pertama_pencatatan)->locale('id')->translatedFormat('l, d/m/Y') }}
                 </div>
             </div>
 
             {{-- NILAI PEROLEHAN --}}
             <div>
-                <span class="text-sm font-semibold">Nilai Perolehan</span>
-                <div class="bg-white rounded-md px-3 py-2 text-sm">
+                <p class="text-gray-500">Nilai Perolehan</p>
+                <div class="bg-white rounded-md py-2 text-sm font-medium">
                     Rp {{ number_format($data->nilai_perolehan, 2, ',', '.') }}
                 </div>
             </div>
@@ -80,7 +80,7 @@
             {{-- DOKUMEN KAJIAN --}}
             <div>
                 <div class="flex items-center justify-between mb-1">
-                    <span class="text-sm font-semibold">Dokumen Kajian</span>
+                    <p class="text-sm text-gray-500">Dokumen Kajian</p>
 
                     @if($data->dokumen_kajian)
                         <a href="{{ asset('storage/'.$data->dokumen_kajian) }}"
@@ -124,7 +124,7 @@
 
             {{-- DESKRIPSI --}}
             <div>
-                <span class="text-sm font-semibold">Deskripsi</span>
+                <p class="text-gray-500">Deskripsi</p>
                 <div class="bg-gray-100 rounded-lg p-4 min-h-[120px] text-sm">
                     {{ $data->deskripsi }}
                 </div>

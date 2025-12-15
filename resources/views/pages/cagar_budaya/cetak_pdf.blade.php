@@ -14,6 +14,7 @@
 <body>
 
 <h2 style="text-align:center;">LAPORAN DATA CAGAR BUDAYA</h2>
+<p style="text-align:center;">Dinas Kebudayaan Kabupaten Badung</p>
 @php
 use Carbon\Carbon;
 
