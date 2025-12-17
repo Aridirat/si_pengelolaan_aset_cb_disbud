@@ -4,7 +4,7 @@
         <!-- CAGAR BUDAYA -->
         <div class="p-8 relative">
             <!-- CAGAR BUDAYA -->
-            <section class="bg-linear-to-r from-blue-200 to-indigo-600 py-3 px-4 rounded-xl shadow mb-2 w-3/4">
+            <section class="bg-linear-to-r from-blue-200 to-indigo-600 py-3 px-4 rounded-xl shadow-md shadow-indigo-300/50 mb-2 w-3/4">
                 <h2 class="text-sm font-bold mb-2 ">Cagar Budaya</h2>
                 <div class="grid grid-cols-3 gap-4">
                     <div class="bg-white py-1 px-2 rounded-lg shadow">
@@ -30,7 +30,7 @@
 
 
             <!-- MUTASI DATA -->
-            <section class="bg-linear-to-r from-blue-200 to-indigo-600 py-3 px-4 rounded-xl shadow mb-2 w-115">
+            <section class="bg-linear-to-r from-blue-200 to-indigo-600 py-3 px-4 rounded-xl shadow-md shadow-indigo-300/50 mb-2 w-115">
                 <h2 class="text-sm font-bold mb-2 ">Mutasi Data</h2>
 
                 <div class="grid grid-cols-2 gap-4 items-center">
@@ -67,7 +67,7 @@
             </section>
 
             <!-- PEMUGARAN -->
-            <section class="bg-linear-to-r from-purple-200 to-fuchsia-800 py-3 px-4 rounded-xl shadow mb-2">
+            <section class="bg-linear-to-r from-purple-200 to-fuchsia-800 py-3 px-4 rounded-xl shadow-md shadow-fuchsia-300/50 mb-2">
                 <h2 class="text-sm font-bold mb-2 ">Pemugaran</h2>
                 <div class="grid grid-cols-6 gap-4">
                     @foreach (['pending','diproses','selesai','menunggu','disetujui','ditolak'] as $status)
@@ -85,7 +85,7 @@
 
 
             <!-- MUTASI -->
-            <section class="bg-linear-to-r from-purple-200 to-fuchsia-800 py-3 px-4 rounded-xl shadow mb-2">
+            <section class="bg-linear-to-r from-purple-200 to-fuchsia-800 py-3 px-4 rounded-xl shadow-md shadow-fuchsia-300/50 mb-2">
                 <h2 class="text-sm  font-bold mb-2">Mutasi</h2>
                 <div class="grid grid-cols-6 gap-4">
                     @foreach (['pending','diproses','selesai','menunggu','disetujui','ditolak'] as $status)
@@ -102,7 +102,7 @@
             </section>
 
             <!-- PENGHAPUSAN -->
-            <section class="bg-linear-to-r from-purple-200 to-fuchsia-800 py-3 px-4 rounded-xl shadow mb-2">
+            <section class="bg-linear-to-r from-purple-200 to-fuchsia-800 py-3 px-4 rounded-xl shadow-md shadow-fuchsia-300/50 mb-2">
                 <h2 class="text-sm font-bold mb-2 ">Penghapusan</h2>
                 <div class="grid grid-cols-6 gap-4">
                     @foreach (['pending','diproses','selesai','menunggu','disetujui','ditolak'] as $status)
