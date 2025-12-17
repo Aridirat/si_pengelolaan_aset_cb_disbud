@@ -6,11 +6,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>Sistem Pengelolaan Aset Cagar Budaya</title>
 
+    <link rel="icon" type="image/png" href="{{ asset('../assets/images/logo-lesbud.png') }}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-        
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
@@ -20,12 +19,12 @@
 <div class="flex h-screen overflow-hidden">
 
     <!-- SIDEBAR -->
-    <aside class="w-64 bg-gray-700 text-white shrink-0 fixed inset-y-0 left-0 z-50">
+    <aside class="bg-white text-white shrink-0 fixed inset-y-0 left-0 z-50">
         @include('layouts.sidebar')
     </aside>
 
     <!-- MAIN CONTENT -->
-    <div class="flex flex-col flex-1 ml-64">
+    <div class="flex flex-col flex-1 ml-56">
         @include('layouts.navbar')
 
         <!-- NAVBAR (FIXED) -->
