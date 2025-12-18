@@ -4,8 +4,8 @@
 <div class="px-6 py-6">
 
     {{-- Tombol Kembali --}}
-    <a href="{{ route('cagar_budaya.index') }}" class="flex items-center text-gray-700 mb-4 hover:text-gray-900">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali
+    <a href="{{ route('cagar_budaya.index') }}" class="flex items-center font-semibold text-neutral-700 mb-4 hover:text-neutral-900">
+        <i class="fas fa-angle-left"></i> Kembali
     </a>
 
     <div class="bg-white rounded-xl p-6 grid grid-cols-1 md:grid-cols-4 gap-6">

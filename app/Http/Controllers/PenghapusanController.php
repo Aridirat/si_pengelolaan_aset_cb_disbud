@@ -8,6 +8,7 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PenghapusanController extends Controller
 {
@@ -213,8 +214,8 @@ class PenghapusanController extends Controller
             ->locale('id')
             ->translatedFormat('d F Y');
 
-        $namaPenandatangan = auth()->user()->nama;
-        $penandatangan     = auth()->user()->id;
+        $namaPenandatangan = Auth::user()->nama;
+        $penandatangan     = Auth::user()->id;
 
         $pdf = Pdf::loadView(
             'pages.penghapusan.cetak_pdf',

@@ -15,7 +15,7 @@
         .total-row {
         background-color: #f2f2f2;
         font-weight: bold;
-    }
+        }
     </style>
 </head>
 <body>

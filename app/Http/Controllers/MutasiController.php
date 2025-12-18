@@ -8,6 +8,7 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MutasiController extends Controller
 {
@@ -211,8 +212,8 @@ class MutasiController extends Controller
 
         // DATA TTD
         $tanggalIndonesia = Carbon::now()->locale('id')->translatedFormat('d F Y');
-        $namaPenandatangan = auth()->user()->nama;
-        $penandatangan = auth()->user()->id;
+        $namaPenandatangan = Auth::user()->nama;
+        $penandatangan = Auth::user()->id;
 
         $pdf = Pdf::loadView('pages.mutasi.cetak_pdf', compact(
             'mutasi',

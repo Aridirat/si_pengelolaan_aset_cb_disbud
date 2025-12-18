@@ -14,40 +14,89 @@
     <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
         <a href="{{ route('mutasi_data.cetak.pdf', request()->query()) }}"
                     target="_blank"
-                    class="px-4 py-2 bg-teal-600 text-white text-sm rounded hover:bg-teal-700">
+                    class="px-3 py-2 mt-5 bg-blue-500 text-white text-sm font-bold rounded-lg hover:bg-blue-700 shadow-md shadow-blue-500/30">
                         Cetak Laporan
         </a>
 
         <div class="flex items-center gap-2">
-            <form method="GET" action="{{ route('mutasi_data.index') }}" class="flex items-center gap-2">
-                <span class="text-sm text-gray-600">Filter berdasarkan field:</span>
+        <form method="GET" action="{{ route('mutasi_data.index') }}" id="filterForm">
 
-                <select name="field" onchange="this.form.submit()"
-                        class="border rounded px-3 py-2 text-sm">
-                    <option value="">Semua Field</option>
+            {{-- Input tersembunyi untuk GET --}}
+            <input type="hidden" name="field" id="selectedField" value="{{ request('field') }}">
 
-                    @foreach (\App\Constants\CagarBudayaBitmask::FIELDS as $field => $bit)
-                        <option value="{{ $field }}"
-                            {{ request('field') === $field ? 'selected' : '' }}>
-                            {{ ucwords(str_replace('_', ' ', $field)) }}
-                        </option>
-                    @endforeach
-                </select>
-            </form>
+            <div class="flex flex-col gap-1">
+                <span class="text-sm text-gray-600">
+                    Filter berdasarkan field:
+                </span>
 
+                <el-dropdown class="inline-block">
+                    {{-- Button --}}
+                    <button
+                        type="button"
+                        id="filterDropdownButton"
+                        class="inline-flex w-72 justify-between items-center gap-x-2 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring-1 inset-ring-gray-300 hover:bg-gray-50"
+                    >
+                        {{ request('field')
+                            ? ucwords(str_replace('_', ' ', request('field')))
+                            : 'Semua Field'
+                        }}
+                        <svg viewBox="0 0 20 20" fill="currentColor" class="size-5 text-gray-400">
+                            <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28Z"/>
+                        </svg>
+                    </button>
+
+                    {{-- Dropdown Menu --}}
+                    <el-menu
+                        anchor="bottom start"
+                        popover
+                        class="w-64 origin-top-left rounded-md bg-white shadow-lg outline-1 outline-black/5"
+                    >
+                        <div class="py-1">
+
+                            {{-- Semua Field --}}
+                            <button
+                                type="button"
+                                class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                                onclick="applyFieldFilter('')"
+                            >
+                                Semua Field
+                            </button>
+
+                            <hr class="my-1 text-gray-300">
+
+                            @foreach (\App\Constants\CagarBudayaBitmask::FIELDS as $field => $bit)
+                                <button
+                                    type="button"
+                                    class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                                    onclick="applyFieldFilter('{{ $field }}')"
+                                >
+                                    {{ ucwords(str_replace('_', ' ', $field)) }}
+                                </button>
+                            @endforeach
+
+                        </div>
+                    </el-menu>
+                </el-dropdown>
+            </div>
+        </form>
+
+            
+            {{-- Search --}}
             <form action="{{ route('mutasi_data.index') }}" method="GET" class="d-flex">
-                    <div class="input-group relative">
-                        <span class="input-group-text absolute left-2 top-8 -translate-y-1/2">
-                        <i class="fa-solid fa-magnifying-glass text-gray-300 text-xl"></i>
-                        </span>
-                        <input type="text" name="search" class="w-full pl-9 pr-3 py-1 border-2 rounded placeholder:text-gray-500 focus:outline-indigo-500 placeholder:italic" placeholder="Cari..." value="{{ request('search') }}">
+                    <div class="mt-5">
+                        <div class="input-group relative">
+                            <span class="input-group-text absolute left-2 top-1">
+                            <i class="fa-solid fa-magnifying-glass text-gray-300 text-xl"></i>
+                            </span>
+                            <input type="text" name="search" class="w-full pl-9 pr-3 py-1 shadow border border-gray-300 rounded-lg placeholder:text-gray-500 focus:outline-indigo-500 placeholder:italic" placeholder="Cari..." value="{{ request('search') }}">
+                        </div>
                     </div>
             </form>
         </div>
     </div>
 
     {{-- Tabel --}}
-    <div class="overflow-x-auto bg-white rounded-lg shadow">
+    <div class="overflow-x-auto bg-white">
         <table class="w-full text-sm text-left">
             <thead class="bg-gray-200">
                 <tr>
@@ -59,7 +108,7 @@
                     <th class="px-4 py-3 text-center">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="bg-gray-50">
                 @forelse ($mutasi_data as $index => $item)
 
                 @php
@@ -83,24 +132,24 @@
                     }
                 @endphp
 
-                <tr class=" hover:bg-gray-100">
-                    <td class="px-4 py-3">
+                <tr class=" hover:bg-gray-200">
+                    <td class="px-4 py-4">
                         {{ $mutasi_data->firstItem() + $index }}
                     </td>
 
-                    <td class="px-4 py-3 font-medium">
+                    <td class="px-4 py-4 font-medium">
                         {{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}
                     </td>
 
-                    <td class="px-4 py-3">
+                    <td class="px-4 py-4">
                         {{ $item->tanggal_mutasi_data->format('d/m/Y H:i') }}
                     </td>
 
-                    <td class="px-4 py-3">
+                    <td class="px-4 py-4">
                         {{ $item->user->nama ?? '-' }}
                     </td>
 
-                    <td class="px-4 py-3 text-gray-700">
+                    <td class="px-4 py-4 text-gray-700">
                         @php
                             $changedFields = \App\Constants\CagarBudayaBitmask::decodeBitmask($item->bitmask);
                         @endphp
@@ -114,9 +163,9 @@
                         @endif
                     </td>
 
-                    <td class="px-4 py-3 text-center">
+                    <td class="px-4 py-4 text-center">
                         <a href="{{ route('mutasi_data.detail', $item->id_mutasi_data) }}"
-                           class="inline-flex items-center justify-center w-8 h-8 bg-teal-500 text-white rounded hover:bg-teal-700">
+                           class="py-2 px-2 bg-teal-500 hover:bg-teal-700 shadow-sm shadow-teal-400 text-white rounded-lg">
                             <i class="fas fa-circle-info"></i>
                         </a>
                     </td>
@@ -140,5 +189,12 @@
 
 
 </div>
+
+<script>
+    function applyFieldFilter(field) {
+        document.getElementById('selectedField').value = field;
+        document.getElementById('filterForm').submit();
+    }
+</script>
 
 @endsection

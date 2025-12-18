@@ -13,13 +13,13 @@
 
             <div class="flex gap-3">
                 <a href="{{ route('cagar_budaya.create') }}"
-                    class="px-3 py-2 bg-blue-500 hover:bg-blue-700 text-white text-sm rounded-lg text-center">
+                    class="px-3 py-2 bg-sky-500 hover:bg-sky-700 text-white text-sm font-bold rounded-lg text-center shadow-md shadow-sky-500/30">
                     Tambah Data
                 </a>
 
                 <a href="{{ route('cagar_budaya.cetak.pdf', request()->query()) }}"
                     target="_blank"
-                    class="px-3 py-2 bg-teal-600 text-white text-sm rounded-lg hover:bg-teal-900">
+                    class="px-3 py-2 bg-blue-500 text-white text-sm font-bold rounded-lg hover:bg-blue-700 shadow-md shadow-blue-500/30">
                         Cetak Laporan
                 </a>
 
@@ -28,10 +28,10 @@
             {{-- Search --}}
             <form action="{{ route('cagar_budaya.index') }}" method="GET" class="d-flex">
                     <div class="input-group relative">
-                        <span class="input-group-text absolute left-2 top-8 -translate-y-1/2">
+                        <span class="input-group-text absolute left-2 top-1">
                         <i class="fa-solid fa-magnifying-glass text-gray-300 text-xl"></i>
                         </span>
-                        <input type="text" name="search" class="w-full pl-9 pr-3 py-1 border-2 rounded-lg placeholder:text-gray-500 focus:outline-indigo-500 placeholder:italic" placeholder="Cari..." value="{{ request('search') }}">
+                        <input type="text" name="search" class="w-full pl-9 pr-3 py-1 shadow border border-gray-300 rounded-lg placeholder:text-gray-500 focus:outline-indigo-500 placeholder:italic" placeholder="Cari..." value="{{ request('search') }}">
                     </div>
             </form>
         </div>
@@ -39,7 +39,7 @@
         {{-- Table --}}
         <table class="w-full border-collapse">
     <thead>
-        <tr class="border-b">
+        <tr class="border-b border-gray-200">
             <th class="py-2 text-center">No.</th>
 
             {{-- Nama --}}
@@ -52,7 +52,7 @@
 
                     <!-- ikon filter -->
                     <button type="button"
-                        class="filter-toggle text-gray-500 hover:text-gray-700"
+                        class="filter-toggle text-sky-500 hover:text-sky-700"
                         data-target="filter-kategori"
                         aria-haspopup="true"
                         aria-expanded="false"
@@ -97,7 +97,7 @@
                 <div class="flex items-center justify-center gap-2">
                     <span>Lokasi</span>
                     <button type="button"
-                        class="filter-toggle text-gray-500 hover:text-gray-700"
+                        class="filter-toggle text-sky-500 hover:text-sky-700"
                         data-target="filter-lokasi"
                         title="Filter lokasi">
                         <i class="fas fa-filter"></i>
@@ -110,7 +110,7 @@
                         <input type="hidden" name="kategori" value="{{ request('kategori') }}">
                         <input type="hidden" name="kondisi" value="{{ request('kondisi') }}">
 
-                        <div class="text-sm font-medium mb-2">Pilih lokasi</div>
+                        <div class="text-sm font-medium mb-2">Pilih Lokasi</div>
                         <div class="max-h-40 overflow-auto">
                             @foreach ($lokasiList as $item)
                                 <label class="flex items-center gap-2 py-1">
@@ -143,7 +143,7 @@
                 <div class="flex items-center justify-center gap-2"></div>
                     <span>Kondisi</span>
                     <button type="button"
-                        class="filter-toggle text-gray-500 hover:text-gray-700"
+                        class="filter-toggle text-sky-500 hover:text-sky-700"
                         data-target="filter-kondisi"
                         title="Filter kondisi">
                         <i class="fas fa-filter"></i>
@@ -193,11 +193,11 @@
                     <td class="py-3 text-center">Rp.{{ number_format($row->nilai_perolehan, 2, ',', '.') }}</td>
                     <td class="flex py-3 gap-2 justify-center">
 
-                        <a href="{{ route('cagar_budaya.detail', $row->id_cagar_budaya) }}" class="py-1 px-2 bg-teal-500 hover:bg-teal-700 text-white rounded-lg">
+                        <a href="{{ route('cagar_budaya.detail', $row->id_cagar_budaya) }}" class="py-1 px-2 bg-teal-500 hover:bg-teal-700 shadow-sm shadow-teal-400 text-white rounded-lg">
                             <i class="fas fa-circle-info"></i>
                         </a>
 
-                        <a href="{{ route('cagar_budaya.edit', $row->id_cagar_budaya) }}" class="py-1 px-2 bg-yellow-500 hover:bg-yellow-700 text-white rounded-lg">
+                        <a href="{{ route('cagar_budaya.edit', $row->id_cagar_budaya) }}" class="py-1 px-2 bg-amber-500 hover:bg-amber-700 shadow-sm shadow-amber-400 text-white rounded-lg">
                             <i class="fas fa-pen"></i>
                         </a>
                     </td>

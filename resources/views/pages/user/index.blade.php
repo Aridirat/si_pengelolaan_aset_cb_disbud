@@ -13,25 +13,25 @@
         <!-- Header: Tombol Tambah & Cari -->
         <div class="flex justify-between items-center mb-6">
             <a href="{{ route('user.create') }}"
-            class="px-4 py-2 bg-blue-500 hover:bg-blue-800 text-white text-sm rounded-lg">
+            class="px-3 py-2 bg-sky-500 hover:bg-sky-700 text-white text-sm font-bold rounded-lg text-center shadow-md shadow-sky-500/30">
                 Tambah Pengguna
             </a>
 
                 <form action="{{ route('user.index') }}" method="GET" class="d-flex">
-                    <div class="mt-2 input-group relative">
-                        <span class="input-group-text absolute left-2 top-8 -translate-y-1/2">
-                        <i class="fa-solid fa-magnifying-glass text-gray-300 text-xl"></i>
-                        </span>
-                        <input type="text" name="search" class="w-full pl-9 pr-3 py-1 border-2 rounded-lg placeholder:text-gray-500 focus:outline-indigo-500 placeholder:italic" placeholder="Cari..." value="{{ request('search') }}">
-                    </div>
-                </form>
+                <div class="input-group relative">
+                    <span class="input-group-text absolute left-2 top-1">
+                    <i class="fa-solid fa-magnifying-glass text-gray-300 text-xl"></i>
+                    </span>
+                    <input type="text" name="search" class="w-full pl-9 pr-3 py-1 shadow border border-gray-300 rounded-lg placeholder:text-gray-500 focus:outline-indigo-500 placeholder:italic" placeholder="Cari..." value="{{ request('search') }}">
+                </div>
+            </form>
             
         </div>
 
         <!-- Tabel -->
         <div class="overflow-x-auto">
             <table class="w-full text-sm table-auto">
-                <thead class="border-b border-gray-400">
+                <thead class="border-b border-gray-300">
                     <tr class="text-gray-700">
                         <th class="py-2">No.</th>
                         <th class="py-2">NIP</th>
@@ -56,7 +56,7 @@
 
                             <!-- Edit -->
                             <a href="{{ url('user/'.$user->id.'/edit') }}"
-                               class="px-2 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded">
+                               class="py-1 px-2 bg-amber-500 hover:bg-amber-700 shadow-sm shadow-amber-400 text-white rounded">
                                 <i class="fas fa-pen"></i>
                             </a>
 
@@ -64,7 +64,7 @@
                             @if (auth()->id() !== $user->id)
                             
                             <button type="button"
-                                    class="btn-delete px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded"
+                                    class="btn-delete px-2 py-1 bg-rose-600 hover:bg-rose-700 shadow-sm shadow-rose-400 text-white rounded"
                                     data-id="{{ $user->id }}"
                                     data-name="{{ $user->nama }}">
                                 <i class="fas fa-trash"></i>
@@ -76,7 +76,7 @@
                                     @method('DELETE')
                                 </form>
                             @else
-                                <button class="px-2 py-1 bg-red-300 text-white rounded cursor-not-allowed" title="Tidak dapat menghapus pengguna yang sedang login" disabled>
+                                <button class="px-2 py-1 bg-rose-300 text-white rounded cursor-not-allowed" title="Tidak dapat menghapus pengguna yang sedang login" disabled>
                                     <i class="fas fa-trash"></i>
                                 </button>
                             @endif

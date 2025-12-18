@@ -4,8 +4,8 @@
 <div class="px-6 py-6">
 
     {{-- Tombol Kembali --}}
-    <a href="{{ route('cagar_budaya.index') }}" class="flex items-center text-gray-700 mb-4 hover:text-gray-900">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali
+    <a href="{{ route('cagar_budaya.index') }}" class="flex items-center font-semibold text-neutral-700 mb-4 hover:text-neutral-900">
+        <i class="fas fa-angle-left"></i> Kembali
     </a>
 
     {{-- Card --}}
@@ -24,7 +24,7 @@
                     {{-- FOTO --}}
                     <div class="relative">
                         <label
-                            class="flex flex-col items-center justify-center h-48 bg-white border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50"
+                            class="flex flex-col items-center justify-center h-48 bg-white border-2 border-dotted border-gray-300 rounded-lg cursor-pointer hover:bg-neutral-50"
                             id="fotoLabel">
                             <i class="far fa-image text-4xl text-gray-400 mb-2"></i>
                             <span class="text-sm text-gray-500">Klik untuk menambah foto</span>
@@ -36,10 +36,10 @@
                         </label>
                         <div class="relative">
                             <img id="fotoPreview" 
-                                 class="hidden w-full h-48 object-cover rounded-lg cursor-pointer" 
+                                 class="hidden w-full h-48 object-cover rounded-lg cursor-pointer border border-dashed border-gray-300" 
                                  alt="Preview">
                             <div id="fotoOverlay" 
-                                 class="hidden absolute inset-0 bg-black bg-opacity-40 rounded-lg flex items-center justify-center hover:flex">
+                                 class="hidden absolute inset-0 bg-gray-700/30 rounded-lg flex items-center justify-center hover:flex">
                                 <button type="button" 
                                         id="fotoUbah"
                                         class="bg-white rounded-full p-3 hover:bg-gray-100">
@@ -92,7 +92,7 @@
                         </label>
                         <input type="number"
                                name="id_cagar_budaya"
-                               class="w-full px-3 py-2 rounded-lg border focus:ring focus:ring-gray-300"
+                               class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring focus:ring-gray-300"
                                placeholder="Masukkan nomor">
                             @error('id_cagar_budaya')
                                 <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
@@ -106,7 +106,7 @@
                         </label>
                         <input type="text"
                                name="nama_cagar_budaya"
-                               class="w-full px-3 py-2 rounded-lg border focus:ring focus:ring-gray-300"
+                               class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring focus:ring-gray-300"
                                placeholder="Masukkan nama">
                         @error('nama_cagar_budaya')
                             <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
@@ -119,7 +119,7 @@
                             Kategori
                         </label>
                         <select name="kategori"
-                                class="w-full px-3 py-2 rounded-lg border bg-white focus:ring focus:ring-gray-300">
+                                class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white focus:ring focus:ring-gray-300">
                             <option value="">Pilih kategori</option>
                             <option value="benda">Benda</option>
                             <option value="bangunan">Bangunan</option>
@@ -139,7 +139,7 @@
                         </label>
                         <input type="text"
                                name="lokasi"
-                               class="w-full px-3 py-2 rounded-lg border focus:ring focus:ring-gray-300"
+                               class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring focus:ring-gray-300"
                                placeholder="Desa, Kecamatan">
                             @error('lokasi')
                                 <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
@@ -152,7 +152,7 @@
                             Status Kepemilikan
                         </label>
                         <select name="status_kepemilikan"
-                                class="w-full px-3 py-2 rounded-lg border bg-white focus:ring focus:ring-gray-300">
+                                class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white focus:ring focus:ring-gray-300">
                             <option value="">Pilih status</option>
                             <option value="pemerintah">Pemerintah</option>
                             <option value="pribadi">Pribadi</option>
@@ -168,7 +168,7 @@
                             Kondisi Cagar Budaya
                         </label>
                         <select name="kondisi"
-                                class="w-full px-3 py-2 rounded-lg border bg-white focus:ring focus:ring-gray-300">
+                                class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white focus:ring focus:ring-gray-300">
                             <option value="">Pilih kondisi</option>
                             <option value="baik">Baik</option>
                             <option value="rusak ringan">Rusak Ringan</option>
@@ -190,7 +190,7 @@
                         </label>
                         <input type="date"
                                name="tanggal_pertama_pencatatan"
-                               class="w-full px-3 py-2 rounded-lg border focus:ring focus:ring-gray-300">
+                               class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring focus:ring-gray-300">
                     @error('tanggal_pertama_pencatatan')
                         <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -204,7 +204,7 @@
                         <input type="number"
                                name="nilai_perolehan"
                                min="0"
-                               class="w-full px-3 py-2 rounded-lg border focus:ring focus:ring-gray-300"
+                               class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring focus:ring-gray-300"
                                placeholder="Rp">
                         @error('nilai_perolehan')
                             <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
@@ -214,9 +214,9 @@
                     {{-- DOKUMEN --}}
                     <div>
                         <label class="block text-sm font-medium mb-1">
-                            Dokumen Kajian (PDF)
+                            Dokumen Kajian
                         </label>
-                        <label class="flex items-center justify-center w-full px-3 py-3 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50"
+                        <label class="flex items-center justify-center w-full px-3 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
                                id="dokumenLabel">
                             <i class="fas fa-paperclip text-2xl text-gray-400 mr-2"></i>
                             <span class="text-sm text-gray-500">Klik untuk menambah dokumen</span>
@@ -226,7 +226,7 @@
                                    class="hidden"
                                    id="dokumenInput">
                         </label>
-                        <div id="dokumenPreview" class="hidden flex items-center justify-between w-full px-3 py-3 border-2 border-dashed rounded-lg bg-gray-50 mt-2">
+                        <div id="dokumenPreview" class="hidden flex items-center justify-between w-full px-3 py-3 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 mt-2">
                             <div class="flex items-center">
                                 <i class="fas fa-file-pdf text-2xl text-red-500 mr-2"></i>
                                 <span id="dokumenNama" class="text-sm text-gray-700"></span>
@@ -282,7 +282,7 @@
                         </label>
                         <textarea name="deskripsi"
                                   rows="6"
-                                  class="w-full px-3 py-2 rounded-lg border focus:ring focus:ring-gray-300"
+                                  class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring focus:ring-gray-300"
                                   placeholder="Deskripsi cagar budaya"></textarea>
                         @error('deskripsi')
                             <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
@@ -295,7 +295,7 @@
             {{-- TOMBOL --}}
             <div class="flex justify-end mt-6">
                 <button type="submit"
-                        class="btn px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                        class="btn px-6 py-2 bg-sky-500 hover:bg-sky-700 shadow shadow-sky-400 text-white rounded-lg font-semibold">
                     Tambah Data
                 </button>
             </div>

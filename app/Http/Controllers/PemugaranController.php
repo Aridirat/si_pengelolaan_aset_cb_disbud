@@ -8,6 +8,7 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PemugaranController extends Controller
 {
@@ -235,8 +236,8 @@ class PemugaranController extends Controller
             'pemugaran' => $pemugaran,
             'totalBiaya' => $totalBiaya,
             'tanggal' => now()->format('d F Y'),
-            'penandatangan' => auth()->user()->id,
-            'namaPenandatangan' => auth()->user()->nama,
+            'penandatangan' => Auth::user()->id,
+            'namaPenandatangan' => Auth::user()->nama,
         ])->setPaper('A4', 'landscape');
 
         return $pdf->stream('laporan-pemugaran.pdf');

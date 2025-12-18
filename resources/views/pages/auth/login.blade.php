@@ -15,7 +15,7 @@
 <div class="flex">
   <div class="flex flex-col w-64 flex-1 min-h-screen justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img src="{{ asset('../assets/images/logo-lesbud.png') }}" alt="Your Company" class="mx-auto h-30 w-auto" />
+        <img src="{{ asset('../assets/images/logo-lesbud.png') }}" alt="Your Company" class="mx-auto h-30 w-auto transition duration-300 ease-in-out hover:scale-105" />
         <h2 class="mt-3 text-center text-2xl/9 font-bold tracking-tight">Login</h2>
     </div>
   
@@ -71,7 +71,7 @@
   
         <div class="grid grid-cols-3 gap-5">
           <div class="col-start-3">
-            <button type="submit" class="btn flex w-full justify-center rounded-md bg-linear-to-r from-blue-600 to-sky-500 px-3 py-1.5 text-white text-sm/6 font-semibold hover:from-blue-800 hover:to-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 shadow-lg shadow-sky-500/50">Masuk</button>
+            <button type="submit" class="btn flex w-full justify-center rounded-md bg-linear-to-r from-blue-600 to-sky-500 px-3 py-1.5 text-white text-sm/6 font-semibold hover:from-blue-800 hover:to-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 shadow-lg shadow-sky-500/50 transition duration-300 ease-in-out hover:scale-104">Masuk</button>
           </div>
         </div>
       </form>
@@ -105,7 +105,7 @@
       <img 
         src="{{ asset('assets/images/logo-lesbud.png') }}" 
         alt="Logo"
-        class="h-60 w-60"
+        class="h-60 w-60 transition duration-300 ease-in-out hover:scale-105"
       />
     </div>
   </div>
