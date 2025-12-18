@@ -1,5 +1,6 @@
 @php
-    $userRole = auth()->user()->role;
+
+$userRole = auth()->user()->role;
 
     $menus = [
         (object) [

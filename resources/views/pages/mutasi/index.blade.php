@@ -205,17 +205,32 @@
                                    class="py-1 px-2 bg-amber-500 hover:bg-amber-700 shadow-sm shadow-amber-400 text-white rounded">
                                     <i class="fas fa-pen"></i>
                                 </a>
-                                <a href="{{ route('mutasi.verifikasi', $item->id_mutasi) }}"
-                                   class="py-1 px-2 bg-indigo-500 hover:bg-indigo-700 shadow-sm shadow-indigo-400 text-white rounded">
-                                    <i class="fa-regular fa-circle-check"></i>
-                                </a>
+                                
+                                @php
+                                $userRole = auth()->user()->role;
+                                @endphp
+                                @if ($userRole === 'admin')
+                                    <a href="{{ route('mutasi.verifikasi', $item->id_mutasi) }}"
+                                        class="py-1 px-2 bg-indigo-500 hover:bg-indigo-700 shadow-sm shadow-indigo-400 text-white rounded">
+                                        <i class="fa-regular fa-circle-check"></i>
+                                    </a>
+                                @else
+                                    <button
+                                        type="button"
+                                        disabled
+                                        class="py-1 px-2 bg-indigo-300 text-white rounded cursor-not-allowed opacity-60"
+                                        title="Hanya admin yang dapat melakukan verifikasi"
+                                    >
+                                        <i class="fa-regular fa-circle-check"></i>
+                                    </button>
+                                @endif
                             </div>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="9" class="py-4 text-center text-gray-500">
-                            Data mutasi belum tersedia
+                        <td colspan="9" class="text-center text-lg py-4 text-gray-400 italic">
+                            Data mutasi tidak tersedia
                         </td>
                     </tr>
                     @endforelse

@@ -153,17 +153,35 @@
                                    class="py-1 px-2 bg-amber-500 hover:bg-amber-700 shadow-sm shadow-amber-400 text-white rounded">
                                     <i class="fas fa-pen"></i>
                                 </a>
-                                <a href="{{ route('penghapusan.verifikasi', $item->id_penghapusan) }}"
-                                   class="py-1 px-2 bg-indigo-500 hover:bg-indigo-700 shadow-sm shadow-indigo-400 text-white rounded">
-                                    <i class="fa-regular fa-circle-check"></i>
-                                </a>
+
+                                @php
+
+                                $userRole = auth()->user()->role;
+                                
+                                @endphp
+                               @if ($userRole === 'admin')
+                                    <a href="{{ route('penghapusan.verifikasi', $item->id_penghapusan) }}"
+                                    class="py-1 px-2 bg-indigo-500 hover:bg-indigo-700 shadow-sm shadow-indigo-400 text-white rounded">
+                                        <i class="fa-regular fa-circle-check"></i>
+                                    </a>
+                                @else
+                                    <div class="relative group">
+                                        <button
+                                            type="button"
+                                            disabled
+                                            class="py-1 px-2 bg-indigo-300 text-white rounded cursor-not-allowed opacity-60"
+                                        >
+                                            <i class="fa-regular fa-circle-check"></i>
+                                        </button>
+                                    </div>
+                                @endif
                             </div>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="9" class="py-4 text-center text-gray-500">
-                            Data penghapusan belum tersedia
+                        <td colspan="9" class="text-center text-lg py-4 text-gray-400 italic">
+                            Data penghapusan tidak tersedia
                         </td>
                     </tr>
                     @endforelse

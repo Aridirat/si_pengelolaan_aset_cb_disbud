@@ -38,8 +38,6 @@ Route::middleware([IsLogin::class])->group(function () {
     Route::post('/pemugaran', [PemugaranController::class, 'store'])->name('pemugaran.store');
     Route::get('/pemugaran/{pemugaran}/edit', [PemugaranController::class, 'edit'])->name('pemugaran.edit');
     Route::put('/pemugaran/{pemugaran}', [PemugaranController::class, 'update'])->name('pemugaran.update');
-    Route::get('/pemugaran/{pemugaran}/verifikasi', [PemugaranController::class, 'verifikasi'])->name('pemugaran.verifikasi');
-    Route::put('/pemugaran/{pemugaran}/verifikasi', [PemugaranController::class, 'verifikasiUpdate'])->name('pemugaran.verifikasi.update');
     Route::get('/pemugaran/{pemugaran}', [PemugaranController::class, 'detail'])->name('pemugaran.detail');
     Route::get('/pemugaran/cetak/pdf',[PemugaranController::class, 'cetakPdf'])->name('pemugaran.cetak.pdf');
 
@@ -48,8 +46,6 @@ Route::middleware([IsLogin::class])->group(function () {
     Route::post('/mutasi', [MutasiController::class, 'store'])->name('mutasi.store');
     Route::get('/mutasi/{mutasi}/edit', [MutasiController::class, 'edit'])->name('mutasi.edit');
     Route::put('/mutasi/{mutasi}', [MutasiController::class, 'update'])->name('mutasi.update');
-    Route::get('/mutasi/{id}/verifikasi', [MutasiController::class, 'verifikasi'])->name('mutasi.verifikasi');
-    Route::put('/mutasi/{id}/verifikasi', [MutasiController::class, 'verifikasiUpdate'])->name('mutasi.verifikasi.update');
     Route::get('/mutasi/{mutasi}', [MutasiController::class, 'detail'])->name('mutasi.detail');
     Route::get('/mutasi/cetak/pdf',[MutasiController::class, 'cetakPdf'])->name('mutasi.cetak.pdf');
 
@@ -58,8 +54,6 @@ Route::middleware([IsLogin::class])->group(function () {
     Route::post('/penghapusan', [App\Http\Controllers\PenghapusanController::class, 'store'])->name('penghapusan.store');
     Route::get('/penghapusan/{penghapusan}/edit', [App\Http\Controllers\PenghapusanController::class, 'edit'])->name('penghapusan.edit');
     Route::put('/penghapusan/{penghapusan}', [App\Http\Controllers\PenghapusanController::class, 'update'])->name('penghapusan.update');
-    Route::get('/penghapusan/{id}/verifikasi', [App\Http\Controllers\PenghapusanController::class, 'verifikasi'])->name('penghapusan.verifikasi');
-    Route::put('/penghapusan/{id}/verifikasi', [App\Http\Controllers\PenghapusanController::class, 'verifikasiUpdate'])->name('penghapusan.verifikasi.update');
     Route::get('/penghapusan/{penghapusan}', [App\Http\Controllers\PenghapusanController::class, 'detail'])->name('penghapusan.detail');
     Route::get('/penghapusan/cetak/pdf',[App\Http\Controllers\PenghapusanController::class, 'cetakPdf'])->name('penghapusan.cetak.pdf');
 
@@ -72,4 +66,13 @@ Route::middleware(['role.admin'])->group(function () {
     Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
     Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.delete');
+
+    Route::get('/pemugaran/{pemugaran}/verifikasi', [PemugaranController::class, 'verifikasi'])->name('pemugaran.verifikasi');
+    Route::put('/pemugaran/{pemugaran}/verifikasi', [PemugaranController::class, 'verifikasiUpdate'])->name('pemugaran.verifikasi.update');
+
+    Route::get('/mutasi/{id}/verifikasi', [MutasiController::class, 'verifikasi'])->name('mutasi.verifikasi');
+    Route::put('/mutasi/{id}/verifikasi', [MutasiController::class, 'verifikasiUpdate'])->name('mutasi.verifikasi.update');
+
+    Route::get('/penghapusan/{id}/verifikasi', [App\Http\Controllers\PenghapusanController::class, 'verifikasi'])->name('penghapusan.verifikasi');
+    Route::put('/penghapusan/{id}/verifikasi', [App\Http\Controllers\PenghapusanController::class, 'verifikasiUpdate'])->name('penghapusan.verifikasi.update');
 });
