@@ -173,8 +173,8 @@
 
                 @empty
                 <tr>
-                    <td colspan="6" class="text-center py-6 text-gray-500">
-                        Tidak ada daftar Mutasi Data
+                    <td colspan="6" class="text-center text-lg py-4 text-gray-400 italic">
+                        Tidak ada daftar mutasi data
                     </td>
                 </tr>
                 @endforelse

@@ -2,10 +2,13 @@
             <!-- Right Icons -->
             <div class="flex items-center gap-6">
                 <!-- User Info -->
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2">
                     <div>
                         <p class="text-sm text-white font-medium">{{ Auth::user()->nama }}</p>
                     </div>
+                    <span>
+                        <i class="fas fa-user-circle text-xl text-white"></i>
+                    </span>
                 </div>
             </div>
         </header>

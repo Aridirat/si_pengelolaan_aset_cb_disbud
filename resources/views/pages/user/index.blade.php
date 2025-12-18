@@ -44,46 +44,57 @@
                 </thead>
 
                 <tbody>
-                    @foreach($users as $i => $user)
-                    <tr class="border-none hover:bg-gray-100">
-                        <td class="py-3 text-center">{{ $users->firstItem() + $i }}</td>
-                        <td class="py-3 w-10 text-center">{{ $user->id }}</td>
-                        <td class="py-3 w-40 text-center">{{ $user->nama }}</td>
-                        <td class="py-3 w-30 text-center">{{ $user->username }}</td>
-                        <td class="py-3 w-auto text-center">{{ $user->role }}</td>
-                        <td class="py-3 w-auto text-center">{{ $user->status_aktif }}</td>
-                        <td class="py-3 flex gap-2 justify-center">
+                    @forelse ($users as $i => $user)
+                        <tr class="border-none hover:bg-gray-100">
+                            <td class="py-3 text-center">{{ $users->firstItem() + $i }}</td>
+                            <td class="py-3 text-center">{{ $user->id }}</td>
+                            <td class="py-3 text-center">{{ $user->nama }}</td>
+                            <td class="py-3 text-center">{{ $user->username }}</td>
+                            <td class="py-3 text-center">{{ ucfirst($user->role) }}</td>
+                            <td class="py-3 text-center">{{ ucfirst($user->status_aktif) }}</td>
+                            <td class="py-3 flex gap-2 justify-center">
 
-                            <!-- Edit -->
-                            <a href="{{ url('user/'.$user->id.'/edit') }}"
-                               class="py-1 px-2 bg-amber-500 hover:bg-amber-700 shadow-sm shadow-amber-400 text-white rounded">
-                                <i class="fas fa-pen"></i>
-                            </a>
+                                {{-- Edit --}}
+                                <a href="{{ url('user/'.$user->id.'/edit') }}"
+                                class="py-1 px-2 bg-amber-500 hover:bg-amber-700 shadow-sm shadow-amber-400 text-white rounded">
+                                    <i class="fas fa-pen"></i>
+                                </a>
 
-                            <!-- Delete -->
-                            @if (auth()->id() !== $user->id)
-                            
-                            <button type="button"
-                                    class="btn-delete px-2 py-1 bg-rose-600 hover:bg-rose-700 shadow-sm shadow-rose-400 text-white rounded"
-                                    data-id="{{ $user->id }}"
-                                    data-name="{{ $user->nama }}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                                <form id="delete-form-{{ $user->id }}" 
-                                    action="{{ route('user.delete', $user->id) }}" 
-                                    method="POST" class="hidden">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            @else
-                                <button class="px-2 py-1 bg-rose-300 text-white rounded cursor-not-allowed" title="Tidak dapat menghapus pengguna yang sedang login" disabled>
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            @endif
-                        </td>
-                    </tr>
-                    @endforeach
+                                {{-- Delete --}}
+                                @if (auth()->id() !== $user->id)
+                                    <button type="button"
+                                            class="btn-delete px-2 py-1 bg-rose-600 hover:bg-rose-700 shadow-sm shadow-rose-400 text-white rounded"
+                                            data-id="{{ $user->id }}"
+                                            data-name="{{ $user->nama }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+
+                                    <form id="delete-form-{{ $user->id }}"
+                                        action="{{ route('user.delete', $user->id) }}"
+                                        method="POST" class="hidden">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                @else
+                                    <button class="px-2 py-1 bg-rose-300 text-white rounded cursor-not-allowed"
+                                            title="Tidak dapat menghapus pengguna yang sedang login"
+                                            disabled>
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                @endif
+
+                            </td>
+                        </tr>
+
+                    @empty
+                        <tr>
+                            <td colspan="7" class="py-6 text-center text-lg text-gray-400 italic">
+                                Tidak ada data pengguna
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
+
 
             </table>
         </div>
