@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class CagarBudayaController extends Controller
 {
@@ -55,7 +56,7 @@ class CagarBudayaController extends Controller
         }
 
         $allResults = $query->get();
-        $cagar_budaya = $query->orderBy('id_cagar_budaya', 'desc')->paginate(10);
+        $cagar_budaya = $query->orderBy('id_cagar_budaya', 'desc')->paginate(perPage: 10);
 
     $kategoriList = CagarBudaya::select('kategori')->distinct()->pluck('kategori');
     $lokasiList = CagarBudaya::select('lokasi')->distinct()->pluck('lokasi');
@@ -290,7 +291,7 @@ class CagarBudayaController extends Controller
         if (!empty($nilaiLama)) {
             MutasiData::create([
                 'id_cagar_budaya'   => $data->id_cagar_budaya,
-                'id'                => auth()->user()->id,
+                'id'                => Auth::user()->id,
                 'tanggal_mutasi_data' => now(),
                 'bitmask'           => $bitmask,
                 'nilai_lama'        => json_encode($nilaiLama),
@@ -347,8 +348,8 @@ class CagarBudayaController extends Controller
             'data' => $data,
             'totalNilai' => $totalNilai,
             'tanggal' => now()->format('d F Y'),
-            'penandatangan' => auth()->user()->id,
-            'namaPenandatangan' => auth()->user()->nama,
+            'penandatangan' => Auth::user()->id,
+            'namaPenandatangan' => Auth::user()->nama,
         ])->setPaper('A4', 'landscape');
 
         $namaFile = $tanggalFormat . '_Laporan_Pencatatan_Cagar_Budaya.pdf';

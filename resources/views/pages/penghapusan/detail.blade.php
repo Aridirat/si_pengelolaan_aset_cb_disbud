@@ -4,9 +4,8 @@
 <div class="px-6 py-6">
 
     {{-- Kembali --}}
-    <a href="{{ route('penghapusan.index') }}"
-       class="flex items-center text-gray-700 mb-4 hover:text-gray-900">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali
+    <a href="{{ route('penghapusan.index') }}" class="flex items-center font-semibold text-neutral-700 mb-4 hover:text-neutral-900">
+        <i class="fas fa-angle-left"></i> Kembali
     </a>
 
     {{-- Card --}}
@@ -42,7 +41,7 @@
             </div>
         </div>
 
-        <hr class="my-6">
+        <hr class="my-6 text-gray-300">
 
         {{-- Status --}}
         <div class="grid grid-cols-9 gap-6 text-sm">
@@ -100,7 +99,7 @@
                         File belum tersedia
                     </p>
                 @else
-                    <div class="border rounded-lg overflow-hidden bg-gray-50">
+                    <div class="border border-gray-300 rounded-lg overflow-hidden bg-gray-50">
                         <iframe
                             src="{{ asset("storage/{$penghapusan->dokumen_penghapusan}") }}"
                             class="w-full h-80"

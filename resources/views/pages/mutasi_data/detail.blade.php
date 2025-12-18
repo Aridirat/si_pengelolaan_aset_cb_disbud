@@ -5,9 +5,8 @@
 <div class="px-6 py-6 min-h-screen">
 
     {{-- Tombol Kembali --}}
-    <a href="{{ route('mutasi_data.index') }}"
-       class="inline-flex items-center text-gray-700 mb-6 hover:text-gray-900">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali
+    <a href="{{ route('mutasi_data.index') }}" class="flex items-center font-semibold text-neutral-700 mb-4 hover:text-neutral-900">
+        <i class="fas fa-angle-left"></i> Kembali
     </a>
 
     {{-- Card Utama --}}

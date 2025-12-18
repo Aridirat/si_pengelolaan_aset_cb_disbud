@@ -4,9 +4,8 @@
 <div class="px-6 py-6">
 
     {{-- Kembali --}}
-    <a href="{{ route('pemugaran.index') }}"
-       class="inline-flex items-center text-gray-700 mb-6 hover:text-gray-900">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali
+    <a href="{{ route('pemugaran.index') }}" class="flex items-center font-semibold text-neutral-700 mb-4 hover:text-neutral-900">
+        <i class="fas fa-angle-left"></i> Kembali
     </a>
 
     <form action="{{ route('pemugaran.update', $pemugaran->id_pemugaran) }}"
@@ -23,7 +22,7 @@
                 {{-- Nama Cagar Budaya --}}
                 <div>
                     <label class="text-sm font-medium">Nama Cagar Budaya</label>
-                    <select name="id_cagar_budaya" class="w-full mt-1 border rounded-md p-2">
+                    <select name="id_cagar_budaya" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         @foreach ($cagarBudaya as $cb)
                             <option value="{{ $cb->id_cagar_budaya }}"
                                 @selected($cb->id_cagar_budaya == $pemugaran->id_cagar_budaya)>
@@ -36,7 +35,7 @@
                 {{-- Penanggung Jawab --}}
                 <div>
                     <label class="text-sm font-medium">Nama Penanggung Jawab</label>
-                    <select name="id" class="w-full mt-1 border rounded-md p-2">
+                    <select name="id" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         @foreach ($penanggungJawab as $user)
                             <option value="{{ $user->id }}"
                                 @selected($user->id == $pemugaran->id)>
@@ -49,7 +48,7 @@
                 {{-- Kondisi --}}
                 <div>
                     <label class="text-sm font-medium">Kondisi Cagar Budaya</label>
-                    <select name="kondisi" class="w-full mt-1 border rounded-md p-2">
+                    <select name="kondisi" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         @foreach (['Rusak Ringan','Rusak Sedang','Rusak Berat'] as $kondisi)
                             <option value="{{ $kondisi }}"
                                 @selected($kondisi == $pemugaran->kondisi)>
@@ -65,7 +64,7 @@
                     <input type="date"
                            name="tanggal_pengajuan"
                            value="{{ $pemugaran->tanggal_pengajuan->format('Y-m-d') }}"
-                           class="w-full mt-1 border rounded-md p-2">
+                           class="w-full mt-1 border border-gray-300 rounded-md p-2">
                 </div>
 
                 {{-- Biaya --}}
@@ -74,7 +73,7 @@
                     <input type="number"
                            name="biaya_pemugaran"
                            value="{{ $pemugaran->biaya_pemugaran }}"
-                           class="w-full mt-1 border rounded-md p-2">
+                           class="w-full mt-1 border border-gray-300 rounded-md p-2">
                 </div>
 
                 {{-- Proposal --}}
@@ -85,7 +84,7 @@
                             Proposal Pengajuan
                         </label>
                         <label id="dokumenLabel"
-                            class="flex items-center justify-center w-full px-3 py-3 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50
+                            class="flex items-center justify-center w-full px-3 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50
                             {{ $pemugaran->proposal_pengajuan ? 'hidden' : '' }}">
                                                     <i class="fas fa-paperclip text-2xl text-gray-400 mr-2"></i>
                                                     <span class="text-sm text-gray-500">Klik untuk menambah dokumen</span>
@@ -96,7 +95,7 @@
                                                         id="dokumenInput">
                                                 </label>
                                                 <div id="dokumenPreview"
-                            class="flex items-center justify-between w-full px-3 py-3 border-2 border-dashed rounded-lg bg-gray-50 mt-2
+                            class="flex items-center justify-between w-full px-3 py-3 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 mt-2
                             {{ empty($pemugaran->proposal_pengajuan) ? 'hidden' : '' }}">
 
                             <div class="flex items-center">
@@ -163,13 +162,13 @@
             <div class="flex flex-col h-full">
                 <label class="text-sm font-medium mb-1">Deskripsi</label>
                 <textarea name="deskripsi_pengajuan"
-                          class="flex-1 border rounded-md p-3 resize-none">{{ $pemugaran->deskripsi_pengajuan }}</textarea>
+                          class="flex-1 border border-gray-300 rounded-md p-3 resize-none">{{ $pemugaran->deskripsi_pengajuan }}</textarea>
 
                 
             </div>
             <div class="flex justify-end mt-4 col-start-2">
                     <button type="submit"
-                            class="px-6 py-2 bg-yellow-500 hover:bg-yellow-700 text-white rounded-md">
+                            class="btn px-6 py-2 bg-amber-500 hover:bg-amber-600 shadow shadow-amber-400 text-white font-semibold rounded-lg">
                         Simpan Perubahan
                     </button>
                 </div>

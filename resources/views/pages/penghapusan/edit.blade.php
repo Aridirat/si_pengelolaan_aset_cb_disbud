@@ -4,9 +4,8 @@
 <div class="px-6 py-6">
 
     {{-- Kembali --}}
-    <a href="{{ route('penghapusan.index') }}"
-       class="inline-flex items-center text-gray-700 mb-6 hover:text-gray-900">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali
+    <a href="{{ route('penghapusan.index') }}" class="flex items-center font-semibold text-neutral-700 mb-4 hover:text-neutral-900">
+        <i class="fas fa-angle-left"></i> Kembali
     </a>
 
 
@@ -23,7 +22,7 @@
                 {{-- Nama Cagar Budaya --}}
                 <div>
                     <label class="text-sm font-medium">Nama Cagar Budaya</label>
-                    <select name="id_cagar_budaya" class="w-full mt-1 border rounded-md p-2">
+                    <select name="id_cagar_budaya" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         @foreach ($cagarBudaya as $cb)
                             <option value="{{ $cb->id_cagar_budaya }}"
                                 {{ $penghapusan->id_cagar_budaya == $cb->id_cagar_budaya ? 'selected' : '' }}>
@@ -36,7 +35,7 @@
                 {{-- Penanggung Jawab --}}
                 <div>
                     <label class="text-sm font-medium">Nama Penanggung Jawab</label>
-                    <select name="id" class="w-full mt-1 border rounded-md p-2">
+                    <select name="id" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         @foreach ($penanggungJawab as $user)
                             <option value="{{ $user->id }}"
                                 {{ $penghapusan->id == $user->id ? 'selected' : '' }}>
@@ -49,7 +48,7 @@
                 {{-- -Kondisi --}}
                 <div>
                     <label class="text-sm font-medium">Kondisi</label>
-                    <select name="kondisi" class="w-full mt-1 border rounded-md p-2">
+                    <select name="kondisi" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         <option value="musnah" {{ $penghapusan->kondisi == 'musnah' ? 'selected' : '' }}>
                             Musnah
                         </option>
@@ -66,7 +65,7 @@
                 <div>
                     <label class="text-sm font-medium">Bukti Dokumentasi</label>
                     <input type="text" name="bukti_dokumentasi"
-                        class="w-full mt-1 border rounded-md p-2"
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2"
                         value="{{ old('bukti_dokumentasi', $penghapusan->bukti_dokumentasi) }}"
                         placeholder="Masukkan link bukti dokumentasi...">
                 </div>
@@ -78,14 +77,14 @@
             <div class="flex flex-col">
                 <label class="text-sm font-medium mb-1">Alasan Penghapusan</label>
                 <textarea name="alasan_penghapusan"
-                    class="flex-1 border rounded-md p-3 resize-none"
+                    class="flex-1 border border-gray-300 rounded-md p-3 resize-none"
                     placeholder="Masukkan alasan penghapusan...">{{ old('alasan_penghapusan', $penghapusan->alasan_penghapusan) }}</textarea>
             </div>
 
             {{-- Submit --}}
             <div class="col-span-2 flex justify-end">
                 <button type="submit"
-                        class="px-6 py-2 bg-yellow-500 hover:bg-yellow-700 text-white rounded-md">
+                        class="btn px-6 py-2 bg-amber-500 hover:bg-amber-600 shadow shadow-amber-400 text-white font-semibold rounded-lg">
                     Simpan Perubahan
                 </button>
             </div>

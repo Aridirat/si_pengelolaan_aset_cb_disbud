@@ -4,8 +4,8 @@
 <div class="px-6 py-6">
 
     {{-- Tombol Kembali --}}
-    <a href="{{ route('user.index') }}" class="flex items-center text-gray-700 mb-4 hover:text-gray-900">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali
+    <a href="{{ route('user.index') }}" class="flex items-center font-semibold text-neutral-700 mb-4 hover:text-neutral-900">
+        <i class="fas fa-angle-left"></i> Kembali
     </a>
 
     {{-- Card Form --}}
@@ -24,7 +24,7 @@
                 <div>
                     <label class="block text-gray-700 mb-1">Username</label>
                     <input type="text" name="username" value="{{ $user->username }}"
-                           class="w-full px-4 py-2 border border-blue-300 rounded-lg focus:ring focus:ring-blue-300"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
                            placeholder="Masukkan username">
                            @error('username')
                             <span class="text-red-500">{{ $message }}</span>
@@ -35,7 +35,7 @@
                 <div>
                     <label class="block text-gray-700 mb-1">Nama Lengkap</label>
                     <input type="text" name="nama" value="{{ $user->nama }}"
-                           class="w-full px-4 py-2 border border-blue-300 rounded-lg focus:ring focus:ring-blue-300"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
                            placeholder="Masukkan nama lengkap">
                            @error('nama')
                             <span class="text-red-500">{{ $message }}</span>
@@ -46,7 +46,7 @@
                 <div>
                     <label class="block text-gray-700 mb-1">Role</label>
                     <select name="role"
-                            class="w-full px-4 py-2 border border-blue-300 rounded-lg bg-white focus:ring focus:ring-blue-300">
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring focus:ring-blue-300">
                         <option value="{{ $user->role }}">{{ $user->role }}</option>
                         <option value="admin">Admin</option>
                         <option value="staf">Staf</option>
@@ -61,7 +61,7 @@
                 <div>
                     <label class="block text-gray-700 mb-1">Status</label>
                     <select name="status_aktif"
-                            class="w-full px-4 py-2 border border-blue-300 rounded-lg bg-white focus:ring focus:ring-blue-300">
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring focus:ring-blue-300">
                         <option value="{{ $user->status_aktif }}">{{ $user->status_aktif }}</option>
                         <option value="aktif">Aktif</option>
                         <option value="tidak aktif">Tidak Aktif</option>
@@ -77,7 +77,7 @@
             {{-- Tombol Tambah --}}
             <div class="flex justify-end mt-6">
                 <button type="submit"
-                        class="px-6 py-2 bg-yellow-500 hover:bg-yellow-700 text-white rounded-lg">
+                        class="btn px-6 py-2 bg-amber-500 hover:bg-amber-600 shadow shadow-amber-400 text-white font-semibold rounded-lg">
                     Simpan Perubahan
                 </button>
             </div>

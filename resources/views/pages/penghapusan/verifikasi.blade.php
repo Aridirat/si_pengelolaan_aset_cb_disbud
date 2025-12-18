@@ -4,9 +4,8 @@
 <div class="px-6 py-6">
 
     {{-- Kembali --}}
-    <a href="{{ route('penghapusan.index') }}"
-       class="inline-flex items-center text-gray-700 mb-6 hover:text-gray-900">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali
+    <a href="{{ route('penghapusan.index') }}" class="flex items-center font-semibold text-neutral-700 mb-4 hover:text-neutral-900">
+        <i class="fas fa-angle-left"></i> Kembali
     </a>
 
     <form action="{{ route('penghapusan.verifikasi.update', $penghapusan->id_penghapusan) }}"
@@ -20,7 +19,7 @@
             {{-- Status penghapusan --}}
             <div>
                 <label class="text-sm font-medium">Status penghapusan</label>
-                <select name="status_penghapusan" class="w-full mt-1 border rounded-md p-2">
+                <select name="status_penghapusan" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                     <option value="">Pilih status penghapusan</option>
                     @foreach (['pending','diproses','selesai'] as $status)
                         <option value="{{ $status }}"
@@ -37,7 +36,7 @@
             {{-- Status Verifikasi --}}
             <div>
                 <label class="text-sm font-medium">Status Verifikasi</label>
-                <select name="status_verifikasi" class="w-full mt-1 border rounded-md p-2">
+                <select name="status_verifikasi" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                     <option value="">Pilih status verifikasi</option>
                     @foreach (['menunggu','disetujui','ditolak'] as $status)
                         <option value="{{ $status }}"
@@ -57,7 +56,7 @@
                 <input type="date"
                        name="tanggal_verifikasi"
                        value="{{ optional($penghapusan->tanggal_verifikasi)->format('Y-m-d') }}"
-                       class="w-full mt-1 border rounded-md p-2">
+                       class="w-full mt-1 border border-gray-300 rounded-md p-2">
                 @error('tanggal_verifikasi')
                     <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                 @enderror
@@ -65,14 +64,14 @@
 
             {{-- Dokumen Pengesahan --}}
             <div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2">
-                            Laporan Pertanggungjawaban
+                <div>
+                        <label class="block text-sm font-medium mb-1">
+                            Dokumen Penghapusan
                         </label>
                         <label id="dokumenLabel"
-                            class="flex items-center justify-center w-full px-2 py-1 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50
+                            class="flex items-center justify-center w-full px-2 py-1 mt-2 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50
                             {{ $penghapusan->dokumen_penghapusan ? 'hidden' : '' }}">
-                                                    <i class="fas fa-paperclip text-xl text-gray-400 mr-2"></i>
+                                                    <i class="fas fa-paperclip text-xl text-gray-400 mr-2 py-1"></i>
                                                     <span class="text-sm text-gray-500">Klik untuk menambah dokumen</span>
                                                     <input type="file"
                                                         name="dokumen_penghapusan"
@@ -81,7 +80,7 @@
                                                         id="dokumenInput">
                         </label>
                         <div id="dokumenPreview"
-                            class="flex items-center justify-between w-full px-2 py-1 border-2 border-dashed rounded-lg bg-gray-50 mt-2
+                            class="flex items-center justify-between w-full px-2 py-2 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 mt-2
                             {{ empty($penghapusan->dokumen_penghapusan) ? 'hidden' : '' }}">
 
                             <div class="flex items-center">
@@ -98,15 +97,15 @@
                             </button>
                         </div>
 
-                                                <div id="dokumenWarning" class="hidden mt-2 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start">
-                                                    <i class="fas fa-exclamation-triangle text-red-600 mr-2 mt-0.5"></i>
-                                                    <span class="text-xs text-red-700">File terlalu besar. Maksimal ukuran 5 MB.</span>
-                                                </div>
-                                                <p class="text-xs text-gray-500 mt-1">
-                                                    PDF, maksimal 5 MB
-                                                </p>
-                                                <div id="dokumenError" class="hidden text-red-500 text-xs mt-1"></div>
-                                            </div>
+                        <div id="dokumenWarning" class="hidden mt-2 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-600 mr-2 mt-0.5"></i>
+                            <span class="text-xs text-red-700">File terlalu besar. Maksimal ukuran 5 MB.</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">
+                            PDF, maksimal 5 MB
+                        </p>
+                        <div id="dokumenError" class="hidden text-red-500 text-xs mt-1"></div>
+                    </div>
 
                     <script>
                         document.addEventListener('DOMContentLoaded', function () {
@@ -145,7 +144,7 @@
                 {{-- Tombol --}}
                 <div class="flex justify-end col-start-2">
                     <button type="submit"
-                            class="px-6 py-2 bg-green-500 hover:bg-gray-700 text-white rounded-md">
+                            class="btn px-6 py-2 bg-indigo-500 hover:bg-indigo-600 shadow shadow-indigo-400 text-white font-semibold rounded-lg">
                         Verifikasi
                     </button>
                 </div>

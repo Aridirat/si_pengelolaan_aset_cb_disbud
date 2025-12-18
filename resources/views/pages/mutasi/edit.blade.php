@@ -4,9 +4,8 @@
 <div class="px-6 py-6">
 
     {{-- Kembali --}}
-    <a href="{{ route('mutasi.index') }}"
-       class="inline-flex items-center text-gray-700 mb-6 hover:text-gray-900">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali
+    <a href="{{ route('mutasi.index') }}" class="flex items-center font-semibold text-neutral-700 mb-4 hover:text-neutral-900">
+        <i class="fas fa-angle-left"></i> Kembali
     </a>
 
     <form action="{{ route('mutasi.update', $mutasi->id_mutasi) }}"
@@ -23,7 +22,7 @@
                 {{-- Nama Cagar Budaya --}}
                 <div>
                     <label class="text-sm font-medium">Nama Cagar Budaya</label>
-                    <select name="id_cagar_budaya" class="w-full mt-1 border rounded-md p-2">
+                    <select name="id_cagar_budaya" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         @foreach ($cagarBudaya as $cb)
                             <option value="{{ $cb->id_cagar_budaya }}"
                                 {{ $mutasi->id_cagar_budaya == $cb->id_cagar_budaya ? 'selected' : '' }}>
@@ -36,7 +35,7 @@
                 {{-- Penanggung Jawab --}}
                 <div>
                     <label class="text-sm font-medium">Nama Penanggung Jawab</label>
-                    <select name="id" class="w-full mt-1 border rounded-md p-2">
+                    <select name="id" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         @foreach ($penanggungJawab as $user)
                             <option value="{{ $user->id }}"
                                 {{ $mutasi->id == $user->id ? 'selected' : '' }}>
@@ -49,7 +48,7 @@
                 {{-- Pemilik Asal --}}
                 <div>
                     <label class="text-sm font-medium">Pemilik Asal</label>
-                    <select name="kepemilikan_asal" class="w-full mt-1 border rounded-md p-2">
+                    <select name="kepemilikan_asal" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         <option value="pemerintah" {{ $mutasi->kepemilikan_asal == 'pemerintah' ? 'selected' : '' }}>
                             Pemerintah
                         </option>
@@ -62,7 +61,7 @@
                 {{-- Pemilik Tujuan --}}
                 <div>
                     <label class="text-sm font-medium">Pemilik Tujuan</label>
-                    <select name="kepemilikan_tujuan" class="w-full mt-1 border rounded-md p-2">
+                    <select name="kepemilikan_tujuan" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         <option value="pemerintah" {{ $mutasi->kepemilikan_tujuan == 'pemerintah' ? 'selected' : '' }}>
                             Pemerintah
                         </option>
@@ -78,7 +77,7 @@
                     <input type="date"
                            name="tanggal_pengajuan"
                            value="{{ $mutasi->tanggal_pengajuan->format('Y-m-d') }}"
-                           class="w-full mt-1 border rounded-md p-2">
+                           class="w-full mt-1 border border-gray-300 rounded-md p-2">
                 </div>
 
                 {{-- Dokumen Pengajuan --}}
@@ -88,7 +87,7 @@
                             Dokumen Pengajuan
                         </label>
                         <label id="dokumenLabel"
-                            class="flex items-center justify-center w-full px-3 py-3 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50
+                            class="flex items-center justify-center w-full px-3 py-3 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50
                             {{ $mutasi->dokumen_pengajuan ? 'hidden' : '' }}">
                                                     <i class="fas fa-paperclip text-2xl text-gray-400 mr-2"></i>
                                                     <span class="text-sm text-gray-500">Klik untuk menambah dokumen</span>
@@ -99,7 +98,7 @@
                                                         id="dokumenInput">
                                                 </label>
                                                 <div id="dokumenPreview"
-                            class="flex items-center justify-between w-full px-3 py-3 border-2 border-dashed rounded-lg bg-gray-50 mt-2
+                            class="flex items-center justify-between w-full px-3 py-3 border-2 border-gray-300 border-dashed rounded-lg bg-gray-50 mt-2
                             {{ empty($mutasi->dokumen_pengajuan) ? 'hidden' : '' }}">
 
                             <div class="flex items-center">
@@ -166,14 +165,14 @@
             <div class="flex flex-col h-full">
                 <label class="text-sm font-medium mb-1">Keterangan</label>
                 <textarea name="keterangan"
-                          class="flex-1 border rounded-md p-3 resize-none"
+                          class="flex-1 border border-gray-300 rounded-md p-3 resize-none"
                           placeholder="Masukkan keterangan mutasi...">{{ $mutasi->keterangan }}</textarea>
             </div>
 
             {{-- Tombol --}}
             <div class="flex justify-end mt-4 col-start-2">
                 <button type="submit"
-                        class="px-6 py-2 bg-yellow-500 hover:bg-yellow-700 text-white rounded-md">
+                        class="btn px-6 py-2 bg-amber-500 hover:bg-amber-600 shadow shadow-amber-400 text-white font-semibold rounded-lg">
                     Simpan Perubahan
                 </button>
             </div>

@@ -4,9 +4,8 @@
 <div class="px-6 py-6">
 
     {{-- Kembali --}}
-    <a href="{{ route('mutasi.index') }}"
-       class="inline-flex items-center text-gray-700 mb-6 hover:text-gray-900">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali
+    <a href="{{ route('mutasi.index') }}" class="flex items-center font-semibold text-neutral-700 mb-4 hover:text-neutral-900">
+        <i class="fas fa-angle-left"></i> Kembali
     </a>
 
 
@@ -23,7 +22,7 @@
                 {{-- Cagar Budaya --}}
                 <div>
                     <label class="text-sm font-medium">Nama Cagar Budaya</label>
-                    <select name="id_cagar_budaya" class="w-full mt-1 border rounded-md p-2">
+                    <select name="id_cagar_budaya" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         <option value="">Pilih cagar budaya</option>
                         @foreach ($cagarBudaya as $cb)
                             <option value="{{ $cb->id_cagar_budaya }}">
@@ -39,7 +38,7 @@
                 {{-- Penanggung Jawab --}}
                 <div>
                     <label class="text-sm font-medium">Nama Penanggung Jawab</label>
-                    <select name="id" class="w-full mt-1 border rounded-md p-2">
+                    <select name="id" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         <option value="">Pilih penanggung jawab</option>
                         @foreach ($penanggungJawab as $user)
                             <option value="{{ $user->id }}">
@@ -56,7 +55,7 @@
                 {{-- Pemilik Asal --}}
                 <div>
                     <label class="text-sm font-medium">Pemilik Asal</label>
-                    <select name="kepemilikan_asal" class="w-full mt-1 border rounded-md p-2">
+                    <select name="kepemilikan_asal" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         <option value="">Pilih kepemilikan asal</option>
                         <option value="pemerintah">Pemerintah</option>
                         <option value="pribadi">Pribadi</option>
@@ -69,7 +68,7 @@
                 {{-- Pemilik Tujuan --}}
                 <div>
                     <label class="text-sm font-medium">Pemilik Tujuan</label>
-                    <select name="kepemilikan_tujuan" class="w-full mt-1 border rounded-md p-2">
+                    <select name="kepemilikan_tujuan" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         <option value="">Pilih kepemilikan tujuan</option>
                         <option value="pemerintah">Pemerintah</option>
                         <option value="pribadi">Pribadi</option>
@@ -84,7 +83,7 @@
                     <label class="text-sm font-medium">Tanggal Pengajuan</label>
                     <input type="date"
                            name="tanggal_pengajuan"
-                           class="w-full mt-1 border rounded-md p-2">
+                           class="w-full mt-1 border border-gray-300 rounded-md p-2">
                 @error('tanggal_pengajuan')
                     <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                 @enderror
@@ -92,37 +91,74 @@
 
                 {{-- Dokumen --}}
                 <div>
-                    <label class="block text-sm font-medium mb-1">Proposal Pengajuan</label>
-                    <label class="flex items-center justify-center w-full px-3 py-3 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50"
+                <label class="block text-sm font-medium mb-1">
+                    Dokumen Pengajuan
+                </label>
+                <label class="flex items-center justify-center w-full px-3 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
                         id="dokumenLabel">
                     <i class="fas fa-paperclip text-2xl text-gray-400 mr-2"></i>
                     <span class="text-sm text-gray-500">Klik untuk menambah dokumen</span>
-                    <input type="file" name="dokumen_pengajuan" accept="application/pdf" class="hidden" id="dokumenInput">
-                    </label>
-                    <div id="dokumenPreview" class="hidden items-center justify-between w-full px-3 py-3 border-2 border-dashed rounded-lg bg-gray-50 mt-2">
+                    <input type="file"
+                            name="dokumen_pengajuan"
+                            accept="application/pdf"
+                            class="hidden"
+                            id="dokumenInput">
+                </label>
+                <div id="dokumenPreview" class="hidden flex items-center justify-between w-full px-3 py-3 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 mt-2">
                     <div class="flex items-center">
                         <i class="fas fa-file-pdf text-2xl text-red-500 mr-2"></i>
                         <span id="dokumenNama" class="text-sm text-gray-700"></span>
                     </div>
-                    <button type="button" id="dokumenUbah" class="text-xs text-blue-600 hover:text-blue-800 font-medium">Ubah</button>
-                    </div>
-                    <div id="dokumenWarning" class="hidden mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-                    <i class="fas fa-exclamation-triangle text-red-600 mr-2"></i>
-                    <span class="text-xs text-red-700">File terlalu besar. Maksimal ukuran 5 MB.</span>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-1">PDF, maksimal 5 MB</p>
-                    <div id="dokumenError" class="hidden text-red-500 text-xs mt-1"></div>
-                    @error('dokumen_pengajuan')
-                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                    @enderror
+                    <button type="button"
+                            id="dokumenUbah"
+                            class="text-xs text-blue-600 hover:text-blue-800 font-medium">
+                        Ubah
+                    </button>
                 </div>
+                <div id="dokumenWarning" class="hidden mt-2 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start">
+                    <i class="fas fa-exclamation-triangle text-red-600 mr-2 mt-0.5"></i>
+                    <span class="text-xs text-red-700">File terlalu besar. Maksimal ukuran 5 MB.</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">
+                    PDF, maksimal 5 MB
+                </p>
+                <div id="dokumenError" class="hidden text-red-500 text-xs mt-1"></div>
+                @error('dokumen_pengajuan')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <script>
+                document.getElementById('dokumenUbah').addEventListener('click', function() {
+                    document.getElementById('dokumenInput').click();
+                });
+
+                document.getElementById('dokumenInput').addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        if (file.size > 5 * 1024 * 1024) {
+                            document.getElementById('dokumenWarning').classList.remove('hidden');
+                            document.getElementById('dokumenError').classList.add('hidden');
+                            document.getElementById('dokumenPreview').classList.add('hidden');
+                            document.getElementById('dokumenLabel').classList.remove('hidden');
+                            e.target.value = '';
+                        } else {
+                            document.getElementById('dokumenWarning').classList.add('hidden');
+                            document.getElementById('dokumenError').classList.add('hidden');
+                            document.getElementById('dokumenNama').textContent = file.name;
+                            document.getElementById('dokumenLabel').classList.add('hidden');
+                            document.getElementById('dokumenPreview').classList.remove('hidden');
+                        }
+                    }
+                });
+            </script>
             </div>
 
             {{-- Kolom Kanan --}}
             <div class="flex flex-col">
                 <label class="text-sm font-medium mb-1">Keterangan</label>
                 <textarea name="keterangan"
-                    class="flex-1 border rounded-md p-3 resize-none"
+                    class="flex-1 border border-gray-300 rounded-md p-3 resize-none"
                     placeholder="Masukkan keterangan mutasi..."></textarea>
                 @error('keterangan')
                     <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
@@ -132,37 +168,12 @@
             {{-- Submit --}}
             <div class="col-span-2 flex justify-end">
                 <button type="submit"
-                        class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
+                        class="btn px-6 py-2 bg-sky-500 hover:bg-sky-700 shadow shadow-sky-400 text-white rounded-lg font-semibold">
                     Ajukan
                 </button>
             </div>
 
         </div>
     </form>
-
-    <script>
-        document.getElementById('dokumenUbah').addEventListener('click', function() {
-          document.getElementById('dokumenInput').click();
-        });
-
-        document.getElementById('dokumenInput').addEventListener('change', function(e) {
-          const file = e.target.files[0];
-          if (file) {
-            if (file.size > 5 * 1024 * 1024) {
-                document.getElementById('dokumenWarning').classList.remove('hidden');
-                document.getElementById('dokumenError').classList.add('hidden');
-                document.getElementById('dokumenPreview').classList.add('hidden');
-                document.getElementById('dokumenLabel').classList.remove('hidden');
-                e.target.value = '';
-            } else {
-                document.getElementById('dokumenWarning').classList.add('hidden');
-                document.getElementById('dokumenError').classList.add('hidden');
-                document.getElementById('dokumenNama').textContent = file.name;
-                document.getElementById('dokumenLabel').classList.add('hidden');
-                document.getElementById('dokumenPreview').classList.remove('flex');
-            }
-          }
-        });
-    </script>
 </div>
 @endsection

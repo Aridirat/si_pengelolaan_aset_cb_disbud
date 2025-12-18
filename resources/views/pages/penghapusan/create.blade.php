@@ -4,9 +4,8 @@
 <div class="px-6 py-6">
 
     {{-- Kembali --}}
-    <a href="{{ route('penghapusan.index') }}"
-       class="inline-flex items-center text-gray-700 mb-6 hover:text-gray-900">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali
+    <a href="{{ route('penghapusan.index') }}" class="flex items-center font-semibold text-neutral-700 mb-4 hover:text-neutral-900">
+        <i class="fas fa-angle-left"></i> Kembali
     </a>
 
 
@@ -23,7 +22,7 @@
                 {{-- Cagar Budaya --}}
                 <div>
                     <label class="text-sm font-medium">Nama Cagar Budaya</label>
-                    <select name="id_cagar_budaya" class="w-full mt-1 border rounded-md p-2">
+                    <select name="id_cagar_budaya" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         <option value="">Pilih cagar budaya</option>
                         @foreach ($cagarBudaya as $cb)
                             <option value="{{ $cb->id_cagar_budaya }}">
@@ -39,7 +38,7 @@
                 {{-- Penanggung Jawab --}}
                 <div>
                     <label class="text-sm font-medium">Nama Penanggung Jawab</label>
-                    <select name="id" class="w-full mt-1 border rounded-md p-2">
+                    <select name="id" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         <option value="">Pilih penanggung jawab</option>
                         @foreach ($penanggungJawab as $user)
                             <option value="{{ $user->id }}">
@@ -56,7 +55,7 @@
                 {{-- -Kondisi --}}
                 <div>
                     <label class="text-sm font-medium">Kondisi</label>
-                    <select name="kondisi" class="w-full mt-1 border rounded-md p-2">
+                    <select name="kondisi" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         <option value="">Pilih kondisi</option>
                         <option value="musnah">Musnah</option>
                         <option value="hilang">Hilang</option>
@@ -69,10 +68,10 @@
 
                 {{-- Bukti Dokumentasi (Link) --}}
                 <div>
-                    <label class="text-sm font-medium">Bukti Dokumentasi (Link Drive)</label>
+                    <label class="text-sm font-medium">Bukti Dokumentasi</label>
                     <input type="url"
                         name="bukti_dokumentasi"
-                        class="w-full mt-1 border rounded-md p-2"
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2"
                         placeholder="https://drive.google.com/...">
                     @error('bukti_dokumentasi')
                         <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
@@ -86,7 +85,7 @@
             <div class="flex flex-col">
                 <label class="text-sm font-medium mb-1">Alasan Penghapusan</label>
                 <textarea name="alasan_penghapusan"
-                    class="flex-1 border rounded-md p-3 resize-none"
+                    class="flex-1 border border-gray-300 rounded-md p-3 resize-none"
                     placeholder="Masukkan alasan penghapusan..."></textarea>
                 @error('alasan_penghapusan')
                     <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
@@ -96,7 +95,7 @@
             {{-- Submit --}}
             <div class="col-span-2 flex justify-end">
                 <button type="submit"
-                        class="px-6 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded-md">
+                        class="btn px-6 py-2 bg-sky-500 hover:bg-sky-700 shadow shadow-sky-400 text-white rounded-lg font-semibold">
                     Ajukan
                 </button>
             </div>

@@ -6,6 +6,7 @@ use App\Constants\CagarBudayaBitmask;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MutasiDataController extends Controller
 {
@@ -102,8 +103,8 @@ class MutasiDataController extends Controller
         $pdf = Pdf::loadView('pages.mutasi_data.cetak_pdf', [
             'mutasiData' => $mutasiData,
             'tanggal' => $tanggalIndonesia,
-            'penandatangan' => auth()->user()->id,
-            'namaPenandatangan' => auth()->user()->nama,
+            'penandatangan' => Auth::user()->id,
+            'namaPenandatangan' => Auth::user()->nama,
         ])->setPaper('A4', 'landscape');
 
         // Bisa stream dulu

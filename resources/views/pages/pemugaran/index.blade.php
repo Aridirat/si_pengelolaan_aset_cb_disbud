@@ -9,30 +9,29 @@
     <div class="bg-white p-6 rounded-lg">
         <div class="flex justify-between items-center mb-4">
         <div class="flex gap-2">
-            <a href="{{ route('pemugaran.create') }}" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded-md text-sm">
+            <a href="{{ route('pemugaran.create') }}" class="px-3 py-2 bg-sky-500 hover:bg-sky-700 text-white text-sm font-bold rounded-lg text-center shadow-md shadow-sky-500/30">
                 Ajukan Pemugaran
             </a>
-            <a href="{{ route('pemugaran.cetak.pdf') }}" class="px-4 py-2 bg-teal-700 hover:bg-teal-900 text-white rounded-md text-sm" target="_blank">
+            <a href="{{ route('pemugaran.cetak.pdf') }}" class="px-3 py-2 bg-blue-500 text-white text-sm font-bold rounded-lg hover:bg-blue-700 shadow-md shadow-blue-500/30" target="_blank">
                 Cetak Laporan
             </a>
         </div>
 
         {{-- Search --}}
-            <form action="{{ route('pemugaran.index') }}" method="GET" class="d-flex">
-                    <div class="input-group relative">
-                        <span class="input-group-text absolute left-2 top-8 -translate-y-1/2">
-                        <i class="fa-solid fa-magnifying-glass text-gray-300 text-xl"></i>
-                        </span>
-                        <input type="text" name="search" class="w-full pl-9 pr-3 py-1 border-2 rounded-lg placeholder:text-gray-500 focus:outline-indigo-500 placeholder:italic" placeholder="Cari..." value="{{ request('search') }}">
-                    </div>
-            </form>
+        <form action="{{ route('pemugaran.index') }}" method="GET" class="d-flex">
+                <div class="input-group relative">
+                    <span class="input-group-text absolute left-2 top-1">
+                    <i class="fa-solid fa-magnifying-glass text-gray-300 text-xl"></i>
+                    </span>
+                    <input type="text" name="search" class="w-full pl-9 pr-3 py-1 shadow border border-gray-300 rounded-lg placeholder:text-gray-500 focus:outline-indigo-500 placeholder:italic" placeholder="Cari..." value="{{ request('search') }}">
+                </div>
+        </form>
     </div>
 
     {{-- Table --}}
-    <div class="bg-white rounded-xl shadow p-4">
         <table class="w-full text-xs border-collapse">
             <thead>
-                <tr class="border-b">
+                <tr class="border-b border-gray-300">
                     <th class="py-2 text-center">No.</th>
                     <th class="py-2 text-center">Cagar Budaya</th>
                     <th class="py-2 text-center relative">
@@ -40,7 +39,7 @@
                             <span>Kondisi</span>
 
                             <button type="button"
-                                class="filter-toggle text-gray-500 hover:text-gray-700"
+                                class="filter-toggle text-sky-500 hover:text-sky-700"
                                 data-target="filter-kondisi">
                                 <i class="fas fa-filter"></i>
                             </button>
@@ -80,7 +79,7 @@
                                         Reset
                                     </a>
                                     <button type="submit"
-                                            class="px-3 py-1 bg-gray-700 text-white rounded text-sm">
+                                            class="px-3 py-1 bg-blue-600 text-white rounded text-sm">
                                         Terapkan
                                     </button>
                                 </div>
@@ -95,7 +94,7 @@
                             <span>Status Pemugaran</span>
 
                             <button type="button"
-                                class="filter-toggle text-gray-500 hover:text-gray-700"
+                                class="filter-toggle text-sky-500 hover:text-sky-700"
                                 data-target="filter-status">
                                 <i class="fas fa-filter"></i>
                             </button>
@@ -132,7 +131,7 @@
                                         Reset
                                     </a>
                                     <button type="submit"
-                                            class="px-3 py-1 bg-gray-700 text-white rounded text-sm">
+                                            class="px-3 py-1 bg-blue-600 text-white rounded text-sm">
                                         Terapkan
                                     </button>
                                 </div>
@@ -149,7 +148,7 @@
             </thead>
             <tbody>
                 @forelse ($pemugaran as $item)
-                <tr class="text-center">
+                <tr class="text-center hover:bg-gray-100">
                     <td class="py-2">{{ $loop->iteration }}</td>
                     <td class="py-2">
                         {{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}
@@ -200,13 +199,13 @@
                     </td>
                     <td class="py-2 text-center">
                         <div class="flex justify-center gap-1">
-                            <a href="{{ route('pemugaran.detail', $item->id_pemugaran) }}" class="px-2 py-1 bg-teal-500 hover:bg-teal-700 text-white rounded">
+                            <a href="{{ route('pemugaran.detail', $item->id_pemugaran) }}" class="py-1 px-2 bg-teal-500 hover:bg-teal-700 shadow-sm shadow-teal-400 text-white rounded">
                                 <i class="fas fa-circle-info"></i>
                             </a>
-                            <a href="{{ route('pemugaran.edit', $item->id_pemugaran) }}" class="px-2 py-1 bg-yellow-500 hover:bg-yellow-700 text-white rounded">
+                            <a href="{{ route('pemugaran.edit', $item->id_pemugaran) }}" class="py-1 px-2 bg-amber-500 hover:bg-amber-700 shadow-sm shadow-amber-400 text-white rounded">
                                 <i class="fas fa-pen"></i>
                             </a>
-                            <a href="{{ route('pemugaran.verifikasi', $item->id_pemugaran) }}" class="px-2 py-1 bg-green-500 hover:bg-green-700 text-white rounded">
+                            <a href="{{ route('pemugaran.verifikasi', $item->id_pemugaran) }}" class="py-1 px-2 bg-indigo-500 hover:bg-indigo-700 shadow-sm shadow-indigo-400 text-white rounded">
                                 <i class="fa-regular fa-circle-check"></i>
                             </a>
                         </div>
@@ -221,7 +220,7 @@
                 @endforelse
             </tbody>
         </table>
-    </div>
+    
 
     {{-- Pagination --}}
     <div class="mt-4">
