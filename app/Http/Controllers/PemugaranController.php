@@ -65,28 +65,40 @@ class PemugaranController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'id_cagar_budaya' => 'required',
             'id' => 'required',
             'kondisi' => 'required|string',
             'tanggal_pengajuan' => 'required|date',
             'deskripsi_pengajuan' => 'required|string',
-            
             'biaya_pemugaran' => 'required|numeric',
             'proposal_pengajuan' => 'required|file|mimes:pdf|max:5120',
         ]);
 
-        $proposalPath = $request->file('proposal_pengajuan')
-            ->store('proposal-pemugaran', 'public');
+        // Upload PROPOSAL PEMUGARAN dengan nama asli
+        if ($request->hasFile('proposal_pengajuan')) {
+            $proposalFile = $request->file('proposal_pengajuan');
+
+            $timestamp = Carbon::now()->format('mdyHisu');
+            $proposalName = $timestamp . '_' . $proposalFile->getClientOriginalName();
+
+            $proposalPath = $proposalFile->storeAs(
+                'proposal-pemugaran',
+                $proposalName,
+                'public'
+            );
+
+            $validated['proposal_pengajuan'] = $proposalPath;
+        }
 
         Pemugaran::create([
-            'id_cagar_budaya' => $request->id_cagar_budaya,
-            'id' => $request->id,
-            'kondisi' => $request->kondisi,
-            'tanggal_pengajuan' => $request->tanggal_pengajuan,
-            'deskripsi_pengajuan' => $request->deskripsi_pengajuan,
-            'biaya_pemugaran' => $request->biaya_pemugaran,
-            'proposal_pengajuan' => $proposalPath,
+            'id_cagar_budaya' => $validated['id_cagar_budaya'],
+            'id' => $validated['id'],
+            'kondisi' => $validated['kondisi'],
+            'tanggal_pengajuan' => $validated['tanggal_pengajuan'],
+            'deskripsi_pengajuan' => $validated['deskripsi_pengajuan'],
+            'biaya_pemugaran' => $validated['biaya_pemugaran'],
+            'proposal_pengajuan' => $validated['proposal_pengajuan'],
             'status_pemugaran' => 'pending',
             'status_verifikasi' => 'menunggu',
         ]);
@@ -95,6 +107,7 @@ class PemugaranController extends Controller
             ->route('pemugaran.index')
             ->with('success', 'Pengajuan pemugaran berhasil dikirim.');
     }
+
 
     public function edit(Pemugaran $pemugaran)
     {
@@ -150,7 +163,7 @@ class PemugaranController extends Controller
 
     public function verifikasiUpdate(Request $request, Pemugaran $pemugaran)
     {
-        $request->validate([
+        $validated = $request->validate([
             'status_pemugaran' => 'required|string',
             'status_verifikasi' => 'required|string',
             'tanggal_verifikasi' => 'required|date',
@@ -159,20 +172,29 @@ class PemugaranController extends Controller
             'laporan_pertanggungjawaban' => 'nullable|file|mimes:pdf|max:5120',
         ]);
 
-        // Upload laporan jika ada
+        // Upload LAPORAN PERTANGGUNGJAWABAN dengan nama asli + timestamp custom
         if ($request->hasFile('laporan_pertanggungjawaban')) {
-            $laporanPath = $request->file('laporan_pertanggungjawaban')
-                ->store('laporan-pemugaran', 'public');
+            $laporanFile = $request->file('laporan_pertanggungjawaban');
 
-            $pemugaran->laporan_pertanggungjawaban = $laporanPath;
+            $timestamp = Carbon::now()->format('mdyHisu');
+            $laporanName = $timestamp . '_' . $laporanFile->getClientOriginalName();
+
+            $laporanPath = $laporanFile->storeAs(
+                'laporan-pemugaran',
+                $laporanName,
+                'public'
+            );
+
+            $validated['laporan_pertanggungjawaban'] = $laporanPath;
         }
 
         $pemugaran->update([
-            'status_pemugaran' => $request->status_pemugaran,
-            'status_verifikasi' => $request->status_verifikasi,
-            'tanggal_verifikasi' => $request->tanggal_verifikasi,
-            'tanggal_selesai' => $request->tanggal_selesai,
-            'bukti_dokumentasi' => $request->bukti_dokumentasi,
+            'status_pemugaran' => $validated['status_pemugaran'],
+            'status_verifikasi' => $validated['status_verifikasi'],
+            'tanggal_verifikasi' => $validated['tanggal_verifikasi'],
+            'tanggal_selesai' => $validated['tanggal_selesai'],
+            'bukti_dokumentasi' => $validated['bukti_dokumentasi'],
+            'laporan_pertanggungjawaban' => $validated['laporan_pertanggungjawaban'] ?? $pemugaran->laporan_pertanggungjawaban,
         ]);
 
         return redirect()

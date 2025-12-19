@@ -85,7 +85,7 @@
 
                             <div class="flex items-center">
                                 <i class="fas fa-file-pdf text-2xl text-red-500 mr-2"></i>
-                                <span id="dokumenNama" class="text-sm text-gray-700 truncate max-w-45">
+                                <span id="dokumenNama" class="text-sm text-gray-700 truncate max-w-90">
                                     {{ $penghapusan->dokumen_penghapusan ? basename($penghapusan->dokumen_penghapusan) : '' }}
                                 </span>
                             </div>

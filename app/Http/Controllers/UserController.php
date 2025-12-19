@@ -23,7 +23,7 @@ class UserController extends Controller
         }
 
         $allResults = $query->get();
-        $users = $query->orderBy('id', 'desc')->paginate(10);
+        $users = $query->orderBy('id', 'desc')->paginate(5);
 
         return view('pages.user.index', [
             "users" => $users,

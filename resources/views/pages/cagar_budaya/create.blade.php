@@ -281,7 +281,7 @@
                             Deskripsi
                         </label>
                         <textarea name="deskripsi"
-                                  rows="6"
+                                  rows="16"
                                   class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring focus:ring-gray-300"
                                   placeholder="Deskripsi cagar budaya"></textarea>
                         @error('deskripsi')

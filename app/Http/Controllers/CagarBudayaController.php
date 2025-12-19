@@ -116,7 +116,9 @@ class CagarBudayaController extends Controller
     // Upload DOKUMEN KAJIAN
     if ($request->hasFile('dokumen_kajian')) {
         $dokumenFile = $request->file('dokumen_kajian');
-        $dokumenName = $dokumenFile->getClientOriginalName();
+
+        $timestamp = Carbon::now()->format('mdyHisu');
+        $dokumenName = $timestamp . '_' . $dokumenFile->getClientOriginalName();
 
         $dokumenPath = $dokumenFile->storeAs(
             'dokumen_kajian',
@@ -236,7 +238,7 @@ class CagarBudayaController extends Controller
                 }
 
                 // Khusus tanggal
-                if ($nilaiDatabase instanceof \Carbon\Carbon) {
+                if ($nilaiDatabase instanceof Carbon) {
                     $nilaiDatabase = $nilaiDatabase->format('Y-m-d');
                 }
 
@@ -278,7 +280,8 @@ class CagarBudayaController extends Controller
             }
 
             $dokumenFile = $request->file('dokumen_kajian');
-            $dokumenName = $dokumenFile->getClientOriginalName();
+            $timestamp = Carbon::now()->format('mdyHisu');
+            $dokumenName = $timestamp . '_' . $dokumenFile->getClientOriginalName();
 
             $validated['dokumen_kajian'] = $dokumenFile->storeAs(
                 'dokumen_kajian',

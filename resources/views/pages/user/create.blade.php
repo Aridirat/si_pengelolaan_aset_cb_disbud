@@ -19,7 +19,7 @@
 
                 {{-- NIP --}}
                 <div>
-                    <label class="block text-gray-700 mb-1">NIP</label>
+                    <label class="block font-bold text-gray-700 mb-1">NIP</label>
                     <input type="number" name="id"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
                            placeholder="Masukkan NIP">
@@ -30,7 +30,7 @@
 
                 {{-- Username --}}
                 <div>
-                    <label class="block text-gray-700 mb-1">Username</label>
+                    <label class="block font-bold text-gray-700 mb-1">Username</label>
                     <input type="text" name="username"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
                            placeholder="Masukkan username">
@@ -41,7 +41,7 @@
 
                 {{-- Nama Lengkap --}}
                 <div>
-                    <label class="block text-gray-700 mb-1">Nama Lengkap</label>
+                    <label class="block font-bold text-gray-700 mb-1">Nama Lengkap</label>
                     <input type="text" name="nama"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
                            placeholder="Masukkan nama lengkap">
@@ -52,18 +52,41 @@
 
                 {{-- Password --}}
                 <div>
-                    <label class="block text-gray-700 mb-1">Password</label>
-                    <input type="password" name="password"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
-                           placeholder="Masukkan password">
-                           @error('password')
-                            <span class="text-red-500">{{ $message }}</span>
-                        @enderror
+                    <label class="block font-bold text-gray-700 mb-1">
+                        Password
+                    </label>
+
+                    <div class="relative">
+                        <input 
+                            id="password"
+                            type="password" 
+                            name="password"
+                            class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
+                            placeholder="Masukkan password"
+                        >
+
+                        {{-- Icon Toggle --}}
+                        <button 
+                            type="button"
+                            onclick="togglePasswordVisibility()"
+                            class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                        >
+                            <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                        </button>
+                    </div>
+
+                    {{-- Error Message --}}
+                    @error('password')
+                        <span class="text-red-500 text-sm">
+                            {{ $message }}
+                        </span>
+                    @enderror
                 </div>
+
 
                 {{-- Role --}}
                 <div>
-                    <label class="block text-gray-700 mb-1">Role</label>
+                    <label class="block font-bold text-gray-700 mb-1">Role</label>
                     <select name="role"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring focus:ring-blue-300">
                         <option value="">Pilih role</option>
@@ -77,7 +100,7 @@
 
                 {{-- Status --}}
                 <div>
-                    <label class="block text-gray-700 mb-1">Status</label>
+                    <label class="block font-bold text-gray-700 mb-1">Status</label>
                     <select name="status_aktif"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring focus:ring-blue-300">
                         <option value="">Pilih status</option>
@@ -103,4 +126,22 @@
 
     </div>
 </div>
+
+<script>
+function togglePasswordVisibility() {
+    const passwordField = document.getElementById('password');
+    const toggleIcon = document.getElementById('togglePasswordIcon');
+
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordField.type = 'password';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+    }
+}
+</script>
+
 @endsection

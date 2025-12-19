@@ -45,8 +45,8 @@
                                  class="@if(!$data->foto) hidden @endif absolute inset-0 bg-gray-700/30 border border-dashed border-gray-300 rounded-lg flex items-center justify-center hover:flex">
                                 <button type="button" 
                                         id="fotoUbah"
-                                        class="bg-white rounded-full p-3 hover:bg-gray-100">
-                                    <i class="fas fa-edit text-gray-700"></i>
+                                        class="bg-white rounded-full py-2 px-3 hover:bg-gray-100">
+                                    <i class="fas fa-pen text-gray-700"></i>
                                 </button>
                             </div>
                         </div>
