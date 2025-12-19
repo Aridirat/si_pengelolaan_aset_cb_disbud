@@ -68,29 +68,42 @@ class MutasiController extends Controller
     // ================= STORE =================
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'id_cagar_budaya'     => 'required',
             'id'                 => 'required',
-            'kepemilikan_asal'       => 'required|in:pemerintah,pribadi',
-            'kepemilikan_tujuan'     => 'required|in:pemerintah,pribadi',
+            'kepemilikan_asal'    => 'required|in:pemerintah,pribadi',
+            'kepemilikan_tujuan'  => 'required|in:pemerintah,pribadi',
             'tanggal_pengajuan'  => 'required|date',
-            'keterangan'=> 'required|string',
+            'keterangan'         => 'required|string',
             'dokumen_pengajuan'  => 'required|file|mimes:pdf|max:5120',
         ]);
 
-        $dokumenPath = $request->file('dokumen_pengajuan')
-            ->store('dokumen-mutasi', 'public');
+        // Upload DOKUMEN MUTASI dengan nama asli + timestamp custom
+        if ($request->hasFile('dokumen_pengajuan')) {
+            $dokumenFile = $request->file('dokumen_pengajuan');
+
+            $timestamp = Carbon::now()->format('mdyHisu');
+            $dokumenName = $timestamp . '_' . $dokumenFile->getClientOriginalName();
+
+            $dokumenPath = $dokumenFile->storeAs(
+                'dokumen-mutasi',
+                $dokumenName,
+                'public'
+            );
+
+            $validated['dokumen_pengajuan'] = $dokumenPath;
+        }
 
         Mutasi::create([
-            'id_cagar_budaya'      => $request->id_cagar_budaya,
-            'id'                  => $request->id,
-            'kepemilikan_asal'        => $request->kepemilikan_asal,
-            'kepemilikan_tujuan'      => $request->kepemilikan_tujuan,
-            'tanggal_pengajuan'   => $request->tanggal_pengajuan,
-            'keterangan' => $request->keterangan,
-            'dokumen_pengajuan'   => $dokumenPath,
-            'status_mutasi'       => 'pending',
-            'status_verifikasi'   => 'menunggu',
+            'id_cagar_budaya'     => $validated['id_cagar_budaya'],
+            'id'                 => $validated['id'],
+            'kepemilikan_asal'    => $validated['kepemilikan_asal'],
+            'kepemilikan_tujuan'  => $validated['kepemilikan_tujuan'],
+            'tanggal_pengajuan'  => $validated['tanggal_pengajuan'],
+            'keterangan'         => $validated['keterangan'],
+            'dokumen_pengajuan'  => $validated['dokumen_pengajuan'],
+            'status_mutasi'      => 'pending',
+            'status_verifikasi'  => 'menunggu',
         ]);
 
         return redirect()
@@ -115,29 +128,40 @@ class MutasiController extends Controller
     {
         $mutasi = Mutasi::findOrFail($id);
 
-        $request->validate([
+        $validated = $request->validate([
             'id_cagar_budaya'      => 'required',
             'id'                  => 'required',
             'kepemilikan_asal'     => 'required|in:pemerintah,pribadi',
             'kepemilikan_tujuan'   => 'required|in:pemerintah,pribadi',
-            'tanggal_pengajuan'    => 'required|date',
-            'keterangan'           => 'required|string',
-            'dokumen_pengajuan'    => 'nullable|file|mimes:pdf|max:5120',
+            'tanggal_pengajuan'   => 'required|date',
+            'keterangan'          => 'required|string',
+            'dokumen_pengajuan'   => 'nullable|file|mimes:pdf|max:5120',
         ]);
 
+        // Upload ulang dokumen pengajuan (jika ada)
         if ($request->hasFile('dokumen_pengajuan')) {
-            $path = $request->file('dokumen_pengajuan')
-                ->store('dokumen-mutasi', 'public');
-            $mutasi->dokumen_pengajuan = $path;
+            $dokumenFile = $request->file('dokumen_pengajuan');
+
+            $timestamp = Carbon::now()->format('mdyHisu');
+            $dokumenName = $timestamp . '_' . $dokumenFile->getClientOriginalName();
+
+            $dokumenPath = $dokumenFile->storeAs(
+                'dokumen-mutasi',
+                $dokumenName,
+                'public'
+            );
+
+            $validated['dokumen_pengajuan'] = $dokumenPath;
         }
 
         $mutasi->update([
-            'id_cagar_budaya'     => $request->id_cagar_budaya,
-            'id'                 => $request->id,
-            'kepemilikan_asal'    => $request->kepemilikan_asal,
-            'kepemilikan_tujuan'  => $request->kepemilikan_tujuan,
-            'tanggal_pengajuan'   => $request->tanggal_pengajuan,
-            'keterangan'          => $request->keterangan,
+            'id_cagar_budaya'     => $validated['id_cagar_budaya'],
+            'id'                 => $validated['id'],
+            'kepemilikan_asal'    => $validated['kepemilikan_asal'],
+            'kepemilikan_tujuan'  => $validated['kepemilikan_tujuan'],
+            'tanggal_pengajuan'  => $validated['tanggal_pengajuan'],
+            'keterangan'         => $validated['keterangan'],
+            'dokumen_pengajuan'  => $validated['dokumen_pengajuan'] ?? $mutasi->dokumen_pengajuan,
         ]);
 
         return redirect()
@@ -156,23 +180,34 @@ class MutasiController extends Controller
     {
         $mutasi = Mutasi::findOrFail($id);
 
-        $request->validate([
+        $validated = $request->validate([
             'status_mutasi'        => 'required|in:pending,diproses,selesai',
             'status_verifikasi'    => 'required|in:menunggu,disetujui,ditolak',
             'tanggal_verifikasi'   => 'required|date',
             'dokumen_pengesahan'   => 'nullable|file|mimes:pdf|max:5120',
         ]);
 
+        // Upload dokumen pengesahan (jika ada)
         if ($request->hasFile('dokumen_pengesahan')) {
-            $path = $request->file('dokumen_pengesahan')
-                ->store('dokumen-pengesahan', 'public');
-            $mutasi->dokumen_pengesahan = $path;
+            $dokumenFile = $request->file('dokumen_pengesahan');
+
+            $timestamp = Carbon::now()->format('mdyHisu');
+            $dokumenName = $timestamp . '_' . $dokumenFile->getClientOriginalName();
+
+            $dokumenPath = $dokumenFile->storeAs(
+                'dokumen-pengesahan',
+                $dokumenName,
+                'public'
+            );
+
+            $validated['dokumen_pengesahan'] = $dokumenPath;
         }
 
         $mutasi->update([
-            'status_mutasi'       => $request->status_mutasi,
-            'status_verifikasi'   => $request->status_verifikasi,
-            'tanggal_verifikasi'  => $request->tanggal_verifikasi,
+            'status_mutasi'       => $validated['status_mutasi'],
+            'status_verifikasi'   => $validated['status_verifikasi'],
+            'tanggal_verifikasi'  => $validated['tanggal_verifikasi'],
+            'dokumen_pengesahan'  => $validated['dokumen_pengesahan'] ?? $mutasi->dokumen_pengesahan,
         ]);
 
         return redirect()

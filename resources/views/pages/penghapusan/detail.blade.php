@@ -28,7 +28,15 @@
                 </div>
                 <div>
                     <p class="text-gray-500">Bukti Dokumentasi</p>
-                    <p class="font-medium">{{ $penghapusan->bukti_dokumentasi ?? '-' }}</p>
+                    @if ($penghapusan->bukti_dokumentasi)
+                        <a href="{{ $penghapusan->bukti_dokumentasi }}"
+                           target="_blank"
+                           class="text-blue-600 hover:underline">
+                            {{ $penghapusan->bukti_dokumentasi }}
+                        </a>
+                    @else
+                        -
+                    @endif
                 </div>
             </div>
 

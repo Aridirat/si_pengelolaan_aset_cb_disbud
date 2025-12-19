@@ -149,24 +149,34 @@ class PenghapusanController extends Controller
     {
         $penghapusan = Penghapusan::findOrFail($id);
 
-        $request->validate([
+        $validated = $request->validate([
             'status_penghapusan'  => 'required|in:pending,diproses,selesai',
             'status_verifikasi'   => 'required|in:menunggu,disetujui,ditolak',
             'tanggal_verifikasi'  => 'nullable|date',
             'dokumen_penghapusan' => 'nullable|file|mimes:pdf|max:5120',
         ]);
 
-        // Upload dokumen jika ada
+        // Upload DOKUMEN PENGHAPUSAN dengan nama asli + timestamp custom
         if ($request->hasFile('dokumen_penghapusan')) {
-            $path = $request->file('dokumen_penghapusan')
-                ->store('dokumen-penghapusan', 'public');
-            $penghapusan->dokumen_penghapusan = $path;
+            $dokumenFile = $request->file('dokumen_penghapusan');
+
+            $timestamp = Carbon::now()->format('mdyHisu');
+            $dokumenName = $timestamp . '_' . $dokumenFile->getClientOriginalName();
+
+            $dokumenPath = $dokumenFile->storeAs(
+                'dokumen-penghapusan',
+                $dokumenName,
+                'public'
+            );
+
+            $validated['dokumen_penghapusan'] = $dokumenPath;
         }
 
         $penghapusan->update([
-            'status_penghapusan' => $request->status_penghapusan,
-            'status_verifikasi'  => $request->status_verifikasi,
-            'tanggal_verifikasi' => $request->tanggal_verifikasi ?? now(),
+            'status_penghapusan' => $validated['status_penghapusan'],
+            'status_verifikasi'  => $validated['status_verifikasi'],
+            'tanggal_verifikasi' => $validated['tanggal_verifikasi'] ?? now(),
+            'dokumen_penghapusan'=> $validated['dokumen_penghapusan'] ?? $penghapusan->dokumen_penghapusan,
         ]);
 
         return redirect()

@@ -91,7 +91,7 @@
                     @endif
                 </div>
 
-                <div class="bg-gray-300 rounded-lg h-100 overflow-hidden">
+                <div class="bg-gray-300 rounded-lg h-80 overflow-hidden">
                     @if($data->dokumen_kajian)
                         @php
                             $path = asset('storage/'.$data->dokumen_kajian);
