@@ -67,14 +67,14 @@ $tanggalIndonesia = Carbon::parse($tanggal)
     <tr class="no-border">
         <td class="no-border" width="70%"></td>
         <td class="no-border" style="text-align:center;">
-            Badung, {{ $tanggalIndonesia }}<br>
-            Kepala Bidang Cagar Budaya<br><br>
+            Mengetahui, Kepala Bidang Cagar Budaya<br>
+            Kabupaten Badung<br><br>
 
             {{-- TTD DIGITAL --}}
             <img src="{{ public_path('storage/ttd/ttd.png') }}" width="120"><br>
 
-            <strong>NIP: {{ $penandatangan }}</strong><br>
-            <strong>{{ $namaPenandatangan }}</strong>
+            <strong><u>{{ $namaPenandatangan }}</u></strong><br>
+            <strong>NIP. {{ $penandatangan }}</strong>
         </td>
     </tr>
 </table>

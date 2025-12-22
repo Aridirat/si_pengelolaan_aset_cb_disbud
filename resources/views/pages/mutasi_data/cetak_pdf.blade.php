@@ -30,16 +30,16 @@
 <p style="text-align:center;">Dinas Kebudayaan Kabupaten Badung</p>
 <p style="text-align:center;">Tanggal Cetak: {{ $tanggal }}</p>
 
-<table class="">
+<table>
     <thead>
         <tr>
-            <th>No</th>
-            <th>Nama Cagar Budaya</th>
-            <th>Tanggal Mutasi</th>
-            <th>Penanggung Jawab</th>
-            <th>Field yang Dimutasi</th>
-            <th>Data Lama</th>
-            <th>Data Baru</th>
+            <th style="font-size:7px; text-align:center;">No</th>
+            <th style="font-size:7px; text-align:center;">Nama Cagar Budaya</th>
+            <th style="font-size:7px; text-align:center;">Tanggal Mutasi</th>
+            <th style="font-size:7px; text-align:center;">Penanggung Jawab</th>
+            <th style="font-size:7px; text-align:center;">Field yang Dimutasi</th>
+            <th style="font-size:7px; text-align:center;">Data Lama</th>
+            <th style="font-size:7px; text-align:center;">Data Baru</th>
         </tr>
     </thead>
     <tbody>
@@ -50,11 +50,11 @@
             $dataBaru = json_decode($item->nilai_baru, true) ?? [];
         @endphp
         <tr>
-            <td>{{ $i + 1 }}</td>
-            <td>{{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}</td>
-            <td>{{ $item->tanggal_mutasi_data->format('d/m/Y H:i') }}</td>
-            <td>{{ $item->user->nama ?? '-' }}</td>
-            <td>
+            <td style="font-size:7px; text-align:justify; vertical-align: top;">{{ $i + 1 }}</td>
+            <td style="font-size:7px; text-align:justify; vertical-align: top;">{{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}</td>
+            <td style="font-size:7px; text-align:justify; vertical-align: top;">{{ $item->tanggal_mutasi_data->format('d/m/Y H:i') }}</td>
+            <td style="font-size:7px; text-align:justify; vertical-align: top;">{{ $item->user->nama ?? '-' }}</td>
+            <td style="font-size:7px; text-align:justify; vertical-align: top;">
                 @if(count($changedFields))
                     {{ collect($changedFields)
                         ->map(fn($f) => ucwords(str_replace('_', ' ', $f)))
@@ -64,7 +64,7 @@
                     -
                 @endif
             </td>
-            <td style="font-size:10px; text-align:left; vertical-align: top;">
+            <td style="font-size:7px; text-align:justify; vertical-align: top;">
                 @foreach ($dataLama as $key => $value)
                     <div style="margin-bottom:2px;">
                         <strong>{{ ucwords(str_replace('_', ' ', $key)) }}:</strong>
@@ -73,7 +73,7 @@
                 @endforeach
             </td>
 
-            <td style="font-size:10px; text-align:left; vertical-align: top;">
+            <td style="font-size:7px; text-align:justify; vertical-align: top;">
                 @foreach ($dataBaru as $key => $value)
                     <div style="margin-bottom:2px;">
                         <strong>{{ ucwords(str_replace('_', ' ', $key)) }}:</strong>
@@ -94,14 +94,14 @@
     <tr class="no-border">
         <td class="no-border" width="70%"></td>
         <td class="no-border" style="text-align:center;">
-            Badung, {{ $tanggal }}<br>
-            Kepala Bidang Cagar Budaya<br><br>
+            Mengetahui, Kepala Bidang Cagar Budaya<br>
+            Kabupaten Badung<br><br>
 
             {{-- TTD DIGITAL --}}
             <img src="{{ public_path('storage/ttd/ttd.png') }}" width="120"><br>
 
-            <strong>NIP: {{ $penandatangan }}</strong><br>
-            <strong>{{ $namaPenandatangan }}</strong>
+            <strong><u>{{ $namaPenandatangan }}</u></strong><br>
+            <strong>NIP. {{ $penandatangan }}</strong>
         </td>
     </tr>
 </table>
