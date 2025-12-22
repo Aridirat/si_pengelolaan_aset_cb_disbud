@@ -97,7 +97,7 @@ $userRole = auth()->user()->role;
             <button 
                 type="submit" 
                 class="w-full font-bold bg-linear-to-r from-red-600 to-rose-500 hover:from-red-800 hover:to-rose-800 shadow-md shadow-red-500/40 text-white py-2 rounded transition duration-300 ease-in-out hover:translate-y-0.5 hover:scale-99">
-                Logout
+                <i class="fas fa-sign-out-alt"></i> Logout
             </button>
         </form>
     </div>

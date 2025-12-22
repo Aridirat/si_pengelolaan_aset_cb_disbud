@@ -74,7 +74,7 @@
                 @enderror
             </div>
 
-            <hr>
+            <hr class="text-gray-300">
 
             {{-- Baris 2 --}}
             <div class="grid grid-cols-3 gap-4 pt-3">
