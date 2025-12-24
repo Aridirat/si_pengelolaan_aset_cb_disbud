@@ -6,9 +6,6 @@
                     <div>
                         <p class="text-sm text-white font-medium">{{ Auth::user()->nama }}</p>
                     </div>
-                    <span>
-                        <i class="fas fa-user-circle text-xl text-white"></i>
-                    </span>
                 </div>
             </div>
         </header>

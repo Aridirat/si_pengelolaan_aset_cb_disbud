@@ -75,7 +75,7 @@
             Kabupaten Badung<br><br>
 
             {{-- TTD DIGITAL --}}
-            <img src="{{ public_path('storage/ttd/ttd.png') }}" width="120"><br>
+            <br><br>
 
             <strong><u>{{ $namaPenandatangan }}</u></strong><br>
             <strong>NIP. {{ $penandatangan }}</strong>

@@ -74,12 +74,12 @@ $userRole = auth()->user()->role;
                             text-base
                             {{ 
                                 $menu->active 
-                                    ? 'bg-linear-to-r from-blue-700 to-sky-600 shadow-md shadow-blue-500/30 text-white hover:bg-sky-900/30 font-bold duration-300 ease-in-out hover:scale-105' 
+                                    ? 'text-white hover:bg-sky-900/30 font-bold duration-300 ease-in-out hover:scale-105' 
                                     : 'text-gray-500 hover:bg-sky-900/40 hover:text-white font-medium duration-200'
                             }}
                         "
                     >
-                        <i class="nav-icon {{ $menu->icon }}"></i>
+                        {{-- <i class="nav-icon {{ $menu->icon }}"></i> --}}
                         <span class="ml-3">{{ $menu->title }}</span>
                     </a>
                 </li>
@@ -93,11 +93,11 @@ $userRole = auth()->user()->role;
     <div class="mt-5">
         <form action="/logout" method="post">
             @csrf
-    
+            {{-- <i class="fas fa-sign-out-alt"></i> --}}
             <button 
                 type="submit" 
                 class="w-full font-bold bg-linear-to-r from-red-600 to-rose-500 hover:from-red-800 hover:to-rose-800 shadow-md shadow-red-500/40 text-white py-2 rounded transition duration-300 ease-in-out hover:translate-y-0.5 hover:scale-99">
-                <i class="fas fa-sign-out-alt"></i> Logout
+                Logout
             </button>
         </form>
     </div>
