@@ -12,6 +12,11 @@ class CagarBudayaFilter
         'kawasan',
     ];
 
+    public const STATUS_PENETAPAN = [
+        'aktif',
+        'terhapus',
+    ];
+
     public const KONDISI = [
         'baik',
         'rusak ringan',

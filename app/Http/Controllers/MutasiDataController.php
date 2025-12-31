@@ -43,7 +43,7 @@ class MutasiDataController extends Controller
                 });
 
                 // 3. Cari Field yang Dimutasi (bitmask)
-                foreach (\App\Constants\CagarBudayaBitmask::FIELDS as $field => $bit) {
+                foreach (CagarBudayaBitmask::FIELDS as $field => $bit) {
                     if (str_contains($field, $search)) {
                         $q->orWhereRaw('bitmask & ? > 0', [$bit]);
                     }
@@ -68,27 +68,16 @@ class MutasiDataController extends Controller
 
     public function cetakPdf(Request $request)
     {
-        $query = MutasiData::with(['cagarBudaya', 'user'])
-            ->orderBy('tanggal_mutasi_data', 'desc');
+        $fields = $request->input('fields', []);
 
-        // Filter field
-        if ($request->filled('field')) {
-            $field = $request->field;
-            if (array_key_exists($field, CagarBudayaBitmask::FIELDS)) {
-                $bit = CagarBudayaBitmask::FIELDS[$field];
-                $query->whereRaw('bitmask & ? > 0', [$bit]);
-            }
-        }
+        $query = MutasiData::with(['cagarBudaya','user'])
+            ->orderBy('tanggal_mutasi_data','desc');
 
-        // Filter search
-        if ($request->filled('search')) {
-            $search = strtolower($request->search);
-            $query->where(function($q) use ($search) {
-                $q->whereHas('cagarBudaya', fn($cb) => $cb->where('nama_cagar_budaya', 'like', "%$search%"))
-                ->orWhereHas('user', fn($u) => $u->where('nama', 'like', "%$search%"));
-
-                foreach (CagarBudayaBitmask::FIELDS as $field => $bit) {
-                    if (str_contains($field, $search)) {
+        if (!empty($fields)) {
+            $query->where(function ($q) use ($fields) {
+                foreach ($fields as $field) {
+                    if (isset(CagarBudayaBitmask::FIELDS[$field])) {
+                        $bit = CagarBudayaBitmask::FIELDS[$field];
                         $q->orWhereRaw('bitmask & ? > 0', [$bit]);
                     }
                 }
@@ -97,18 +86,15 @@ class MutasiDataController extends Controller
 
         $mutasiData = $query->get();
 
-        $tanggal = Carbon::now();
-        $tanggalIndonesia = $tanggal->locale('id')->isoFormat('D MMMM YYYY');
-
-        $pdf = Pdf::loadView('pages.mutasi_data.cetak_pdf', [
+        return Pdf::loadView('pages.mutasi_data.cetak_pdf', [
             'mutasiData' => $mutasiData,
-            'tanggal' => $tanggalIndonesia,
+            'selectedFields' => $fields,
+            'tanggal' => now()->locale('id')->isoFormat('D MMMM YYYY'),
             'penandatangan' => Auth::user()->id,
             'namaPenandatangan' => Auth::user()->nama,
-        ])->setPaper('A4', 'landscape');
-
-        // Bisa stream dulu
-        return $pdf->stream('Mutasi_Data_' . $tanggal->format('dmy') . '.pdf');
+        ])->setPaper('A4','landscape')
+        ->stream();
     }
+
 
 }

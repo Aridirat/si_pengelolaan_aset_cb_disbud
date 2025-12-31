@@ -12,11 +12,84 @@
     
     {{-- Toolbar --}}
     <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-        <a href="{{ route('mutasi_data.cetak.pdf', request()->query()) }}"
-                    target="_blank"
-                    class="px-3 py-2 mt-5 bg-blue-500 text-white text-sm font-bold rounded-lg hover:bg-blue-700 shadow-md shadow-blue-500/30">
-                        Cetak Laporan
-        </a>
+        <button onclick="openModal()"
+            class="px-3 py-2 bg-blue-500 text-white text-sm font-bold rounded-lg hover:bg-blue-700 shadow-md shadow-blue-500/30">
+            Cetak Laporan
+        </button>
+
+        {{-- Modal Filter Cetak Laporan --}}
+        <div id="modalCetak" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+            <div class="bg-white rounded-lg p-6 w-96 shadow-lg relative">
+
+                {{-- Tombol Close (X) --}}
+                <button
+                    type="button"
+                    onclick="closeModal()"
+                    class="absolute top-1 right-3 text-gray-400 hover:text-gray-700 text-xl font-bold"
+                    aria-label="Tutup"
+                >
+                    &times;
+                </button>
+
+                <h3 class="font-semibold text-lg mb-4 text-gray-800">
+                    Pilih Field Mutasi yang Akan Dicetak
+                </h3>
+
+                <form method="GET" action="{{ route('mutasi_data.cetak.pdf') }}" target="_blank">
+
+                    {{-- Checklist --}}
+                    <div class="space-y-2 max-h-64 overflow-y-auto border rounded p-3">
+                        @foreach (\App\Constants\CagarBudayaBitmask::FIELDS as $field => $bit)
+                            <label class="flex items-center gap-2 text-sm text-gray-700">
+                                <input
+                                    type="checkbox"
+                                    name="fields[]"
+                                    value="{{ $field }}"
+                                    class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                >
+                                {{ ucwords(str_replace('_',' ', $field)) }}
+                            </label>
+                        @endforeach
+                    </div>
+
+                    {{-- Action Button --}}
+                    <div class="mt-5 flex justify-between items-center">
+
+                        {{-- Left Action --}}
+                        <div class="flex gap-2">
+                            <button
+                                type="button"
+                                onclick="selectAllChecklist()"
+                                class="px-3 py-1 bg-teal-500 hover:bg-teal-700 text-white text-md rounded"
+                            >
+                                Pilih Semua
+                            </button>
+
+                            <button
+                                type="button"
+                                onclick="resetChecklist()"
+                                class="px-3 py-1 bg-rose-500 hover:bg-rose-700 text-white text-md rounded"
+                            >
+                                Clear
+                            </button>
+                        </div>
+
+                        {{-- Right Action --}}
+                        <div>
+                            <button
+                                type="submit"
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+                            >
+                                Cetak
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
 
         <div class="flex items-center gap-2">
         <form method="GET" action="{{ route('mutasi_data.index') }}" id="filterForm">
@@ -189,6 +262,28 @@
 
 
 </div>
+<script>
+function openModal() {
+    document.getElementById('modalCetak').classList.remove('hidden');
+}
+function closeModal() {
+    document.getElementById('modalCetak').classList.add('hidden');
+}
+
+function selectAllChecklist() {
+    document
+        .querySelectorAll('#modalCetak input[type="checkbox"]')
+        .forEach(cb => cb.checked = true);
+}
+
+function resetChecklist() {
+    document
+        .querySelectorAll('#modalCetak input[type="checkbox"]')
+        .forEach(cb => cb.checked = false);
+}
+</script>
+
+
 
 <script>
     function applyFieldFilter(field) {

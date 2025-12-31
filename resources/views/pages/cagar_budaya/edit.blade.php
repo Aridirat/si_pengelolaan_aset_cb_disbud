@@ -90,12 +90,11 @@
                         <label class="block text-sm font-medium mb-1">
                             Nama Cagar Budaya
                         </label>
-                        <input type="text"
-                               name="nama_cagar_budaya"
-                               class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring focus:ring-gray-300"
-                               placeholder="Masukkan nama"
-                               value="{{ $data->nama_cagar_budaya }}">
+                        <div class="px-3 py-2 rounded-lg border border-gray-200 bg-gray-100 text-gray-700">
+                            {{ $data->nama_cagar_budaya }}
+                        </div>
                     </div>
+
 
                     {{-- KATEGORI --}}
                     <div>
@@ -119,10 +118,20 @@
                             Lokasi
                         </label>
                         <input type="text"
-                               name="lokasi"
-                               class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring focus:ring-gray-300"
-                               placeholder="Desa, Kecamatan"
-                               value="{{ $data->lokasi }}">
+                            name="lokasi"
+                            class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring focus:ring-gray-300"
+                            placeholder="Desa, Kecamatan"
+                            value="{{ $data->lokasi }}">
+                    </div>
+
+                    {{-- STATUS Penetapan --}}
+                    <div>
+                        <label class="block text-sm font-medium mb-1">
+                            Status Penetapan
+                        </label>
+                        <div class="px-3 py-2 rounded-lg border border-gray-200 bg-gray-100 text-gray-700">
+                            {{ ucfirst($data->status_penetapan) }}
+                        </div>
                     </div>
 
                     {{-- STATUS KEPEMILIKAN --}}
@@ -130,13 +139,11 @@
                         <label class="block text-sm font-medium mb-1">
                             Status Kepemilikan
                         </label>
-                        <select name="status_kepemilikan"
-                                class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white focus:ring focus:ring-gray-300">
-                            <option value="">Pilih status kepemilikan</option>
-                            <option value="pemerintah" {{ $data->status_kepemilikan == 'pemerintah' ? 'selected' : '' }}>Pemerintah</option>
-                            <option value="pribadi" {{ $data->status_kepemilikan == 'pribadi' ? 'selected' : '' }}>Pribadi</option>
-                        </select>
+                        <div class="px-3 py-2 rounded-lg border border-gray-200 bg-gray-100 text-gray-700">
+                            {{ ucfirst($data->status_kepemilikan) }}
+                        </div>
                     </div>
+
 
                     {{-- KONDISI --}}
                     <div>
@@ -173,13 +180,11 @@
                         <label class="block text-sm font-medium mb-1">
                             Nilai Perolehan
                         </label>
-                        <input type="number"
-                               name="nilai_perolehan"
-                               min="0"
-                               class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring focus:ring-gray-300"
-                               placeholder="Rp"
-                               value="{{ $data->nilai_perolehan }}">
+                        <div class="px-3 py-2 rounded-lg border border-gray-200 bg-gray-100 text-gray-700">
+                            Rp {{ number_format($data->nilai_perolehan, 0, ',', '.') }}
+                        </div>
                     </div>
+
 
                     {{-- DOKUMEN --}}
                     <div>

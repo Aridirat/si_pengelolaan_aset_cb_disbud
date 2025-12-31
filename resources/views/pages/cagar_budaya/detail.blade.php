@@ -45,6 +45,11 @@
                     <p class="text-gray-500">Lokasi</p>
                     <p class="font-medium">{{ $data->lokasi }}
                 </div>
+                
+                <div class="pb-3">
+                    <p class="text-gray-500">Status Penetapan</p>
+                    <p class="font-medium">{{ ucfirst($data->status_penetapan) }}</p>
+                </div>
 
                 <div class="pb-3">
                     <p class="text-gray-500">Status Kepemilikan</p>

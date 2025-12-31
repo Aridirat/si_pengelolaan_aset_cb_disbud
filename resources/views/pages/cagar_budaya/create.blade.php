@@ -146,6 +146,22 @@
                             @enderror
                     </div>
 
+                    {{-- STATUS PENETAPAN --}}
+                    <div>
+                        <label class="block text-sm font-medium mb-1">
+                            Status Penetapan
+                        </label>
+                        <select name="status_penetapan"
+                                class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white focus:ring focus:ring-gray-300">
+                            <option value="">Pilih status</option>
+                            <option value="aktif">Aktif</option>
+                            <option value="terhapus">Terhapus</option>
+                        </select>
+                    @error('status_penetapan')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
+                    </div>
+
                     {{-- STATUS KEPEMILIKAN --}}
                     <div>
                         <label class="block text-sm font-medium mb-1">

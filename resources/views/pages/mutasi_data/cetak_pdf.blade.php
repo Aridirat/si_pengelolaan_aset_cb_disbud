@@ -48,15 +48,16 @@
             $changedFields = \App\Constants\CagarBudayaBitmask::decodeBitmask($item->bitmask);
             $dataLama = json_decode($item->nilai_lama, true) ?? [];
             $dataBaru = json_decode($item->nilai_baru, true) ?? [];
+            $printedChangedFields = array_intersect($changedFields, $selectedFields);
         @endphp
         <tr>
-            <td style="font-size:7px; text-align:justify; vertical-align: top;">{{ $i + 1 }}</td>
-            <td style="font-size:7px; text-align:justify; vertical-align: top;">{{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}</td>
-            <td style="font-size:7px; text-align:justify; vertical-align: top;">{{ $item->tanggal_mutasi_data->format('d/m/Y H:i') }}</td>
-            <td style="font-size:7px; text-align:justify; vertical-align: top;">{{ $item->user->nama ?? '-' }}</td>
-            <td style="font-size:7px; text-align:justify; vertical-align: top;">
-                @if(count($changedFields))
-                    {{ collect($changedFields)
+            <td style="font-size:7px; text-align:left; vertical-align: top;">{{ $i + 1 }}</td>
+            <td style="font-size:7px; text-align:left; vertical-align: top;">{{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}</td>
+            <td style="font-size:7px; text-align:left; vertical-align: top;">{{ $item->tanggal_mutasi_data->format('d/m/Y H:i') }}</td>
+            <td style="font-size:7px; text-align:left; vertical-align: top;">{{ $item->user->nama ?? '-' }}</td>
+            <td style="font-size:7px; text-align:left; vertical-align: top;">
+                @if(count($printedChangedFields))
+                    {{ collect($printedChangedFields)
                         ->map(fn($f) => ucwords(str_replace('_', ' ', $f)))
                         ->implode(', ')
                     }}
@@ -64,21 +65,26 @@
                     -
                 @endif
             </td>
-            <td style="font-size:7px; text-align:justify; vertical-align: top;">
-                @foreach ($dataLama as $key => $value)
-                    <div style="margin-bottom:2px;">
-                        <strong>{{ ucwords(str_replace('_', ' ', $key)) }}:</strong>
-                        {{ is_array($value) ? json_encode($value) : $value }}
-                    </div>
+
+            <td style="font-size:7px; text-align:left; vertical-align: top;">
+                @foreach ($selectedFields as $field)
+                    @if (array_key_exists($field, $dataLama))
+                        <div>
+                            <strong>{{ ucwords(str_replace('_',' ',$field)) }}:</strong>
+                            {{ $dataLama[$field] }}
+                        </div>
+                    @endif
                 @endforeach
             </td>
 
-            <td style="font-size:7px; text-align:justify; vertical-align: top;">
-                @foreach ($dataBaru as $key => $value)
-                    <div style="margin-bottom:2px;">
-                        <strong>{{ ucwords(str_replace('_', ' ', $key)) }}:</strong>
-                        {{ is_array($value) ? json_encode($value) : $value }}
-                    </div>
+            <td style="font-size:7px; text-align:left; vertical-align: top;">
+                @foreach ($selectedFields as $field)
+                    @if (array_key_exists($field, $dataBaru))
+                        <div>
+                            <strong>{{ ucwords(str_replace('_',' ',$field)) }}:</strong>
+                            {{ $dataBaru[$field] }}
+                        </div>
+                    @endif
                 @endforeach
             </td>
         </tr>

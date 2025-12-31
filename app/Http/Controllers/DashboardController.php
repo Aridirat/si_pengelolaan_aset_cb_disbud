@@ -27,6 +27,8 @@ class DashboardController extends Controller
             'baik' => CagarBudaya::where('kondisi', 'baik')->count(),
             'rusak_ringan' => CagarBudaya::where('kondisi', 'rusak ringan')->count(),
             'rusak_berat' => CagarBudaya::where('kondisi', 'rusak berat')->count(),
+            'aktif' => CagarBudaya::where('status_penetapan', 'aktif')->count(),
+            'terhapus' => CagarBudaya::where('status_penetapan', 'terhapus')->count(),
         ];
 
         /* =========================
@@ -57,7 +59,8 @@ class DashboardController extends Controller
         * MUTASI DATA - FIELD YANG DIUBAH (BITMASK)
         * ========================= */
         $mutasiFieldCount = [];
-
+        $totalMutasiData = MutasiData::count();
+        
         foreach (CagarBudayaBitmask::FIELDS as $field => $bit) {
             $mutasiFieldCount[$field] = MutasiData::whereRaw(
                 '(bitmask & ?) != 0',
@@ -71,7 +74,8 @@ class DashboardController extends Controller
             'pemugaran',
             'penghapusan',
             'mutasiStatus',
-            'mutasiFieldCount'
+            'mutasiFieldCount',
+            'totalMutasiData'
         ));
     }
 }

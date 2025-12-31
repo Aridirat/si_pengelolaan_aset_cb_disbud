@@ -17,7 +17,8 @@ return new class extends Migration
             $table->enum('kategori',['benda','bangunan','struktur','situs','kawasan']);
             $table->string('lokasi');
             $table->date('tanggal_pertama_pencatatan');
-            $table->decimal('nilai_perolehan', 13, 2);
+            $table->decimal('nilai_perolehan', 20, 2);
+            $table->enum('status_penetapan',['aktif','terhapus']);
             $table->enum('status_kepemilikan',['pemerintah','pribadi']);
             $table->enum('kondisi', ['baik', 'rusak ringan', 'rusak berat']);
             $table->string('foto');
