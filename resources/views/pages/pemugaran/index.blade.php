@@ -199,32 +199,68 @@
                     </td>
                     <td class="py-2 text-center">
                         <div class="flex justify-center gap-1">
-                            <a href="{{ route('pemugaran.detail', $item->id_pemugaran) }}" class="py-1 px-2 bg-teal-500 hover:bg-teal-700 shadow-sm shadow-teal-400 text-white rounded">
+
+                            {{-- DETAIL (SELALU AKTIF) --}}
+                            <a href="{{ route('pemugaran.detail', $item->id_pemugaran) }}"
+                            class="py-1 px-2 bg-teal-500 hover:bg-teal-700 shadow-sm shadow-teal-400 text-white rounded"
+                            title="Detail Pemugaran">
                                 <i class="fas fa-circle-info"></i>
                             </a>
-                            <a href="{{ route('pemugaran.edit', $item->id_pemugaran) }}" class="py-1 px-2 bg-amber-500 hover:bg-amber-700 shadow-sm shadow-amber-400 text-white rounded">
-                                <i class="fas fa-pen"></i>
-                            </a>
-                            
+
+                            {{-- EDIT --}}
                             @php
-                            $userRole = auth()->user()->role;
+                                $disableEdit = in_array(
+                                    $item->status_pemugaran,
+                                    ['diproses', 'selesai']
+                                );
                             @endphp
-                            @if ($userRole === 'admin')
-                                <a href="{{ route('pemugaran.verifikasi', $item->id_pemugaran) }}" class="py-1 px-2 bg-indigo-500 hover:bg-indigo-700 shadow-sm shadow-indigo-400 text-white rounded">
-                                <i class="fa-regular fa-circle-check"></i>
-                            </a>
+
+                            @if ($disableEdit)
+                                <button type="button"
+                                        disabled
+                                        class="py-1 px-2 bg-amber-300 text-white rounded cursor-not-allowed opacity-60"
+                                        title="Tidak dapat diedit karena pemugaran sudah diproses atau selesai">
+                                    <i class="fas fa-pen"></i>
+                                </button>
                             @else
-                                <button
-                                    type="button"
-                                    disabled
-                                    class="py-1 px-2 bg-indigo-300 text-white rounded cursor-not-allowed opacity-60"
-                                    title="Hanya admin yang dapat melakukan verifikasi"
-                                >
+                                <a href="{{ route('pemugaran.edit', $item->id_pemugaran) }}"
+                                class="py-1 px-2 bg-amber-500 hover:bg-amber-700 shadow-sm shadow-amber-400 text-white rounded"
+                                title="Edit Pemugaran">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+                            @endif
+
+                            {{-- VERIFIKASI --}}
+                            @php
+                                $userRole = auth()->user()->role;
+
+                                $verifikasiFinal = in_array(
+                                    $item->status_verifikasi,
+                                    ['ditolak', 'disetujui']
+                                );
+                            @endphp
+
+                            @if ($userRole === 'admin' && !$verifikasiFinal)
+                                <a href="{{ route('pemugaran.verifikasi', $item->id_pemugaran) }}"
+                                class="py-1 px-2 bg-indigo-500 hover:bg-indigo-700 shadow-sm shadow-indigo-400 text-white rounded"
+                                title="Verifikasi Pemugaran">
+                                    <i class="fa-regular fa-circle-check"></i>
+                                </a>
+                            @else
+                                <button type="button"
+                                        disabled
+                                        class="py-1 px-2 bg-indigo-300 text-white rounded cursor-not-allowed opacity-60"
+                                        title="{{ $userRole !== 'admin'
+                                            ? 'Hanya admin yang dapat melakukan verifikasi'
+                                            : 'Verifikasi sudah bersifat final'
+                                        }}">
                                     <i class="fa-regular fa-circle-check"></i>
                                 </button>
                             @endif
+
                         </div>
                     </td>
+
                 </tr>
                 @empty
                 <tr>

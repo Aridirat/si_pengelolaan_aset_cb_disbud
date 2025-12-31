@@ -22,15 +22,19 @@
                 {{-- Nama Cagar Budaya --}}
                 <div>
                     <label class="text-sm font-medium">Nama Cagar Budaya</label>
-                    <select name="id_cagar_budaya" class="w-full mt-1 border border-gray-300 rounded-md p-2">
-                        @foreach ($cagarBudaya as $cb)
-                            <option value="{{ $cb->id_cagar_budaya }}"
-                                @selected($cb->id_cagar_budaya == $pemugaran->id_cagar_budaya)>
-                                {{ $cb->nama_cagar_budaya }}
-                            </option>
-                        @endforeach
-                    </select>
+
+                    <input type="text"
+                        value="{{ $pemugaran->cagarBudaya->nama_cagar_budaya }}"
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100 cursor-not-allowed"
+                        readonly>
+
+                    {{-- ID tetap dikirim ke server --}}
+                    <input type="hidden"
+                        name="id_cagar_budaya"
+                        value="{{ $pemugaran->id_cagar_budaya }}">
                 </div>
+
+
 
                 {{-- Penanggung Jawab --}}
                 <div>
@@ -48,24 +52,24 @@
                 {{-- Kondisi --}}
                 <div>
                     <label class="text-sm font-medium">Kondisi Cagar Budaya</label>
-                    <select name="kondisi" class="w-full mt-1 border border-gray-300 rounded-md p-2">
-                        @foreach (['Rusak Ringan','Rusak Sedang','Rusak Berat'] as $kondisi)
-                            <option value="{{ $kondisi }}"
-                                @selected($kondisi == $pemugaran->kondisi)>
-                                {{ $kondisi }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <input type="text"
+                        name="kondisi"
+                        value="{{ $pemugaran->cagarBudaya->kondisi }}"
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100"
+                        readonly>
                 </div>
+
 
                 {{-- Tanggal --}}
                 <div>
                     <label class="text-sm font-medium">Tanggal Pengajuan</label>
                     <input type="date"
-                           name="tanggal_pengajuan"
-                           value="{{ $pemugaran->tanggal_pengajuan->format('Y-m-d') }}"
-                           class="w-full mt-1 border border-gray-300 rounded-md p-2">
+                        name="tanggal_pengajuan"
+                        value="{{ $pemugaran->tanggal_pengajuan->format('Y-m-d') }}"
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100"
+                        readonly>
                 </div>
+
 
                 {{-- Biaya --}}
                 <div>

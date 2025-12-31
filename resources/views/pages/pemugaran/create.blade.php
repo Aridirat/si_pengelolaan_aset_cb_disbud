@@ -21,16 +21,26 @@
             {{-- Nama Cagar Budaya --}}
             <div>
                 <label class="text-sm font-medium">Nama Cagar Budaya</label>
-                <select name="id_cagar_budaya" class="w-full mt-1 border border-gray-300 rounded-md p-2">
-                  <option value="">Pilih cagar budaya</option>
-                  @foreach ($cagarBudaya as $cb)
-                    <option value="{{ $cb->id_cagar_budaya }}">{{ $cb->nama_cagar_budaya }}</option>
-                  @endforeach
+                <select
+                    name="id_cagar_budaya"
+                    id="cagarBudayaSelect"
+                    class="w-full mt-1 border border-gray-300 rounded-md p-2"
+                >
+                    <option value="">Pilih cagar budaya</option>
+                    @foreach ($cagarBudaya as $cb)
+                        <option
+                            value="{{ $cb->id_cagar_budaya }}"
+                            data-kondisi="{{ strtolower($cb->kondisi) }}"
+                        >
+                            {{ $cb->nama_cagar_budaya }}
+                        </option>
+                    @endforeach
                 </select>
                 @error('id_cagar_budaya')
                   <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
+            
 
             {{-- Penanggung Jawab --}}
             <div>
@@ -49,15 +59,25 @@
             {{-- Kondisi --}}
             <div>
                 <label class="text-sm font-medium">Kondisi Cagar Budaya</label>
-                <select name="kondisi" class="w-full mt-1 border border-gray-300 rounded-md p-2">
-                  <option value="">Pilih kondisi</option>
-                  <option value="Rusak Ringan">Rusak Ringan</option>
-                  <option value="Rusak Berat">Rusak Berat</option>
-                </select>
+
+                {{-- Input tampilan --}}
+                <input
+                    type="text"
+                    id="kondisi_display"
+                    class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100 cursor-not-allowed"
+                    placeholder="Kondisi akan terisi otomatis"
+                    readonly
+                >
+
+                {{-- Hidden input untuk backend --}}
+                <input type="hidden" name="kondisi" id="kondisi">
+
                 @error('kondisi')
-                  <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
+
+
 
             {{-- Tanggal --}}
             <div>
@@ -158,4 +178,18 @@
     </form>
 
 </div>
+
+<script>
+document.getElementById('cagarBudayaSelect').addEventListener('change', function () {
+    const selectedOption = this.options[this.selectedIndex];
+    const kondisi = selectedOption.getAttribute('data-kondisi');
+
+    // Set nilai ke select tampilan
+    document.getElementById('kondisi_display').value = kondisi ?? '';
+
+    // Set nilai ke hidden input (untuk dikirim ke server)
+    document.getElementById('kondisi').value = kondisi ?? '';
+});
+</script>
+
 @endsection
