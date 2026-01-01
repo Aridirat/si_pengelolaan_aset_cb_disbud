@@ -43,6 +43,10 @@ class PemugaranController extends Controller
             $query->where('status_pemugaran', $request->status_pemugaran);
         }
 
+        if ($request->filled('status_verifikasi')) {
+            $query->where('status_verifikasi', $request->status_verifikasi);
+        }
+
         $pemugaran = $query
             ->orderBy('tanggal_pengajuan', 'desc')
             ->paginate(10)
@@ -288,6 +292,13 @@ class PemugaranController extends Controller
             $query->where('status_pemugaran', $request->status_pemugaran);
         }
 
+        /* ======================
+        | FILTER STATUS Verifikasi
+        ====================== */
+        if ($request->filled('status_verifikasi')) {
+            $query->where('status_verifikasi', $request->status_verifikasi);
+        }
+        
         $pemugaran = $query
             ->orderBy('tanggal_pengajuan', 'desc')
             ->get();

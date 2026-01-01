@@ -43,53 +43,79 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($mutasiData as $i => $item)
-        @php
-            $changedFields = \App\Constants\CagarBudayaBitmask::decodeBitmask($item->bitmask);
-            $dataLama = json_decode($item->nilai_lama, true) ?? [];
-            $dataBaru = json_decode($item->nilai_baru, true) ?? [];
-            $printedChangedFields = array_intersect($changedFields, $selectedFields);
-        @endphp
-        <tr>
-            <td style="font-size:7px; text-align:left; vertical-align: top;">{{ $i + 1 }}</td>
-            <td style="font-size:7px; text-align:left; vertical-align: top;">{{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}</td>
-            <td style="font-size:7px; text-align:left; vertical-align: top;">{{ $item->tanggal_mutasi_data->format('d/m/Y H:i') }}</td>
-            <td style="font-size:7px; text-align:left; vertical-align: top;">{{ $item->user->nama ?? '-' }}</td>
-            <td style="font-size:7px; text-align:left; vertical-align: top;">
-                @if(count($printedChangedFields))
-                    {{ collect($printedChangedFields)
-                        ->map(fn($f) => ucwords(str_replace('_', ' ', $f)))
-                        ->implode(', ')
-                    }}
-                @else
-                    -
-                @endif
-            </td>
+        @forelse ($mutasiData as $i => $item)
+            @php
+                $changedFields = \App\Constants\CagarBudayaBitmask::decodeBitmask($item->bitmask);
+                $dataLama = is_string($item->nilai_lama)
+                    ? json_decode($item->nilai_lama, true)
+                    : ($item->nilai_lama ?? []);
 
-            <td style="font-size:7px; text-align:left; vertical-align: top;">
-                @foreach ($selectedFields as $field)
-                    @if (array_key_exists($field, $dataLama))
-                        <div>
-                            <strong>{{ ucwords(str_replace('_',' ',$field)) }}:</strong>
-                            {{ $dataLama[$field] }}
-                        </div>
-                    @endif
-                @endforeach
-            </td>
+                $dataBaru = is_string($item->nilai_baru)
+                    ? json_decode($item->nilai_baru, true)
+                    : ($item->nilai_baru ?? []);
 
-            <td style="font-size:7px; text-align:left; vertical-align: top;">
-                @foreach ($selectedFields as $field)
-                    @if (array_key_exists($field, $dataBaru))
-                        <div>
-                            <strong>{{ ucwords(str_replace('_',' ',$field)) }}:</strong>
-                            {{ $dataBaru[$field] }}
-                        </div>
+                $printedChangedFields = array_intersect($changedFields, $selectedFields);
+            @endphp
+
+            <tr>
+                <td style="text-align:left; font-size:7px; vertical-align: top;">{{ $i + 1 }}</td>
+
+                <td style="text-align:left; font-size:7px; vertical-align: top;">
+                    {{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}
+                </td>
+
+                <td style="text-align:left; font-size:7px; vertical-align: top;">
+                    {{ $item->tanggal_mutasi_data->format('d/m/Y H:i') }}
+                </td>
+
+                <td style="text-align:left; font-size:7px; vertical-align: top;">
+                    {{ $item->user->nama ?? '-' }}
+                </td>
+
+                <td style="text-align:left; font-size:7px; vertical-align: top;">
+                    @if(count($printedChangedFields))
+                        {{ collect($printedChangedFields)
+                            ->map(fn($f) => ucwords(str_replace('_', ' ', $f)))
+                            ->implode(', ')
+                        }}
+                    @else
+                        -
                     @endif
-                @endforeach
-            </td>
-        </tr>
-        @endforeach
+                </td>
+
+                <td style="text-align:left; font-size:7px; vertical-align: top;">
+                    @foreach ($selectedFields as $field)
+                        @if (array_key_exists($field, $dataLama))
+                            <div>
+                                <strong>{{ ucwords(str_replace('_',' ',$field)) }}:</strong>
+                                {{ $dataLama[$field] }}
+                            </div>
+                        @endif
+                    @endforeach
+                </td>
+
+                <td style="text-align:left; font-size:7px; vertical-align: top;">
+                    @foreach ($selectedFields as $field)
+                        @if (array_key_exists($field, $dataBaru))
+                            <div>
+                                <strong>{{ ucwords(str_replace('_',' ',$field)) }}:</strong>
+                                {{ $dataBaru[$field] }}
+                            </div>
+                        @endif
+                    @endforeach
+                </td>
+            </tr>
+
+        @empty
+            <tr>
+                <td colspan="7"
+                    style="text-align:center; font-size:8px; padding:10px;">
+                    Data tidak tersedia
+                </td>
+            </tr>
+        @endforelse
     </tbody>
+
 </table>
 
 

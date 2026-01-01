@@ -12,7 +12,7 @@
             <a href="{{ route('pemugaran.create') }}" class="px-3 py-2 bg-sky-500 hover:bg-sky-700 text-white text-sm font-bold rounded-lg text-center shadow-md shadow-sky-500/30">
                 Ajukan Pemugaran
             </a>
-            <a href="{{ route('pemugaran.cetak.pdf') }}" class="px-3 py-2 bg-blue-500 text-white text-sm font-bold rounded-lg hover:bg-blue-700 shadow-md shadow-blue-500/30" target="_blank">
+            <a href="{{ route('pemugaran.cetak.pdf', request()->query()) }}" class="px-3 py-2 bg-blue-500 text-white text-sm font-bold rounded-lg hover:bg-blue-700 shadow-md shadow-blue-500/30" target="_blank">
                 Cetak Laporan
             </a>
         </div>
@@ -139,8 +139,60 @@
                         </div>
                     </th>
 
+                    <th class="py-2 text-center relative">
+                        <div class="flex items-center gap-0.5 justify-center">
+                            <span>Verifikasi</span>
 
-                    <th class="py-2 text-center">Verifikasi</th>
+                            <button type="button"
+                                class="filter-toggle text-sky-500 hover:text-sky-700"
+                                data-target="filter-verifikasi">
+                                <i class="fas fa-filter"></i>
+                            </button>
+                        </div>
+
+                        {{-- Dropdown Filter Verifikasi --}}
+                        <div id="filter-verifikasi"
+                            class="filter-dropdown hidden absolute mt-2 bg-white border rounded shadow z-40 w-44">
+                            <form method="GET" class="p-3">
+
+                                {{-- Pertahankan filter lain --}}
+                                <input type="hidden" name="kondisi" value="{{ request('kondisi') }}">
+                                <input type="hidden" name="status_pemugaran" value="{{ request('status_pemugaran') }}">
+
+                                <div class="text-sm font-medium mb-2">Status Verifikasi</div>
+
+                                @foreach (['menunggu', 'ditolak', 'disetujui'] as $status)
+                                    <label class="flex items-center gap-2 py-1">
+                                        <input type="radio" name="status_verifikasi"
+                                            value="{{ $status }}"
+                                            {{ request('status_verifikasi') == $status ? 'checked' : '' }}>
+                                        <span class="text-sm capitalize">{{ $status }}</span>
+                                    </label>
+                                @endforeach
+
+                                <label class="flex items-center gap-2 py-1">
+                                    <input type="radio" name="status_verifikasi" value=""
+                                        {{ request('status_verifikasi') === null || request('status_verifikasi') === '' ? 'checked' : '' }}>
+                                    <span class="text-sm">Semua</span>
+                                </label>
+
+                                <div class="mt-3 flex justify-between">
+                                    <a href="{{ route('pemugaran.index', [
+                                        'kondisi' => request('kondisi'),
+                                        'status_pemugaran' => request('status_pemugaran')
+                                    ]) }}"
+                                    class="text-sm text-gray-600">
+                                        Reset
+                                    </a>
+                                    <button type="submit"
+                                            class="px-3 py-1 bg-blue-600 text-white rounded text-sm">
+                                        Terapkan
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </th>
+
                     <th class="py-2 text-center">Tanggal Selesai</th>
                     <th class="py-2 text-center">Biaya Pemugaran</th>
                     <th class="py-2 text-center">Aksi</th>
