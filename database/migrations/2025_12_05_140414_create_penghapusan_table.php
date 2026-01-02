@@ -33,8 +33,8 @@ return new class extends Migration
                 ->default('pending');
             $table->enum('status_verifikasi', ['menunggu', 'ditolak', 'disetujui'])
                 ->default('menunggu');
-            $table->date('tanggal_verifikasi');
-            $table->string('dokumen_penghapusan');
+            $table->date('tanggal_verifikasi')->nullable();
+            $table->string('dokumen_penghapusan')->nullable();
         });
     }
 

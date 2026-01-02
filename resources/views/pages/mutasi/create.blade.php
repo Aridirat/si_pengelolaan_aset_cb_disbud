@@ -22,10 +22,13 @@
                 {{-- Cagar Budaya --}}
                 <div>
                     <label class="text-sm font-medium">Nama Cagar Budaya</label>
-                    <select name="id_cagar_budaya" class="w-full mt-1 border border-gray-300 rounded-md p-2">
+                    <select name="id_cagar_budaya" id="cagarBudayaSelect" class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         <option value="">Pilih cagar budaya</option>
                         @foreach ($cagarBudaya as $cb)
-                            <option value="{{ $cb->id_cagar_budaya }}">
+                            <option 
+                                value="{{ $cb->id_cagar_budaya }}"
+                                data-kepemilikan="{{ $cb->status_kepemilikan }}"
+                            >
                                 {{ $cb->nama_cagar_budaya }}
                             </option>
                         @endforeach
@@ -55,11 +58,21 @@
                 {{-- Pemilik Asal --}}
                 <div>
                     <label class="text-sm font-medium">Pemilik Asal</label>
-                    <select name="kepemilikan_asal" class="w-full mt-1 border border-gray-300 rounded-md p-2">
+                    <select 
+                        id="kepemilikanAsalDisplay"
+                        disabled
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100 cursor-not-allowed">
+
                         <option value="">Pilih kepemilikan asal</option>
                         <option value="pemerintah">Pemerintah</option>
                         <option value="pribadi">Pribadi</option>
                     </select>
+
+
+                {{-- Input tersembunyi untuk dikirim ke server --}}
+                <input type="hidden" name="kepemilikan_asal" id="kepemilikanAsal">
+
+
                 @error('kepemilikan_asal')
                     <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                 @enderror
@@ -78,15 +91,19 @@
                 @enderror
                 </div>
 
-                {{-- Tanggal --}}
+                {{-- Tanggal Pengajuan --}}
                 <div>
                     <label class="text-sm font-medium">Tanggal Pengajuan</label>
-                    <input type="date"
-                           name="tanggal_pengajuan"
-                           class="w-full mt-1 border border-gray-300 rounded-md p-2">
-                @error('tanggal_pengajuan')
-                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-                @enderror
+                    <input
+                        type="date"
+                        name="tanggal_pengajuan"
+                        value="{{ now()->format('Y-m-d') }}"
+                        readonly
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100 cursor-not-allowed"
+                    >
+                    @error('tanggal_pengajuan')
+                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Dokumen --}}
@@ -176,4 +193,24 @@
         </div>
     </form>
 </div>
+
+<script>
+    document.getElementById('cagarBudayaSelect').addEventListener('change', function () {
+        const selected = this.options[this.selectedIndex];
+        const kepemilikan = selected.getAttribute('data-kepemilikan');
+
+        const hiddenInput = document.getElementById('kepemilikanAsal');
+        const displaySelect = document.getElementById('kepemilikanAsalDisplay');
+
+        if (kepemilikan) {
+            hiddenInput.value = kepemilikan;
+            displaySelect.value = kepemilikan;
+        } else {
+            hiddenInput.value = '';
+            displaySelect.value = '';
+        }
+    });
+</script>
+
+
 @endsection

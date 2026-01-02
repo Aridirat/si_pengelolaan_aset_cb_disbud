@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Mutasi;
 use App\Models\CagarBudaya;
+use App\Models\MutasiData;
+use App\Constants\CagarBudayaBitmask;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -183,9 +185,14 @@ class MutasiController extends Controller
         $validated = $request->validate([
             'status_mutasi'        => 'required|in:pending,diproses,selesai',
             'status_verifikasi'    => 'required|in:menunggu,disetujui,ditolak',
-            'tanggal_verifikasi'   => 'required|date',
             'dokumen_pengesahan'   => 'nullable|file|mimes:pdf|max:5120',
         ]);
+
+        $tanggalVerifikasi = in_array(
+            $request->status_verifikasi,
+            ['disetujui','ditolak']
+        ) ? now() : null;
+
 
         // Upload dokumen pengesahan (jika ada)
         if ($request->hasFile('dokumen_pengesahan')) {
@@ -204,11 +211,42 @@ class MutasiController extends Controller
         }
 
         $mutasi->update([
-            'status_mutasi'       => $validated['status_mutasi'],
-            'status_verifikasi'   => $validated['status_verifikasi'],
-            'tanggal_verifikasi'  => $validated['tanggal_verifikasi'],
-            'dokumen_pengesahan'  => $validated['dokumen_pengesahan'] ?? $mutasi->dokumen_pengesahan,
+            'status_mutasi'      => $request->status_mutasi,
+            'status_verifikasi'  => $request->status_verifikasi,
+            'tanggal_verifikasi' => $tanggalVerifikasi,
+            'dokumen_pengesahan' => $validated['dokumen_pengesahan']
+                ?? $mutasi->dokumen_pengesahan,
         ]);
+
+        // JIKA DISETUJUI → UPDATE CAGAR BUDAYA + MUTASI
+        if ($request->status_verifikasi === 'disetujui') {
+
+            $request->validate([
+                'status_kepemilikan' => 'required|string',
+            ]);
+
+            $cagarBudaya = CagarBudaya::findOrFail($mutasi->id_cagar_budaya);
+
+            $nilaiLama = [
+                'status_kepemilikan' => $cagarBudaya->status_kepemilikan,
+            ];
+
+            $nilaiBaru = [
+                'status_kepemilikan' => $request->status_kepemilikan,
+            ];
+
+            $cagarBudaya->update($nilaiBaru);
+
+            MutasiData::create([
+                'id_cagar_budaya' => $cagarBudaya->id_cagar_budaya,
+                'id' => Auth::id(),
+                'tanggal_mutasi_data' => now(),
+                'bitmask' =>
+                    CagarBudayaBitmask::FIELDS['status_kepemilikan'],
+                'nilai_lama' => json_encode($nilaiLama),
+                'nilai_baru' => json_encode($nilaiBaru),
+            ]);
+        }
 
         return redirect()
             ->route('mutasi.index')
@@ -237,6 +275,9 @@ class MutasiController extends Controller
             )
             ->when($request->status_mutasi, fn ($q) =>
                 $q->where('status_mutasi', $request->status_mutasi)
+            )
+            ->when($request->status_verifikasi, fn ($q) =>
+                $q->where('status_verifikasi', $request->status_verifikasi)
             )
             ->get();
 

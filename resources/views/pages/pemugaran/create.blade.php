@@ -77,14 +77,36 @@
                 @enderror
             </div>
 
-
-
-            {{-- Tanggal --}}
+            {{-- Tanggal Pengajuan --}}
             <div>
                 <label class="text-sm font-medium">Tanggal Pengajuan</label>
-                <input type="date" name="tanggal_pengajuan" class="w-full mt-1 border border-gray-300 rounded-md p-2">
+                <input
+                    type="date"
+                    name="tanggal_pengajuan"
+                    value="{{ now()->format('Y-m-d') }}"
+                    readonly
+                    class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100 cursor-not-allowed"
+                >
                 @error('tanggal_pengajuan')
-                  <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- Tipe Pemugaran --}}
+            <div>
+                <label class="block text-sm font-medium mb-1">
+                    Tipe Pemugaran
+                </label>
+                <select name="tipe_pemugaran"
+                        class="w-full px-2 py-2 rounded-lg border border-gray-300 bg-white focus:ring focus:ring-gray-300">
+                    <option value="">Pilih tipe pemugaran</option>
+                    <option value="konsolidasi">Konsolidasi</option>
+                    <option value="rehabilitasi">Rehabilitasi</option>
+                    <option value="restorasi">Restorasi</option>
+                    <option value="rekonstruksi">Rekonstruksi</option>
+                </select>
+                @error('tipe_pemugaran')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
 

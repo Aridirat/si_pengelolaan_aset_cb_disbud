@@ -37,31 +37,42 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($mutasi as $item)
-        <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}</td>
-            <td>{{ ucfirst($item->kepemilikan_asal) }}</td>
-            <td>{{ ucfirst($item->kepemilikan_tujuan) }}</td>
-            <td>{{ \Carbon\Carbon::parse($item->tanggal_pengajuan)->format('d/m/Y') }}</td>
-            <td>{{ ucfirst($item->status_mutasi) }}</td>
-            <td>{{ ucfirst($item->status_verifikasi) }}</td>
-            <td style="text-align:right;">
-                Rp {{ number_format($item->cagarBudaya->nilai_perolehan ?? 0, 0, ',', '.') }}
-            </td>
-        </tr>
-        @endforeach
+        @forelse ($mutasi as $item)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}</td>
+                <td>{{ ucfirst($item->kepemilikan_asal) }}</td>
+                <td>{{ ucfirst($item->kepemilikan_tujuan) }}</td>
+                <td>{{ \Carbon\Carbon::parse($item->tanggal_pengajuan)->format('d/m/Y') }}</td>
+                <td>{{ ucfirst($item->status_mutasi) }}</td>
+                <td>{{ ucfirst($item->status_verifikasi) }}</td>
+                <td style="text-align:right;">
+                    Rp {{ number_format($item->cagarBudaya->nilai_perolehan ?? 0, 0, ',', '.') }}
+                </td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="8" style="text-align:center; font-style:italic; color:#555;">
+                    Data mutasi tidak tersedia
+                </td>
+            </tr>
+        @endforelse
 
-        {{-- TOTAL --}}
-        <tr class="total-row">
-            <td colspan="7" style="text-align:right;"><strong>TOTAL NILAI PEROLEHAN</strong></td>
-            <td style="text-align:right;">
-                <strong>
-                    Rp {{ number_format($totalNilai, 0, ',', '.') }}
-                </strong>
-            </td>
-        </tr>
+        {{-- TOTAL (hanya tampil jika ada data) --}}
+        @if ($mutasi->count() > 0)
+            <tr class="total-row">
+                <td colspan="7" style="text-align:right;">
+                    <strong>TOTAL NILAI PEROLEHAN</strong>
+                </td>
+                <td style="text-align:right;">
+                    <strong>
+                        Rp {{ number_format($totalNilai, 0, ',', '.') }}
+                    </strong>
+                </td>
+            </tr>
+        @endif
     </tbody>
+
 </table>
 
 <br><br>

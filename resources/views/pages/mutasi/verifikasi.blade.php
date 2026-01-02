@@ -8,7 +8,9 @@
         <i class="fas fa-angle-left"></i> Kembali
     </a>
 
-    <form action="{{ route('mutasi.verifikasi.update', $mutasi->id_mutasi) }}"
+    <div class="bg-white rounded-xl px-6 space-y-4">
+
+        <form action="{{ route('mutasi.verifikasi.update', $mutasi->id_mutasi) }}"
           method="POST"
           enctype="multipart/form-data">
         @csrf
@@ -18,48 +20,65 @@
 
             {{-- Status Mutasi --}}
             <div>
-                <label class="text-sm font-medium">Status Mutasi</label>
-                <select name="status_mutasi" class="w-full mt-1 border border-gray-300 rounded-md p-2">
-                    <option value="">Pilih status mutasi</option>
-                    @foreach (['pending','diproses','selesai'] as $status)
-                        <option value="{{ $status }}"
-                            {{ $mutasi->status_mutasi == $status ? 'selected' : '' }}>
-                            {{ ucfirst($status) }}
-                        </option>
-                    @endforeach
+                <label class="text-sm font-medium">Status mutasi</label>
+
+                <select name="status_mutasi"
+                    class="w-full mt-1 border border-gray-300 rounded-md p-2
+                    {{ $mutasi->status_mutasi === 'selesai' ? 'bg-gray-100 cursor-not-allowed' : '' }}"
+                    {{ $mutasi->status_mutasi === 'selesai' ? 'disabled' : '' }}>
+
+                    {{-- Pending hanya muncul jika status MASIH pending --}}
+                    @if ($mutasi->status_mutasi === 'pending')
+                        <option value="pending" selected>Pending</option>
+                    @endif
+
+                    {{-- Diproses selalu tersedia --}}
+                    <option value="diproses"
+                        {{ $mutasi->status_mutasi === 'diproses' ? 'selected' : '' }}>
+                        Diproses
+                    </option>
+
+                    {{-- Selesai --}}
+                    <option value="selesai"
+                        {{ $mutasi->status_mutasi === 'selesai' ? 'selected' : '' }}>
+                        Selesai
+                    </option>
                 </select>
-                @error('status_mutasi')
-                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-                @enderror
+
+                {{-- Agar tetap terkirim saat disabled --}}
+                @if ($mutasi->status_mutasi === 'selesai')
+                    <input type="hidden" name="status_mutasi" value="selesai">
+                @endif
             </div>
 
             {{-- Status Verifikasi --}}
             <div>
                 <label class="text-sm font-medium">Status Verifikasi</label>
-                <select name="status_verifikasi" class="w-full mt-1 border border-gray-300 rounded-md p-2">
-                    <option value="">Pilih status verifikasi</option>
+                <select id="statusVerifikasi"
+                        class="w-full mt-1 border rounded-md p-2 bg-gray-100"
+                        disabled>
                     @foreach (['menunggu','disetujui','ditolak'] as $status)
                         <option value="{{ $status }}"
-                            {{ $mutasi->status_verifikasi == $status ? 'selected' : '' }}>
+                            @selected($mutasi->status_verifikasi === $status)>
                             {{ ucfirst($status) }}
                         </option>
                     @endforeach
                 </select>
-                @error('status_verifikasi')
-                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-                @enderror
+
+                <input type="hidden"
+                    name="status_verifikasi"
+                    id="statusVerifikasiHidden"
+                    value="{{ $mutasi->status_verifikasi }}">
             </div>
 
             {{-- Tanggal Verifikasi --}}
             <div>
                 <label class="text-sm font-medium">Tanggal Verifikasi</label>
                 <input type="date"
-                       name="tanggal_verifikasi"
-                       value="{{ optional($mutasi->tanggal_verifikasi)->format('Y-m-d') }}"
-                       class="w-full mt-1 border border-gray-300 rounded-md p-2">
-                @error('tanggal_verifikasi')
-                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-                @enderror
+                    id="tanggalVerifikasi"
+                    class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100"
+                    readonly
+                    value="{{ optional($mutasi->tanggal_verifikasi)->format('Y-m-d') }}">
             </div>
 
             {{-- Dokumen Pengesahan --}}
@@ -141,20 +160,91 @@
                     </script>
                 </div>
 
-                {{-- Tombol --}}
-                <div class="flex justify-end col-start-2">
-                    <button type="submit"
-                            class="btn px-6 py-2 bg-indigo-500 hover:bg-indigo-600 shadow shadow-indigo-400 text-white font-semibold rounded-lg">
-                        Verifikasi
-                    </button>
+        </div>
+            
+            <hr class="text-gray-200">
+            
+            <div class="bg-white py-3 px-6 grid grid-cols-2 gap-6">
+                <div>
+                    <label class="text-sm font-medium">Pemilik Baru</label>
+
+                    {{-- Tampilan saja --}}
+                    <input type="text"
+                        class="w-full mt-1 border rounded-md p-2 bg-gray-100"
+                        value="{{ ucfirst($mutasi->kepemilikan_tujuan) }}"
+                        readonly>
+
+                    {{-- Nilai aktual yang dikirim --}}
+                    <input type="hidden"
+                        name="status_kepemilikan"
+                        value="{{ $mutasi->kepemilikan_tujuan }}">
                 </div>
             </div>
 
-            
-            
 
-        </div>
-    </form>
-
+            {{-- Tombol --}}
+            <div class="flex justify-end pb-6 col-start-2">
+                <button type="submit"
+                        class="btn px-10 py-2 bg-indigo-500 hover:bg-indigo-600 shadow shadow-indigo-400 text-white font-semibold rounded-lg">
+                    Verifikasi
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const statusMutasi      = document.querySelector('[name="status_mutasi"]');
+        const statusVerifikasi  = document.getElementById('statusVerifikasi');
+        const statusHidden      = document.getElementById('statusVerifikasiHidden');
+        const tanggalVerifikasi = document.getElementById('tanggalVerifikasi');
+        const dokumenInput      = document.getElementById('dokumenInput');
+        const pemilikBaru       = document.getElementById('pemilikBaru');
+
+        function today() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        function handleStatusMutasi() {
+            if (statusMutasi.value === 'selesai') {
+                statusVerifikasi.disabled = false;
+                dokumenInput.disabled = false;
+                statusVerifikasi.classList.remove('bg-gray-100');
+            } else {
+                statusVerifikasi.disabled = true;
+                dokumenInput.disabled = true;
+                statusHidden.value = 'menunggu';
+                tanggalVerifikasi.value = '';
+                pemilikBaru.disabled = true;
+            }
+        }
+
+        function handleStatusVerifikasi() {
+            statusHidden.value = statusVerifikasi.value;
+
+            if (['disetujui','ditolak'].includes(statusVerifikasi.value)) {
+                tanggalVerifikasi.value = today();
+            } else {
+                tanggalVerifikasi.value = '';
+            }
+
+            if (statusVerifikasi.value === 'disetujui') {
+                pemilikBaru.disabled = false;
+                pemilikBaru.classList.remove('bg-gray-100');
+            } else {
+                pemilikBaru.disabled = true;
+                pemilikBaru.classList.add('bg-gray-100');
+            }
+        }
+
+        statusMutasi.addEventListener('change', handleStatusMutasi);
+        statusVerifikasi.addEventListener('change', handleStatusVerifikasi);
+
+        handleStatusMutasi();
+        handleStatusVerifikasi();
+    });
+</script>
+
 @endsection

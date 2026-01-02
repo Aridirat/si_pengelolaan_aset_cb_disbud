@@ -22,7 +22,10 @@
                 {{-- Nama Cagar Budaya --}}
                 <div>
                     <label class="text-sm font-medium">Nama Cagar Budaya</label>
-                    <select name="id_cagar_budaya" class="w-full mt-1 border border-gray-300 rounded-md p-2">
+                    <select 
+                        id="idCagarBudayaDisplay"
+                        disabled
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100 cursor-not-allowed">
                         @foreach ($cagarBudaya as $cb)
                             <option value="{{ $cb->id_cagar_budaya }}"
                                 {{ $mutasi->id_cagar_budaya == $cb->id_cagar_budaya ? 'selected' : '' }}>
@@ -30,6 +33,9 @@
                             </option>
                         @endforeach
                     </select>
+
+                    {{-- Ini input --}}
+                    <input type="hidden" name="id_cagar_budaya" value="{{ $mutasi->id_cagar_budaya }}">
                 </div>
 
                 {{-- Penanggung Jawab --}}
@@ -48,7 +54,10 @@
                 {{-- Pemilik Asal --}}
                 <div>
                     <label class="text-sm font-medium">Pemilik Asal</label>
-                    <select name="kepemilikan_asal" class="w-full mt-1 border border-gray-300 rounded-md p-2">
+                    <select 
+                        id="kepemilikanAsalDisplay"
+                        disabled
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100 cursor-not-allowed">
                         <option value="pemerintah" {{ $mutasi->kepemilikan_asal == 'pemerintah' ? 'selected' : '' }}>
                             Pemerintah
                         </option>
@@ -56,6 +65,9 @@
                             Pribadi
                         </option>
                     </select>
+
+                    {{-- Ini hidden input --}}
+                    <input type="hidden" name="kepemilikan_asal" value="{{ $mutasi->kepemilikan_asal }}">
                 </div>
 
                 {{-- Pemilik Tujuan --}}
@@ -74,10 +86,12 @@
                 {{-- Tanggal Pengajuan --}}
                 <div>
                     <label class="text-sm font-medium">Tanggal Pengajuan</label>
-                    <input type="date"
-                           name="tanggal_pengajuan"
-                           value="{{ $mutasi->tanggal_pengajuan->format('Y-m-d') }}"
-                           class="w-full mt-1 border border-gray-300 rounded-md p-2">
+                    <input 
+                        type="date"
+                        name="tanggal_pengajuan"
+                        value="{{ $mutasi->tanggal_pengajuan->format('Y-m-d') }}"
+                        readonly
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100 cursor-not-allowed">
                 </div>
 
                 {{-- Dokumen Pengajuan --}}

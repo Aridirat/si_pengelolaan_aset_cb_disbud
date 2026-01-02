@@ -25,17 +25,23 @@ class PemugaranController extends Controller
                 $q->whereHas('cagarBudaya', function ($cb) use ($searchTerm) {
                     $cb->where('nama_cagar_budaya', 'like', '%' . $searchTerm . '%');
                 })->orWhere('kondisi', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('status_pemugaran', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('status_verifikasi', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('biaya_pemugaran', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('tanggal_pengajuan', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('tanggal_selesai', 'like', '%' . $searchTerm . '%');
+                ->orWhere('tipe_pemugaran','like','%' . $searchTerm . '%')
+                ->orWhere('status_pemugaran', 'like', '%' . $searchTerm . '%')
+                ->orWhere('status_verifikasi', 'like', '%' . $searchTerm . '%')
+                ->orWhere('biaya_pemugaran', 'like', '%' . $searchTerm . '%')
+                ->orWhere('tanggal_pengajuan', 'like', '%' . $searchTerm . '%')
+                ->orWhere('tanggal_selesai', 'like', '%' . $searchTerm . '%');
             });
         }
 
         // Filter kondisi
         if ($request->filled('kondisi')) {
             $query->where('kondisi', $request->kondisi);
+        }
+
+        // Filter tipe
+        if ($request->filled('tipe_pemugaran')) {
+            $query->where('tipe_pemugaran', $request->tipe_pemugaran);
         }
 
         // Filter status pemugaran
@@ -60,10 +66,14 @@ class PemugaranController extends Controller
 
     public function create()
     {
-        $cagarBudaya = CagarBudaya::where('kondisi', 'rusak berat')
+        $cagarBudaya = CagarBudaya::whereIn('kondisi', [
+                'rusak berat',
+                'rusak ringan'
+            ])
             ->where('status_penetapan', 'aktif')
             ->orderBy('nama_cagar_budaya')
             ->get();
+
 
         $penanggungJawab = User::orderBy('nama')->get();
 
@@ -80,6 +90,7 @@ class PemugaranController extends Controller
             'id_cagar_budaya' => 'required',
             'id' => 'required',
             'kondisi' => 'required|string',
+            'tipe_pemugaran' => 'required|string',
             'tanggal_pengajuan' => 'required|date',
             'deskripsi_pengajuan' => 'required|string',
             'biaya_pemugaran' => 'required|numeric',
@@ -106,6 +117,7 @@ class PemugaranController extends Controller
             'id_cagar_budaya' => $validated['id_cagar_budaya'],
             'id' => $validated['id'],
             'kondisi' => $validated['kondisi'],
+            'tipe_pemugaran' => $validated['tipe_pemugaran'],
             'tanggal_pengajuan' => $validated['tanggal_pengajuan'],
             'deskripsi_pengajuan' => $validated['deskripsi_pengajuan'],
             'biaya_pemugaran' => $validated['biaya_pemugaran'],
@@ -138,6 +150,7 @@ class PemugaranController extends Controller
             'id_cagar_budaya' => 'required',
             'id' => 'required',
             'kondisi' => 'required|string',
+            'tipe_pemugaran' => 'required|string',
             'tanggal_pengajuan' => 'required|date',
             'deskripsi_pengajuan' => 'required|string',
             'biaya_pemugaran' => 'required|numeric',
@@ -156,6 +169,7 @@ class PemugaranController extends Controller
             'id_cagar_budaya' => $request->id_cagar_budaya,
             'id' => $request->id,
             'kondisi' => $request->kondisi,
+            'tipe_pemugaran' => $request->tipe_pemugaran,
             'tanggal_pengajuan' => $request->tanggal_pengajuan,
             'deskripsi_pengajuan' => $request->deskripsi_pengajuan,
             'biaya_pemugaran' => $request->biaya_pemugaran,
@@ -251,8 +265,6 @@ class PemugaranController extends Controller
             ->with('success', 'Data verifikasi pemugaran berhasil disimpan.');
     }
 
-
-
     public function detail(Pemugaran $pemugaran)
     {
         return view('pages.pemugaran.detail', compact('pemugaran'));
@@ -283,6 +295,13 @@ class PemugaranController extends Controller
         ====================== */
         if ($request->filled('kondisi')) {
             $query->where('kondisi', $request->kondisi);
+        }
+
+        /* ======================
+        | FILTER TIPE
+        ====================== */
+        if ($request->filled('tipe_pemugaran')) {
+            $query->where('tipe_pemugaran', $request->tipe_pemugaran);
         }
 
         /* ======================

@@ -22,7 +22,7 @@
                 {{-- Nama Cagar Budaya --}}
                 <div>
                     <label class="text-sm font-medium">Nama Cagar Budaya</label>
-                    <select name="id_cagar_budaya" class="w-full mt-1 border border-gray-300 rounded-md p-2">
+                    <select name="id_cagar_budaya" disabled class="w-full mt-1 border border-gray-300 bg-gray-100 rounded-md p-2 cursor-not-allowed">
                         @foreach ($cagarBudaya as $cb)
                             <option value="{{ $cb->id_cagar_budaya }}"
                                 {{ $penghapusan->id_cagar_budaya == $cb->id_cagar_budaya ? 'selected' : '' }}>
@@ -30,6 +30,9 @@
                             </option>
                         @endforeach
                     </select>
+
+                    {{-- Ini input --}}
+                    <input type="hidden" name="id_cagar_budaya" value="{{ $penghapusan->id_cagar_budaya }}">
                 </div>
 
                 {{-- Penanggung Jawab --}}

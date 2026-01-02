@@ -34,25 +34,46 @@ class DashboardController extends Controller
         /* =========================
          * PEMUGARAN (STATUS)
          * ========================= */
-        $pemugaran = Pemugaran::selectRaw('status_pemugaran, COUNT(*) as total')
-        ->groupBy('status_pemugaran')
-        ->pluck('total', 'status_pemugaran');
+        $pemugaranProses = Pemugaran::selectRaw('status_pemugaran, COUNT(*) as total')
+            ->groupBy('status_pemugaran')
+            ->pluck('total', 'status_pemugaran');
+
+        $pemugaranVerifikasi = Pemugaran::selectRaw('status_verifikasi, COUNT(*) as total')
+            ->groupBy('status_verifikasi')
+            ->pluck('total', 'status_verifikasi');
+
+        $pemugaran = $pemugaranProses->merge($pemugaranVerifikasi);
+
 
 
         /* =========================
          * PENGHAPUSAN (STATUS)
          * ========================= */
-        $penghapusan = Penghapusan::selectRaw('status_penghapusan, COUNT(*) as total')
-        ->groupBy('status_penghapusan')
-        ->pluck('total', 'status_penghapusan');
+        $penghapusanProses = Penghapusan::selectRaw('status_penghapusan, COUNT(*) as total')
+            ->groupBy('status_penghapusan')
+            ->pluck('total', 'status_penghapusan');
+
+        $penghapusanVerifikasi = Penghapusan::selectRaw('status_verifikasi, COUNT(*) as total')
+            ->groupBy('status_verifikasi')
+            ->pluck('total', 'status_verifikasi');
+
+        $penghapusan = $penghapusanProses->merge($penghapusanVerifikasi);
+
 
 
         /* =========================
          * MUTASI (STATUS)
          * ========================= */
-        $mutasiStatus = Mutasi::selectRaw('status_mutasi, COUNT(*) as total')
-        ->groupBy('status_mutasi')
-        ->pluck('total', 'status_mutasi');
+        $mutasiProses = Mutasi::selectRaw('status_mutasi, COUNT(*) as total')
+            ->groupBy('status_mutasi')
+            ->pluck('total', 'status_mutasi');
+
+        $mutasiVerifikasi = Mutasi::selectRaw('status_verifikasi, COUNT(*) as total')
+            ->groupBy('status_verifikasi')
+            ->pluck('total', 'status_verifikasi');
+
+        $mutasiStatus = $mutasiProses->merge($mutasiVerifikasi);
+
 
 
         /* =========================

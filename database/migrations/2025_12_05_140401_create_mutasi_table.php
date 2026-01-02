@@ -32,8 +32,8 @@ return new class extends Migration
             $table->string('dokumen_pengajuan');
             $table->enum('status_mutasi', ['pending', 'diproses', 'selesai'])->default('pending');
             $table->enum('status_verifikasi', ['menunggu', 'ditolak', 'disetujui'])->default('menunggu');
-            $table->date('tanggal_verifikasi');
-            $table->string('dokumen_pengesahan');
+            $table->date('tanggal_verifikasi')->nullable();
+            $table->string('dokumen_pengesahan')->nullable();
 
         });
     }

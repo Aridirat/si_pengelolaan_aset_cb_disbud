@@ -79,8 +79,8 @@
                     <label class="text-sm font-medium">Status Verifikasi</label>
 
                     <select id="statusVerifikasi"
-                            class="w-full mt-1 border rounded-md p-2"
-                            readonly>
+                            class="w-full mt-1 border rounded-md p-2 bg-gray-100 text-gray-400"
+                            disabled>
                         @foreach (['menunggu','ditolak','disetujui'] as $status)
                             <option value="{{ $status }}"
                                 @selected($pemugaran->status_verifikasi === $status)>
@@ -93,7 +93,6 @@
                         name="status_verifikasi"
                         id="statusVerifikasiHidden"
                         value="{{ $pemugaran->status_verifikasi }}">
-
                 </div>
 
 
@@ -250,34 +249,35 @@
             {{-- Baris 3 --}}
             {{-- Ini adalah 2 field khusus yang otomatis tercatat sebagai update data ke tabel cagar budaya di field nilai_perolehan dan kondisi--}}
             <div class="grid grid-cols-3 gap-4 pt-3">
-                <div>
-                    <label class="text-sm font-medium">Nilai Prolehan Baru</label>
-                    <input type="number"
-                        id="nilaiPerolehanBaru"
-                        class="w-full mt-1 border rounded-md p-2 bg-gray-100"
-                        placeholder="Rp."
-                        readonly>
+                {{-- Nilai Perolehan Baru --}}
+            <div>
+                <label class="text-sm font-medium">Nilai Perolehan Baru</label>
+                <input type="number"
+                    id="nilaiPerolehanBaru"
+                    class="w-full mt-1 border rounded-md p-2 bg-gray-100 text-gray-400 cursor-not-allowed"
+                    placeholder="Rp."
+                    readonly>
 
-                    <input type="hidden"
-                        name="nilai_perolehan"
-                        id="nilaiPerolehanHidden">
+                <input type="hidden"
+                    name="nilai_perolehan"
+                    id="nilaiPerolehanHidden">
+            </div>
 
-                           
-                </div>
-                <div>
-                    <label for="">Kondisi Baru</label>
-                    <select id="kondisiBaru"
-                            class="w-full mt-1 border rounded-md p-2 bg-gray-100"
-                            readonly>
-                        <option value="">-- Pilih Kondisi --</option>
-                        <option value="baik">Baik</option>
-                    </select>
+            {{-- Kondisi Baru --}}
+            <div>
+                <label class="text-sm font-medium">Kondisi Baru</label>
+                <select id="kondisiBaru"
+                        class="w-full mt-1 border rounded-md p-2 bg-gray-100 text-gray-400 cursor-not-allowed"
+                        disabled>
+                    <option value="">Pilih Kondisi Baru</option>
+                    <option value="baik">Baik</option>
+                </select>
 
-                    <input type="hidden"
-                        name="kondisi_baru"
-                        id="kondisiBaruHidden">
+                <input type="hidden"
+                    name="kondisi_baru"
+                    id="kondisiBaruHidden">
+            </div>
 
-                </div>
             </div>
             {{-- End Baris 3 --}}
 
@@ -303,156 +303,163 @@
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
 
-    const statusPemugaran   = document.getElementById('statusPemugaran');
-    const statusVerifikasi  = document.getElementById('statusVerifikasi');
-    const statusVerifikasiHidden = document.getElementById('statusVerifikasiHidden');
+        const statusPemugaran = document.getElementById('statusPemugaran');
+        const statusVerifikasi = document.getElementById('statusVerifikasi');
+        const statusVerifikasiHidden = document.getElementById('statusVerifikasiHidden');
 
-    const tanggalSelesai    = document.getElementById('tanggalSelesai');
-    const tanggalVerifikasi = document.getElementById('tanggalVerifikasi');
+        const tanggalSelesai = document.getElementById('tanggalSelesai');
+        const tanggalVerifikasi = document.getElementById('tanggalVerifikasi');
 
-    const buktiDokumentasi  = document.getElementById('buktiDokumentasi');
-    const laporanInput      = document.getElementById('dokumenInput');
+        const buktiDokumentasi = document.getElementById('buktiDokumentasi');
+        const laporanInput = document.getElementById('dokumenInput');
 
-    const nilaiInput        = document.getElementById('nilaiPerolehanBaru');
-    const nilaiHidden       = document.getElementById('nilaiPerolehanHidden');
+        const hasBuktiDokumentasi = @json(!empty($pemugaran->bukti_dokumentasi));
+        const hasLaporan = @json(!empty($pemugaran->laporan_pertanggungjawaban));
 
-    const kondisiSelect     = document.getElementById('kondisiBaru');
-    const kondisiHidden     = document.getElementById('kondisiBaruHidden');
+        const nilaiInput = document.getElementById('nilaiPerolehanBaru');
+        const nilaiHidden = document.getElementById('nilaiPerolehanHidden');
 
-    function today() {
-        return new Date().toISOString().split('T')[0];
-    }
+        const kondisiSelect = document.getElementById('kondisiBaru');
+        const kondisiHidden = document.getElementById('kondisiBaruHidden');
 
-    /* =========================
-       STATUS PEMUGARAN
-    ========================= */
-    function handlePemugaranChange() {
+        const VERIFIKASI_FINAL = window.STATUS_VERIFIKASI_FINAL;
 
-        if (window.STATUS_VERIFIKASI_FINAL) return;
-
-        if (statusPemugaran.value === 'selesai') {
-            tanggalSelesai.value = today();
-
-            statusVerifikasi.readOnly = false;
-            statusVerifikasi.classList.remove('bg-gray-100','text-gray-400');
-
-        } else {
-            tanggalSelesai.value = '';
-            statusVerifikasi.value = 'menunggu';
-            statusVerifikasiHidden.value = 'menunggu';
-            tanggalVerifikasi.value = '';
-
-            statusVerifikasi.readOnly = true;
-            statusVerifikasi.classList.add('bg-gray-100','text-gray-400');
-        }
-    }
-
-    /* =========================
-       STATUS VERIFIKASI
-    ========================= */
-    function handleVerifikasiChange() {
-
-        if (window.STATUS_VERIFIKASI_FINAL) return;
-
-        statusVerifikasiHidden.value = statusVerifikasi.value;
-
-        if (
-            statusVerifikasi.value === 'ditolak' ||
-            statusVerifikasi.value === 'disetujui'
-        ) {
-            tanggalVerifikasi.value = today();
-        } else {
-            tanggalVerifikasi.value = '';
+        function today() {
+            return new Date().toISOString().split('T')[0];
         }
 
-        handleFinalApprovalField();
-    }
+        /* ======================
+        STATUS PEMUGARAN
+        ====================== */
+        function handlePemugaranChange() {
+            if (VERIFIKASI_FINAL) return;
 
-    /* =========================
-       DOKUMENTASI
-    ========================= */
-    function handleDokumentasiRequirement() {
+            if (statusPemugaran.value === 'selesai') {
+                tanggalSelesai.value = today();
 
-        if (statusPemugaran.value === 'selesai') {
-            buktiDokumentasi.required = true;
-            laporanInput.required = true;
+                statusVerifikasi.disabled = false;
+                statusVerifikasi.classList.remove('bg-gray-100','text-gray-400');
 
-            buktiDokumentasi.readOnly = false;
-            laporanInput.disabled = false;
+                buktiDokumentasi.required = true;
+                laporanInput.required = true;
+                laporanInput.disabled = false;
+                buktiDokumentasi.readOnly = false;
 
-        } else {
-            buktiDokumentasi.required = false;
-            laporanInput.required = false;
+            } else {
+                tanggalSelesai.value = '';
 
-            buktiDokumentasi.readOnly = true;
-            laporanInput.disabled = true;
+                statusVerifikasi.value = 'menunggu';
+                statusVerifikasiHidden.value = 'menunggu';
+                statusVerifikasi.disabled = true;
 
-            buktiDokumentasi.value = '';
-            laporanInput.value = '';
+                tanggalVerifikasi.value = '';
+
+                buktiDokumentasi.required = false;
+                laporanInput.required = false;
+                laporanInput.disabled = true;
+                buktiDokumentasi.readOnly = true;
+            }
         }
-    }
 
-    /* =========================
-       FIELD KHUSUS DISETUJUI
-    ========================= */
-    function handleFinalApprovalField() {
+        /* ======================
+        STATUS VERIFIKASI
+        ====================== */
+        function handleVerifikasiChange() {
+            if (VERIFIKASI_FINAL) return;
 
-        if (statusVerifikasi.value === 'disetujui') {
+            statusVerifikasiHidden.value = statusVerifikasi.value;
 
-            nilaiInput.readOnly = false;
-            kondisiSelect.disabled = false;
+            if (['ditolak','disetujui'].includes(statusVerifikasi.value)) {
+                tanggalVerifikasi.value = today();
+            } else {
+                tanggalVerifikasi.value = '';
+            }
 
-            nilaiInput.required = true;
-            kondisiSelect.required = true;
-
-        } else {
-
-            nilaiInput.readOnly = true;
-            kondisiSelect.disabled = true;
-
-            nilaiInput.required = false;
-            kondisiSelect.required = false;
-
-            nilaiInput.value = '';
-            kondisiSelect.value = '';
-
-            nilaiHidden.value = '';
-            kondisiHidden.value = '';
+            handleFinalApprovalField();
         }
-    }
 
-    /* =========================
-       SYNC KE HIDDEN INPUT
-    ========================= */
-    nilaiInput.addEventListener('input', () => {
-        nilaiHidden.value = nilaiInput.value;
-    });
+        /* ======================
+        FIELD KHUSUS DISETUJUI
+        ====================== */
+        function handleFinalApprovalField() {
+            if (statusVerifikasi.value === 'disetujui') {
 
-    kondisiSelect.addEventListener('change', () => {
-        kondisiHidden.value = kondisiSelect.value;
-    });
+                nilaiInput.readOnly = false;
+                kondisiSelect.disabled = false;
 
-    /* =========================
-       EVENT LISTENER
-    ========================= */
-    statusPemugaran.addEventListener('change', () => {
+                nilaiInput.required = true;
+                kondisiSelect.required = true;
+
+                nilaiInput.classList.remove('bg-gray-100','text-gray-400','cursor-not-allowed');
+                nilaiInput.classList.add('bg-white','text-gray-800');
+
+                kondisiSelect.classList.remove('bg-gray-100','text-gray-400','cursor-not-allowed');
+                kondisiSelect.classList.add('bg-white','text-gray-800');
+
+            } else {
+
+                nilaiInput.readOnly = true;
+                kondisiSelect.disabled = true;
+
+                nilaiInput.required = false;
+                kondisiSelect.required = false;
+
+                nilaiInput.value = '';
+                kondisiSelect.value = '';
+                nilaiHidden.value = '';
+                kondisiHidden.value = '';
+
+                nilaiInput.classList.add('bg-gray-100','text-gray-400','cursor-not-allowed');
+                kondisiSelect.classList.add('bg-gray-100','text-gray-400','cursor-not-allowed');
+            }
+        }
+
+        function handleDokumentasiRequirement(statusPemugaran) {
+
+            if (statusPemugaran === 'selesai') {
+
+                // WAJIB HANYA JIKA BELUM ADA DATA
+                buktiDokumentasi.required = !hasBuktiDokumentasi;
+                laporanInput.required = !hasLaporan;
+
+                buktiDokumentasi.readOnly = false;
+                laporanInput.disabled = false;
+
+            } else {
+
+                buktiDokumentasi.required = false;
+                laporanInput.required = false;
+
+                buktiDokumentasi.readOnly = true;
+                laporanInput.disabled = true;
+            }
+        }
+
+        /* ======================
+        SYNC KE HIDDEN INPUT
+        ====================== */
+        nilaiInput.addEventListener('input', () => {
+            nilaiHidden.value = nilaiInput.value;
+        });
+
+        kondisiSelect.addEventListener('change', () => {
+            kondisiHidden.value = kondisiSelect.value;
+        });
+
+        statusPemugaran.addEventListener('change', handlePemugaranChange);
+        statusVerifikasi.addEventListener('change', handleVerifikasiChange);
+
+        /* ======================
+        INIT
+        ====================== */
         handlePemugaranChange();
-        handleDokumentasiRequirement();
+        handleVerifikasiChange();
+        handleDokumentasiRequirement(
+            document.getElementById('statusPemugaran').value
+        );
     });
-
-    statusVerifikasi.addEventListener('change', handleVerifikasiChange);
-
-    /* =========================
-       INIT
-    ========================= */
-    handlePemugaranChange();
-    handleVerifikasiChange();
-    handleDokumentasiRequirement();
-});
 </script>
-
-
 
 @endsection

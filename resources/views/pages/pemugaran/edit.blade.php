@@ -70,6 +70,20 @@
                         readonly>
                 </div>
 
+                {{-- Tipe Pemugaran --}}
+                <div>
+                    <label class="block text-sm font-medium mb-1">
+                        Tipe Pemugaran
+                    </label>
+                    <select name="tipe_pemugaran"
+                            class="w-full px-2 py-2 rounded-lg border border-gray-300 bg-white focus:ring focus:ring-gray-300">
+                        <option value="">Pilih tipe pemugaran</option>
+                        <option value="konsolidasi" {{ $pemugaran->tipe_pemugaran == 'konsolidasi' ? 'selected' : '' }}>konsolidasi</option>
+                        <option value="rehabilitasi" {{ $pemugaran->tipe_pemugaran == 'rehabilitasi' ? 'selected' : '' }}>rehabilitasi</option>
+                        <option value="restorasi" {{ $pemugaran->tipe_pemugaran == 'restorasi' ? 'selected' : '' }}>restorasi</option>
+                        <option value="rekonstruksi" {{ $pemugaran->tipe_pemugaran == 'rekonstruksi' ? 'selected' : '' }}>rekonstruksi</option>
+                    </select>
+                </div>
 
                 {{-- Biaya --}}
                 <div>
@@ -81,7 +95,6 @@
                 </div>
 
                 {{-- Proposal --}}
-
                 <div>
                     <div>
                         <label class="block text-sm font-medium mb-1">

@@ -87,6 +87,71 @@
                         </div>
                     </th>
 
+                    <th class="py-2 text-center relative">
+                        <div class="flex items-center gap-0.5 justify-center">
+                            <span>Tipe Pemugaran</span>
+
+                            <button type="button"
+                                class="filter-toggle text-sky-500 hover:text-sky-700"
+                                data-target="filter-tipe">
+                                <i class="fas fa-filter"></i>
+                            </button>
+                        </div>
+
+                        {{-- Dropdown Filter tipe --}}
+                        <div id="filter-tipe"
+                            class="filter-dropdown hidden absolute mt-2 bg-white border rounded shadow z-40 w-44">
+                            <form method="GET" class="p-3">
+                                {{-- Pertahankan filter lain --}}
+                                <input type="hidden" name="status_pemugaran" value="{{ request('status_pemugaran') }}">
+
+                                <div class="text-sm font-medium mb-2">Pilih Tipe Pemugaran</div>
+
+                                <label class="flex items-center gap-2 py-1">
+                                    <input type="radio" name="tipe_pemugaran" value="Konsolidasi"
+                                        {{ request('tipe_pemugaran') == 'Konsolidasi' ? 'checked' : '' }}>
+                                    <span class="text-sm">Konsolidasi</span>
+                                </label>
+
+                                <label class="flex items-center gap-2 py-1">
+                                    <input type="radio" name="tipe_pemugaran" value="Rehabilitasi"
+                                        {{ request('tipe_pemugaran') == 'Rehabilitasi' ? 'checked' : '' }}>
+                                    <span class="text-sm">Rehabilitasi</span>
+                                </label>
+
+                                <label class="flex items-center gap-2 py-1">
+                                    <input type="radio" name="tipe_pemugaran" value="Restorasi"
+                                        {{ request('tipe_pemugaran') == 'Restorasi' ? 'checked' : '' }}>
+                                    <span class="text-sm">Restorasi</span>
+                                </label>
+
+                                <label class="flex items-center gap-2 py-1">
+                                    <input type="radio" name="tipe_pemugaran" value="Rekonstruksi"
+                                        {{ request('tipe_pemugaran') == 'Rekonstruksi' ? 'checked' : '' }}>
+                                    <span class="text-sm">Rekonstruksi</span>
+                                </label>
+
+                                <label class="flex items-center gap-2 py-1">
+                                    <input type="radio" name="tipe_pemugaran" value=""
+                                        {{ request('tipe_pemugaran') === null || request('tipe_pemugaran') === '' ? 'checked' : '' }}>
+                                    <span class="text-sm">Semua</span>
+                                </label>
+
+
+                                <div class="mt-3 flex justify-between">
+                                    <a href="{{ route('pemugaran.index', ['status_pemugaran' => request('status_pemugaran')]) }}"
+                                    class="text-sm text-gray-600">
+                                        Reset
+                                    </a>
+                                    <button type="submit"
+                                            class="px-3 py-1 bg-blue-600 text-white rounded text-sm">
+                                        Terapkan
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </th>
+
                     <th class="py-2 text-center">Tanggal Pengajuan</th>
 
                     <th class="py-2 text-center relative">
@@ -206,6 +271,7 @@
                         {{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}
                     </td>
                     <td class="py-2">{{ $item->kondisi }}</td>
+                    <td class="py-2">{{ $item->tipe_pemugaran }}</td>
                     <td class="py-2">
                         {{ $item->tanggal_pengajuan?->parse($item->tanggal_pengajuan)->locale('id')->translatedFormat('l, d/m/Y') }}
                     </td>
