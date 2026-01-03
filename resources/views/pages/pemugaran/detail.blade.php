@@ -35,6 +35,10 @@
                     </p>
                 </div>
                 <div>
+                    <p class="text-gray-500">Tipe Pemugaran</p>
+                    <p class="font-medium">{{ $pemugaran->tipe_pemugaran ?? '-' }}</p>
+                </div>
+                <div>
                     <p class="text-gray-500">Biaya Pemugaran</p>
                     <p class="font-medium">
                         Rp {{ number_format($pemugaran->biaya_pemugaran ?? 0, 0, ',', '.') }}

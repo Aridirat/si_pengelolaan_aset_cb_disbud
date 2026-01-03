@@ -7,22 +7,37 @@
             <section class="bg-linear-to-r from-blue-200 to-indigo-600 py-3 px-4 rounded-xl shadow-md shadow-indigo-300/50 mb-2 w-3/4 transition duration-300 ease-in-out hover:scale-102">
                 <h2 class="text-sm font-bold mb-2 ">Cagar Budaya</h2>
                 <div class="grid grid-cols-3 gap-4">
-                    <div class="bg-white py-1 px-2 rounded-lg shadow transition duration-300 ease-in-out hover:scale-105">
+                    <div class="bg-white py-2 px-2 rounded-lg shadow transition duration-300 ease-in-out hover:scale-105">
                         <p class="font-medium text-sm text-left">Kondisi Baik</p>
                         <p class="text-3xl font-bold mt-2 text-center">
                             {{ $cagarBudaya['baik'] ?? 0 }}
                         </p>
                     </div>
-                    <div class="bg-white py-2 px-3 rounded-lg shadow transition duration-300 ease-in-out hover:scale-105">
+                    <div class="bg-white py-2 px-2 rounded-lg shadow transition duration-300 ease-in-out hover:scale-105">
                         <p class="font-medium text-sm text-left">Kondisi Rusak Ringan</p>
                         <p class="text-3xl font-bold mt-2 text-center">
                             {{ $cagarBudaya['rusak_ringan'] ?? 0 }}
                         </p>
                     </div>
-                    <div class="bg-white py-2 px-3 rounded-lg shadow transition duration-300 ease-in-out hover:scale-105">
+                    <div class="bg-white py-2 px-2 rounded-lg shadow transition duration-300 ease-in-out hover:scale-105">
                         <p class="font-medium text-sm text-left">Kondisi Rusak Berat</p>
                         <p class="text-3xl font-bold mt-2 text-center">
                             {{ $cagarBudaya['rusak_berat'] ?? 0 }}
+                        </p>
+                    </div>
+                </div>
+                <hr class="text-white my-5">
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-white py-2 px-2 rounded-lg shadow transition duration-300 ease-in-out hover:scale-105">
+                        <p class="font-medium text-sm text-left"> Status Aktif</p>
+                        <p class="text-3xl font-bold mt-2 text-center">
+                            {{ $cagarBudaya['aktif'] ?? 0 }}
+                        </p>
+                    </div>
+                    <div class="bg-white py-2 px-2 rounded-lg shadow transition duration-300 ease-in-out hover:scale-105">
+                        <p class="font-medium text-sm text-left">Status Terhapus</p>
+                        <p class="text-3xl font-bold mt-2 text-center">
+                            {{ $cagarBudaya['terhapus'] ?? 0 }}
                         </p>
                     </div>
                 </div>
@@ -38,7 +53,7 @@
                     <div class="bg-white py-2 px-3 rounded-lg h-32 shadow transition duration-300 ease-in-out hover:scale-105">
                         <p class="font-medium text-sm text-left">Total Mutasi Data</p>
                         <p class="text-4xl font-bold mt-8 text-center">
-                            {{ array_sum($mutasiStatus->toArray()) }}
+                            {{ $totalMutasiData }}
                         </p>
                     </div>
 

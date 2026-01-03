@@ -21,16 +21,26 @@
             {{-- Nama Cagar Budaya --}}
             <div>
                 <label class="text-sm font-medium">Nama Cagar Budaya</label>
-                <select name="id_cagar_budaya" class="w-full mt-1 border border-gray-300 rounded-md p-2">
-                  <option value="">Pilih cagar budaya</option>
-                  @foreach ($cagarBudaya as $cb)
-                    <option value="{{ $cb->id_cagar_budaya }}">{{ $cb->nama_cagar_budaya }}</option>
-                  @endforeach
+                <select
+                    name="id_cagar_budaya"
+                    id="cagarBudayaSelect"
+                    class="w-full mt-1 border border-gray-300 rounded-md p-2"
+                >
+                    <option value="">Pilih cagar budaya</option>
+                    @foreach ($cagarBudaya as $cb)
+                        <option
+                            value="{{ $cb->id_cagar_budaya }}"
+                            data-kondisi="{{ strtolower($cb->kondisi) }}"
+                        >
+                            {{ $cb->nama_cagar_budaya }}
+                        </option>
+                    @endforeach
                 </select>
                 @error('id_cagar_budaya')
                   <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
+            
 
             {{-- Penanggung Jawab --}}
             <div>
@@ -49,22 +59,54 @@
             {{-- Kondisi --}}
             <div>
                 <label class="text-sm font-medium">Kondisi Cagar Budaya</label>
-                <select name="kondisi" class="w-full mt-1 border border-gray-300 rounded-md p-2">
-                  <option value="">Pilih kondisi</option>
-                  <option value="Rusak Ringan">Rusak Ringan</option>
-                  <option value="Rusak Berat">Rusak Berat</option>
-                </select>
+
+                {{-- Input tampilan --}}
+                <input
+                    type="text"
+                    id="kondisi_display"
+                    class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100 cursor-not-allowed"
+                    placeholder="Kondisi akan terisi otomatis"
+                    readonly
+                >
+
+                {{-- Hidden input untuk backend --}}
+                <input type="hidden" name="kondisi" id="kondisi">
+
                 @error('kondisi')
-                  <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
-            {{-- Tanggal --}}
+            {{-- Tanggal Pengajuan --}}
             <div>
                 <label class="text-sm font-medium">Tanggal Pengajuan</label>
-                <input type="date" name="tanggal_pengajuan" class="w-full mt-1 border border-gray-300 rounded-md p-2">
+                <input
+                    type="date"
+                    name="tanggal_pengajuan"
+                    value="{{ now()->format('Y-m-d') }}"
+                    readonly
+                    class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100 cursor-not-allowed"
+                >
                 @error('tanggal_pengajuan')
-                  <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- Tipe Pemugaran --}}
+            <div>
+                <label class="block text-sm font-medium mb-1">
+                    Tipe Pemugaran
+                </label>
+                <select name="tipe_pemugaran"
+                        class="w-full px-2 py-2 rounded-lg border border-gray-300 bg-white focus:ring focus:ring-gray-300">
+                    <option value="">Pilih tipe pemugaran</option>
+                    <option value="konsolidasi">Konsolidasi</option>
+                    <option value="rehabilitasi">Rehabilitasi</option>
+                    <option value="restorasi">Restorasi</option>
+                    <option value="rekonstruksi">Rekonstruksi</option>
+                </select>
+                @error('tipe_pemugaran')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -158,4 +200,18 @@
     </form>
 
 </div>
+
+<script>
+document.getElementById('cagarBudayaSelect').addEventListener('change', function () {
+    const selectedOption = this.options[this.selectedIndex];
+    const kondisi = selectedOption.getAttribute('data-kondisi');
+
+    // Set nilai ke select tampilan
+    document.getElementById('kondisi_display').value = kondisi ?? '';
+
+    // Set nilai ke hidden input (untuk dikirim ke server)
+    document.getElementById('kondisi').value = kondisi ?? '';
+});
+</script>
+
 @endsection

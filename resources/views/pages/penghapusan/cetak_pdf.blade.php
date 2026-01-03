@@ -41,7 +41,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($penghapusan as $item)
+        @forelse ($penghapusan as $item)
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}</td>
@@ -58,20 +58,29 @@
                     Rp {{ number_format($item->cagarBudaya->nilai_perolehan ?? 0, 0, ',', '.') }}
                 </td>
             </tr>
-        @endforeach
+        @empty
+            <tr>
+                <td colspan="8" class="text-center py-6 text-gray-500 italic">
+                    Data penghapusan tidak tersedia
+                </td>
+            </tr>
+        @endforelse
 
         {{-- TOTAL --}}
-        <tr class="total-row">
-            <td colspan="7" class="text-right">
-                <strong>TOTAL NILAI PEROLEHAN</strong>
-            </td>
-            <td class="text-right">
-                <strong>
-                    Rp {{ number_format($totalNilai, 0, ',', '.') }}
-                </strong>
-            </td>
-        </tr>
+        @if ($penghapusan->count() > 0)
+            <tr class="total-row">
+                <td colspan="7" class="text-right">
+                    <strong>TOTAL NILAI PEROLEHAN</strong>
+                </td>
+                <td class="text-right">
+                    <strong>
+                        Rp {{ number_format($totalNilai, 0, ',', '.') }}
+                    </strong>
+                </td>
+            </tr>
+        @endif
     </tbody>
+
 </table>
 
 <br><br>

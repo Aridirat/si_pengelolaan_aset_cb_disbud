@@ -22,15 +22,19 @@
                 {{-- Nama Cagar Budaya --}}
                 <div>
                     <label class="text-sm font-medium">Nama Cagar Budaya</label>
-                    <select name="id_cagar_budaya" class="w-full mt-1 border border-gray-300 rounded-md p-2">
-                        @foreach ($cagarBudaya as $cb)
-                            <option value="{{ $cb->id_cagar_budaya }}"
-                                @selected($cb->id_cagar_budaya == $pemugaran->id_cagar_budaya)>
-                                {{ $cb->nama_cagar_budaya }}
-                            </option>
-                        @endforeach
-                    </select>
+
+                    <input type="text"
+                        value="{{ $pemugaran->cagarBudaya->nama_cagar_budaya }}"
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100 cursor-not-allowed"
+                        readonly>
+
+                    {{-- ID tetap dikirim ke server --}}
+                    <input type="hidden"
+                        name="id_cagar_budaya"
+                        value="{{ $pemugaran->id_cagar_budaya }}">
                 </div>
+
+
 
                 {{-- Penanggung Jawab --}}
                 <div>
@@ -48,23 +52,37 @@
                 {{-- Kondisi --}}
                 <div>
                     <label class="text-sm font-medium">Kondisi Cagar Budaya</label>
-                    <select name="kondisi" class="w-full mt-1 border border-gray-300 rounded-md p-2">
-                        @foreach (['Rusak Ringan','Rusak Sedang','Rusak Berat'] as $kondisi)
-                            <option value="{{ $kondisi }}"
-                                @selected($kondisi == $pemugaran->kondisi)>
-                                {{ $kondisi }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <input type="text"
+                        name="kondisi"
+                        value="{{ $pemugaran->cagarBudaya->kondisi }}"
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100"
+                        readonly>
                 </div>
+
 
                 {{-- Tanggal --}}
                 <div>
                     <label class="text-sm font-medium">Tanggal Pengajuan</label>
                     <input type="date"
-                           name="tanggal_pengajuan"
-                           value="{{ $pemugaran->tanggal_pengajuan->format('Y-m-d') }}"
-                           class="w-full mt-1 border border-gray-300 rounded-md p-2">
+                        name="tanggal_pengajuan"
+                        value="{{ $pemugaran->tanggal_pengajuan->format('Y-m-d') }}"
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100"
+                        readonly>
+                </div>
+
+                {{-- Tipe Pemugaran --}}
+                <div>
+                    <label class="block text-sm font-medium mb-1">
+                        Tipe Pemugaran
+                    </label>
+                    <select name="tipe_pemugaran"
+                            class="w-full px-2 py-2 rounded-lg border border-gray-300 bg-white focus:ring focus:ring-gray-300">
+                        <option value="">Pilih tipe pemugaran</option>
+                        <option value="konsolidasi" {{ $pemugaran->tipe_pemugaran == 'konsolidasi' ? 'selected' : '' }}>konsolidasi</option>
+                        <option value="rehabilitasi" {{ $pemugaran->tipe_pemugaran == 'rehabilitasi' ? 'selected' : '' }}>rehabilitasi</option>
+                        <option value="restorasi" {{ $pemugaran->tipe_pemugaran == 'restorasi' ? 'selected' : '' }}>restorasi</option>
+                        <option value="rekonstruksi" {{ $pemugaran->tipe_pemugaran == 'rekonstruksi' ? 'selected' : '' }}>rekonstruksi</option>
+                    </select>
                 </div>
 
                 {{-- Biaya --}}
@@ -77,7 +95,6 @@
                 </div>
 
                 {{-- Proposal --}}
-
                 <div>
                     <div>
                         <label class="block text-sm font-medium mb-1">

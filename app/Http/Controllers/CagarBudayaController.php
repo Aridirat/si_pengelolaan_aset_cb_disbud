@@ -6,6 +6,9 @@ use App\Models\CagarBudaya;
 use App\Models\MutasiData;
 use App\Constants\CagarBudayaBitmask;
 use App\Constants\CagarBudayaFilter;
+use App\Models\Pemugaran;
+use App\Models\Mutasi;
+use App\Models\Penghapusan;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -23,56 +26,64 @@ class CagarBudayaController extends Controller
         
     // }
     public function index(Request $request)
-{
-    $query = CagarBudaya::query();
-    
-    // FILTER KATEGORI (ENUM)
-    if ($request->filled('kategori')) {
-        $query->where('kategori', $request->kategori);
-    }
-
-    // FILTER KONDISI (ENUM)
-    if ($request->filled('kondisi')) {
-        $query->where('kondisi', $request->kondisi);
-    }
-
-    // FILTER LOKASI BERDASARKAN KECAMATAN (SUBSTRING)
-    if ($request->filled('lokasi')) {
-        $query->whereRaw(
-            'LOWER(lokasi) LIKE ?',
-            ['%' . strtolower($request->lokasi) . '%']
-        );
-    }
-
-        if ($request->has('search') && $request->input('search') !== '') {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('nama_cagar_budaya', 'like', '%' . $search . '%')
-                ->orWhere('kategori', 'like', '%' . $search . '%')
-                ->orWhere('lokasi', 'like', '%' . $search . '%')
-                ->orWhere('kondisi', 'like', '%' . $search . '%')
-                ->orWhere('nilai_perolehan', 'like', '%' . $search . '%');
-            });
+    {
+        $query = CagarBudaya::query();
+        
+        // FILTER KATEGORI (ENUM)
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
         }
 
-        $allResults = $query->get();
-        $cagar_budaya = $query->orderBy('id_cagar_budaya', 'desc')->paginate(perPage: 10);
+        //FILTER PENETAPAN (ENUM)
+        if ($request->filled('status_penetapan')) {
+            $query->where('status_penetapan', $request->status_penetapan);
+        }
+        
+        // FILTER KONDISI (ENUM)
+        if ($request->filled('kondisi')) {
+            $query->where('kondisi', $request->kondisi);
+        }
 
-    $kategoriList = CagarBudaya::select('kategori')->distinct()->pluck('kategori');
-    $lokasiList = CagarBudaya::select('lokasi')->distinct()->pluck('lokasi');
-    $kondisiList = CagarBudaya::select('kondisi')->distinct()->pluck('kondisi');
+        // FILTER LOKASI BERDASARKAN KECAMATAN (SUBSTRING)
+        if ($request->filled('lokasi')) {
+            $query->whereRaw(
+                'LOWER(lokasi) LIKE ?',
+                ['%' . strtolower($request->lokasi) . '%']
+            );
+        }
 
-    $data = $query->paginate(10)->withQueryString();
+            if ($request->has('search') && $request->input('search') !== '') {
+                $search = $request->input('search');
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama_cagar_budaya', 'like', '%' . $search . '%')
+                    ->orWhere('kategori', 'like', '%' . $search . '%')
+                    ->orWhere('status_penetapan', 'like', '%' . $search . '%')
+                    ->orWhere('lokasi', 'like', '%' . $search . '%')
+                    ->orWhere('kondisi', 'like', '%' . $search . '%')
+                    ->orWhere('nilai_perolehan', 'like', '%' . $search . '%');
+                });
+            }
 
-    return view('pages.cagar_budaya.index', [
-        'cagar_budaya' => $cagar_budaya,
-        'data' => $data,
-        'kategoriList' => CagarBudayaFilter::KATEGORI,
-        'lokasiList'   => CagarBudayaFilter::KECAMATAN_BADUNG,
-        'kondisiList'  => CagarBudayaFilter::KONDISI,
-        "allResults" => $allResults,
-        "search" => $request->input('search', '')
-    ]);
+            $allResults = $query->get();
+            $cagar_budaya = $query->orderBy('id_cagar_budaya', 'desc')->paginate(perPage: 10);
+
+        $kategoriList = CagarBudaya::select('kategori')->distinct()->pluck('kategori');
+        $penetapanList = CagarBudaya::select('status_penetapan')->distinct()->pluck('status_penetapan');
+        $lokasiList = CagarBudaya::select('lokasi')->distinct()->pluck('lokasi');
+        $kondisiList = CagarBudaya::select('kondisi')->distinct()->pluck('kondisi');
+
+        $data = $query->paginate(10)->withQueryString();
+
+        return view('pages.cagar_budaya.index', [
+            'cagar_budaya' => $cagar_budaya,
+            'data' => $data,
+            'kategoriList' => CagarBudayaFilter::KATEGORI,
+            'penetapanList' => CagarBudayaFilter::STATUS_PENETAPAN,
+            'lokasiList'   => CagarBudayaFilter::KECAMATAN_BADUNG,
+            'kondisiList'  => CagarBudayaFilter::KONDISI,
+            "allResults" => $allResults,
+            "search" => $request->input('search', '')
+        ]);
     }
 
     
@@ -92,6 +103,7 @@ class CagarBudayaController extends Controller
             'lokasi' => 'required|string',
             'tanggal_pertama_pencatatan' => 'required|date',
             'nilai_perolehan' => 'required|numeric',
+            'status_penetapan' => 'required|in:aktif,terhapus',
             'status_kepemilikan' => 'required|in:pemerintah,pribadi',
             'kondisi' => 'required|in:baik,rusak ringan,rusak berat',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048', // 2 MB
@@ -142,7 +154,25 @@ class CagarBudayaController extends Controller
     public function detail($id)
     {
         $data = CagarBudaya::findOrFail($id);
-        return view('pages.cagar_budaya.detail', compact('data'));
+
+        $pemugaran = Pemugaran::where('id_cagar_budaya', $data->id_cagar_budaya)
+            ->orderBy('tanggal_pengajuan', 'desc')
+            ->get();
+
+        $mutasi = Mutasi::where('id_cagar_budaya', $data->id_cagar_budaya)
+            ->orderBy('tanggal_pengajuan', 'desc')
+            ->get();
+
+        $penghapusan = Penghapusan::where('id_cagar_budaya', $data->id_cagar_budaya)
+            ->orderBy('id_penghapusan', 'desc')
+            ->get();
+
+        return view('pages.cagar_budaya.detail', compact(
+            'data',
+            'pemugaran',
+            'mutasi',
+            'penghapusan'
+        ));
     }
 
     /**
@@ -164,12 +194,9 @@ class CagarBudayaController extends Controller
     public function update(Request $request, $id)
     {   
         $fields = [
-        'nama_cagar_budaya',
         'kategori',
         'lokasi',
         'tanggal_pertama_pencatatan',
-        'nilai_perolehan',
-        'status_kepemilikan',
         'kondisi',
         'deskripsi',
         'foto',
@@ -180,12 +207,9 @@ class CagarBudayaController extends Controller
         $original = $data->getOriginal();
 
         $validated = $request->validate([
-            'nama_cagar_budaya' => 'sometimes|string',
             'kategori' => 'sometimes|in:benda,bangunan,struktur,situs,kawasan',
             'lokasi' => 'sometimes|string',
             'tanggal_pertama_pencatatan' => 'sometimes|date',
-            'nilai_perolehan' => 'sometimes|numeric',
-            'status_kepemilikan' => 'sometimes|in:pemerintah,pribadi',
             'kondisi' => 'sometimes|in:baik,rusak ringan,rusak berat',
             'deskripsi' => 'sometimes|string',
             'foto' => 'sometimes|image|mimes:jpg,jpeg,png,webp|max:2048',
@@ -323,6 +347,10 @@ class CagarBudayaController extends Controller
             $query->where('kondisi', $request->kondisi);
         }
 
+        if ($request->filled('status_penetapan')) {
+            $query->where('status_penetapan', $request->status_penetapan);
+        }
+
         if ($request->filled('lokasi')) {
             $query->whereRaw(
                 'LOWER(lokasi) LIKE ?',
@@ -335,6 +363,7 @@ class CagarBudayaController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('nama_cagar_budaya', 'like', "%$search%")
                 ->orWhere('kategori', 'like', "%$search%")
+                ->orWhere('status_penetapan', 'like', "%$search%")
                 ->orWhere('lokasi', 'like', "%$search%");
             });
         }
@@ -363,13 +392,13 @@ class CagarBudayaController extends Controller
     /**
      * Menghapus data cagar budaya.
      */
-    public function destroy($id)
-    {
-        $data = CagarBudaya::findOrFail($id);
-        $data->delete();
+    // public function destroy($id)
+    // {
+    //     $data = CagarBudaya::findOrFail($id);
+    //     $data->delete();
 
-        return response()->json([
-            'message' => 'Data berhasil dihapus.'
-        ]);
-    }
+    //     return response()->json([
+    //         'message' => 'Data berhasil dihapus.'
+    //     ]);
+    // }
 }

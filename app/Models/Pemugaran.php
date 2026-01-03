@@ -14,6 +14,7 @@ class Pemugaran extends Model
         'id_cagar_budaya',
         'id',
         'kondisi',
+        'tipe_pemugaran',
         'tanggal_pengajuan',
         'deskripsi_pengajuan',
         'proposal_pengajuan',

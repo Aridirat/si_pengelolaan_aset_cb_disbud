@@ -17,6 +17,7 @@ class CagarBudaya extends Model
         'lokasi',
         'tanggal_pertama_pencatatan',
         'nilai_perolehan',
+        'status_penetapan',
         'status_kepemilikan',
         'kondisi',
         'foto',

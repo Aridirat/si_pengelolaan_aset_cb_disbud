@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Pemugaran;
 use App\Models\CagarBudaya;
+use App\Models\MutasiData;
+use App\Constants\CagarBudayaBitmask;
 use App\Models\User;   
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -23,11 +25,12 @@ class PemugaranController extends Controller
                 $q->whereHas('cagarBudaya', function ($cb) use ($searchTerm) {
                     $cb->where('nama_cagar_budaya', 'like', '%' . $searchTerm . '%');
                 })->orWhere('kondisi', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('status_pemugaran', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('status_verifikasi', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('biaya_pemugaran', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('tanggal_pengajuan', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('tanggal_selesai', 'like', '%' . $searchTerm . '%');
+                ->orWhere('tipe_pemugaran','like','%' . $searchTerm . '%')
+                ->orWhere('status_pemugaran', 'like', '%' . $searchTerm . '%')
+                ->orWhere('status_verifikasi', 'like', '%' . $searchTerm . '%')
+                ->orWhere('biaya_pemugaran', 'like', '%' . $searchTerm . '%')
+                ->orWhere('tanggal_pengajuan', 'like', '%' . $searchTerm . '%')
+                ->orWhere('tanggal_selesai', 'like', '%' . $searchTerm . '%');
             });
         }
 
@@ -36,9 +39,18 @@ class PemugaranController extends Controller
             $query->where('kondisi', $request->kondisi);
         }
 
+        // Filter tipe
+        if ($request->filled('tipe_pemugaran')) {
+            $query->where('tipe_pemugaran', $request->tipe_pemugaran);
+        }
+
         // Filter status pemugaran
         if ($request->filled('status_pemugaran')) {
             $query->where('status_pemugaran', $request->status_pemugaran);
+        }
+
+        if ($request->filled('status_verifikasi')) {
+            $query->where('status_verifikasi', $request->status_verifikasi);
         }
 
         $pemugaran = $query
@@ -54,7 +66,15 @@ class PemugaranController extends Controller
 
     public function create()
     {
-        $cagarBudaya = CagarBudaya::orderBy('nama_cagar_budaya')->get();
+        $cagarBudaya = CagarBudaya::whereIn('kondisi', [
+                'rusak berat',
+                'rusak ringan'
+            ])
+            ->where('status_penetapan', 'aktif')
+            ->orderBy('nama_cagar_budaya')
+            ->get();
+
+
         $penanggungJawab = User::orderBy('nama')->get();
 
         return view('pages.pemugaran.create', compact(
@@ -63,12 +83,14 @@ class PemugaranController extends Controller
         ));
     }
 
+
     public function store(Request $request)
     {
         $validated = $request->validate([
             'id_cagar_budaya' => 'required',
             'id' => 'required',
             'kondisi' => 'required|string',
+            'tipe_pemugaran' => 'required|string',
             'tanggal_pengajuan' => 'required|date',
             'deskripsi_pengajuan' => 'required|string',
             'biaya_pemugaran' => 'required|numeric',
@@ -95,6 +117,7 @@ class PemugaranController extends Controller
             'id_cagar_budaya' => $validated['id_cagar_budaya'],
             'id' => $validated['id'],
             'kondisi' => $validated['kondisi'],
+            'tipe_pemugaran' => $validated['tipe_pemugaran'],
             'tanggal_pengajuan' => $validated['tanggal_pengajuan'],
             'deskripsi_pengajuan' => $validated['deskripsi_pengajuan'],
             'biaya_pemugaran' => $validated['biaya_pemugaran'],
@@ -127,6 +150,7 @@ class PemugaranController extends Controller
             'id_cagar_budaya' => 'required',
             'id' => 'required',
             'kondisi' => 'required|string',
+            'tipe_pemugaran' => 'required|string',
             'tanggal_pengajuan' => 'required|date',
             'deskripsi_pengajuan' => 'required|string',
             'biaya_pemugaran' => 'required|numeric',
@@ -145,6 +169,7 @@ class PemugaranController extends Controller
             'id_cagar_budaya' => $request->id_cagar_budaya,
             'id' => $request->id,
             'kondisi' => $request->kondisi,
+            'tipe_pemugaran' => $request->tipe_pemugaran,
             'tanggal_pengajuan' => $request->tanggal_pengajuan,
             'deskripsi_pengajuan' => $request->deskripsi_pengajuan,
             'biaya_pemugaran' => $request->biaya_pemugaran,
@@ -163,39 +188,77 @@ class PemugaranController extends Controller
 
     public function verifikasiUpdate(Request $request, Pemugaran $pemugaran)
     {
-        $validated = $request->validate([
+        $request->validate([
             'status_pemugaran' => 'required|string',
             'status_verifikasi' => 'required|string',
-            'tanggal_verifikasi' => 'required|date',
-            'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_verifikasi',
             'bukti_dokumentasi' => 'nullable|url',
             'laporan_pertanggungjawaban' => 'nullable|file|mimes:pdf|max:5120',
         ]);
 
-        // Upload LAPORAN PERTANGGUNGJAWABAN dengan nama asli + timestamp custom
+        // Tanggal otomatis
+        $tanggalSelesai = $request->status_pemugaran === 'selesai'
+            ? now()->toDateString()
+            : null;
+
+        $tanggalVerifikasi = in_array(
+            $request->status_verifikasi,
+            ['ditolak','disetujui']
+        ) ? now()->toDateString() : null;
+
+        // Upload laporan
+        $laporanPath = $pemugaran->laporan_pertanggungjawaban;
         if ($request->hasFile('laporan_pertanggungjawaban')) {
-            $laporanFile = $request->file('laporan_pertanggungjawaban');
-
-            $timestamp = Carbon::now()->format('mdyHisu');
-            $laporanName = $timestamp . '_' . $laporanFile->getClientOriginalName();
-
-            $laporanPath = $laporanFile->storeAs(
+            $file = $request->file('laporan_pertanggungjawaban');
+            $laporanPath = $file->storeAs(
                 'laporan-pemugaran',
-                $laporanName,
+                now()->format('mdyHisu').'_'.$file->getClientOriginalName(),
                 'public'
             );
-
-            $validated['laporan_pertanggungjawaban'] = $laporanPath;
         }
 
+        // Update pemugaran
         $pemugaran->update([
-            'status_pemugaran' => $validated['status_pemugaran'],
-            'status_verifikasi' => $validated['status_verifikasi'],
-            'tanggal_verifikasi' => $validated['tanggal_verifikasi'],
-            'tanggal_selesai' => $validated['tanggal_selesai'],
-            'bukti_dokumentasi' => $validated['bukti_dokumentasi'],
-            'laporan_pertanggungjawaban' => $validated['laporan_pertanggungjawaban'] ?? $pemugaran->laporan_pertanggungjawaban,
+            'status_pemugaran' => $request->status_pemugaran,
+            'status_verifikasi' => $request->status_verifikasi,
+            'tanggal_selesai' => $tanggalSelesai,
+            'tanggal_verifikasi' => $tanggalVerifikasi,
+            'bukti_dokumentasi' => $request->bukti_dokumentasi,
+            'laporan_pertanggungjawaban' => $laporanPath,
         ]);
+
+        // JIKA DISETUJUI → UPDATE CAGAR BUDAYA + MUTASI
+        if ($request->status_verifikasi === 'disetujui') {
+
+            $request->validate([
+                'nilai_perolehan' => 'required|numeric',
+                'kondisi_baru' => 'required|string',
+            ]);
+
+            $cagarBudaya = CagarBudaya::findOrFail($pemugaran->id_cagar_budaya);
+
+            $nilaiLama = [
+                'nilai_perolehan' => $cagarBudaya->nilai_perolehan,
+                'kondisi' => $cagarBudaya->kondisi,
+            ];
+
+            $nilaiBaru = [
+                'nilai_perolehan' => $request->nilai_perolehan,
+                'kondisi' => $request->kondisi_baru,
+            ];
+
+            $cagarBudaya->update($nilaiBaru);
+
+            MutasiData::create([
+                'id_cagar_budaya' => $cagarBudaya->id_cagar_budaya,
+                'id' => Auth::id(),
+                'tanggal_mutasi_data' => now(),
+                'bitmask' =>
+                    CagarBudayaBitmask::FIELDS['nilai_perolehan']
+                    | CagarBudayaBitmask::FIELDS['kondisi'],
+                'nilai_lama' => json_encode($nilaiLama),
+                'nilai_baru' => json_encode($nilaiBaru),
+            ]);
+        }
 
         return redirect()
             ->route('pemugaran.index')
@@ -235,12 +298,26 @@ class PemugaranController extends Controller
         }
 
         /* ======================
+        | FILTER TIPE
+        ====================== */
+        if ($request->filled('tipe_pemugaran')) {
+            $query->where('tipe_pemugaran', $request->tipe_pemugaran);
+        }
+
+        /* ======================
         | FILTER STATUS PEMUGARAN
         ====================== */
         if ($request->filled('status_pemugaran')) {
             $query->where('status_pemugaran', $request->status_pemugaran);
         }
 
+        /* ======================
+        | FILTER STATUS Verifikasi
+        ====================== */
+        if ($request->filled('status_verifikasi')) {
+            $query->where('status_verifikasi', $request->status_verifikasi);
+        }
+        
         $pemugaran = $query
             ->orderBy('tanggal_pengajuan', 'desc')
             ->get();

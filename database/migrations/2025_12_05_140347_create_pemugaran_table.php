@@ -21,16 +21,17 @@ return new class extends Migration
             $table->foreign('id')->references('id')->on('users')->onDelete('cascade');
 
             $table->enum('kondisi', ['rusak ringan', 'rusak berat']);
+            $table->enum('tipe_pemugaran', ['konsolidasi', 'rehabilitasi', 'restorasi', 'rekonstruksi']);
             $table->date('tanggal_pengajuan');
             $table->text('deskripsi_pengajuan');
             $table->string('proposal_pengajuan');
-            $table->decimal('biaya_pemugaran', 13, 2);
+            $table->decimal('biaya_pemugaran', 20, 2);
             $table->enum('status_pemugaran', ['pending', 'diproses', 'selesai'])->default('pending');
             $table->enum('status_verifikasi', ['menunggu', 'ditolak', 'disetujui'])->default('menunggu');
-            $table->date('tanggal_verifikasi');
-            $table->string('laporan_pertanggungjawaban');
-            $table->string('bukti_dokumentasi');
-            $table->date('tanggal_selesai');
+            $table->date('tanggal_verifikasi')->nullable();
+            $table->string('laporan_pertanggungjawaban')->nullable();
+            $table->string('bukti_dokumentasi')->nullable();
+            $table->date('tanggal_selesai')->nullable();
         });
     }
 

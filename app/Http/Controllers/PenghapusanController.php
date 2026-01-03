@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Penghapusan;
 use App\Models\CagarBudaya;
+use App\Models\MutasiData;
+use App\Constants\CagarBudayaBitmask;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -47,6 +49,9 @@ class PenghapusanController extends Controller
             ->when($request->status_penghapusan, fn ($q) =>
                 $q->where('status_penghapusan', $request->status_penghapusan)
             )
+            ->when($request->status_verifikasi, fn ($q) =>
+                $q->where('status_verifikasi', $request->status_verifikasi)
+            )
             ->latest('id_penghapusan')
             ->paginate(10)
             ->withQueryString();
@@ -60,7 +65,9 @@ class PenghapusanController extends Controller
      */
     public function create()
     {
-        $cagarBudaya = CagarBudaya::orderBy('nama_cagar_budaya')->get();
+        $cagarBudaya = CagarBudaya::where('status_penetapan', 'aktif')
+            ->orderBy('nama_cagar_budaya')
+            ->get();
         $penanggungJawab = User::orderBy('nama')->get();
 
         return view('pages.penghapusan.create', compact(
@@ -152,9 +159,13 @@ class PenghapusanController extends Controller
         $validated = $request->validate([
             'status_penghapusan'  => 'required|in:pending,diproses,selesai',
             'status_verifikasi'   => 'required|in:menunggu,disetujui,ditolak',
-            'tanggal_verifikasi'  => 'nullable|date',
             'dokumen_penghapusan' => 'nullable|file|mimes:pdf|max:5120',
         ]);
+
+        $tanggalVerifikasi = in_array(
+            $request->status_verifikasi,
+            ['disetujui','ditolak']
+        ) ? now() : null;
 
         // Upload DOKUMEN PENGHAPUSAN dengan nama asli + timestamp custom
         if ($request->hasFile('dokumen_penghapusan')) {
@@ -175,9 +186,39 @@ class PenghapusanController extends Controller
         $penghapusan->update([
             'status_penghapusan' => $validated['status_penghapusan'],
             'status_verifikasi'  => $validated['status_verifikasi'],
-            'tanggal_verifikasi' => $validated['tanggal_verifikasi'] ?? now(),
+            'tanggal_verifikasi' => $tanggalVerifikasi,
             'dokumen_penghapusan'=> $validated['dokumen_penghapusan'] ?? $penghapusan->dokumen_penghapusan,
         ]);
+
+        // JIKA DISETUJUI → UPDATE CAGAR BUDAYA + MUTASI
+        if ($request->status_verifikasi === 'disetujui') {
+
+            $request->validate([
+                'status_penetapan' => 'required|string',
+            ]);
+
+            $cagarBudaya = CagarBudaya::findOrFail($penghapusan->id_cagar_budaya);
+
+            $nilaiLama = [
+                'status_penetapan' => $cagarBudaya->status_penetapan,
+            ];
+
+            $nilaiBaru = [
+                'status_penetapan' => $request->status_penetapan,
+            ];
+
+            $cagarBudaya->update($nilaiBaru);
+
+            MutasiData::create([
+                'id_cagar_budaya' => $cagarBudaya->id_cagar_budaya,
+                'id' => Auth::id(),
+                'tanggal_mutasi_data' => now(),
+                'bitmask' =>
+                    CagarBudayaBitmask::FIELDS['status_penetapan'],
+                'nilai_lama' => json_encode($nilaiLama),
+                'nilai_baru' => json_encode($nilaiBaru),
+            ]);
+        }
 
         return redirect()
             ->route('penghapusan.index')
@@ -211,6 +252,9 @@ class PenghapusanController extends Controller
             )
             ->when($request->status_penghapusan, fn ($q) =>
                 $q->where('status_penghapusan', $request->status_penghapusan)
+            )
+            ->when($request->status_verifikasi, fn ($q) =>
+                $q->where('status_verifikasi', $request->status_verifikasi)
             )
             ->get();
 

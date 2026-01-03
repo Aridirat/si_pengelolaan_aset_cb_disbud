@@ -16,7 +16,7 @@
                     Ajukan Mutasi
                 </a>
 
-                <a href="{{ route('mutasi.cetak.pdf') }}"
+                <a href="{{ route('mutasi.cetak.pdf', request()->query()) }}"
                    class="px-3 py-2 bg-blue-500 text-white text-sm font-bold rounded-lg hover:bg-blue-700 shadow-md shadow-blue-500/30"
                    target="_blank">
                     Cetak Laporan
@@ -163,7 +163,41 @@
                             </div>
                         </th>
 
-                        <th class="py-2 text-center">Verifikasi</th>
+                        {{-- Status Verifikasi --}}
+                        <th class="py-2 text-center relative">
+                            <div class="flex justify-center items-center gap-1">
+                                <span>Verifikasi</span>
+                                <button type="button" class="filter-toggle" data-target="filter-status-verifikasi">
+                                    <i class="fas fa-filter text-sky-500 hover:text-sky-700"></i>
+                                </button>
+                            </div>
+
+                            <div id="filter-status-verifikasi"
+                                 class="filter-dropdown hidden absolute mt-2 bg-white border rounded shadow z-40 w-44">
+                                <form method="GET" class="p-3">
+                                    @foreach (['menunggu','ditolak','disetujui'] as $status)
+                                        <label class="flex items-center gap-2 py-1">
+                                            <input type="radio" name="status_verifikasi" value="{{ $status }}"
+                                                {{ request('status_verifikasi') == $status ? 'checked' : '' }}>
+                                            <span class="capitalize">{{ $status }}</span>
+                                        </label>
+                                    @endforeach
+
+                                    <label class="flex items-center gap-2 py-1">
+                                        <input type="radio" name="status_verifikasi" value="">
+                                        <span>Semua</span>
+                                    </label>
+
+                                    <div class="mt-3 flex justify-between">
+                                        <a href="{{ route('mutasi.index') }}" class="text-gray-500 text-sm">Reset</a>
+                                        <button class="px-3 py-1 bg-blue-600 text-white rounded text-sm">
+                                            Terapkan
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </th>
+
                         <th class="py-2 text-center">Tanggal Verifikasi</th>
                         <th class="py-2 text-center">Aksi</th>
                     </tr>
@@ -197,34 +231,64 @@
                         </td>
                         <td class="py-2">
                             <div class="flex justify-center gap-1">
+
+                                {{-- DETAIL (SELALU AKTIF) --}}
                                 <a href="{{ route('mutasi.detail', $item->id_mutasi) }}"
-                                   class="py-1 px-2 bg-teal-500 hover:bg-teal-700 shadow-sm shadow-teal-400 text-white rounded">
+                                class="py-1 px-2 bg-teal-500 hover:bg-teal-700 shadow-sm shadow-teal-400 text-white rounded"
+                                title="Detail">
                                     <i class="fas fa-circle-info"></i>
                                 </a>
-                                <a href="{{ route('mutasi.edit', $item->id_mutasi) }}"
-                                   class="py-1 px-2 bg-amber-500 hover:bg-amber-700 shadow-sm shadow-amber-400 text-white rounded">
-                                    <i class="fas fa-pen"></i>
-                                </a>
-                                
-                                @php
-                                $userRole = auth()->user()->role;
-                                @endphp
-                                @if ($userRole === 'admin')
-                                    <a href="{{ route('mutasi.verifikasi', $item->id_mutasi) }}"
-                                        class="py-1 px-2 bg-indigo-500 hover:bg-indigo-700 shadow-sm shadow-indigo-400 text-white rounded">
-                                        <i class="fa-regular fa-circle-check"></i>
+
+                                {{-- EDIT --}}
+                                @if (in_array($item->status_mutasi, ['diproses','selesai']))
+                                    <button
+                                        type="button"
+                                        disabled
+                                        class="py-1 px-2 bg-amber-300 text-white rounded cursor-not-allowed opacity-60"
+                                        title="Tidak dapat diedit karena status mutasi {{ $item->status_mutasi }}">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                @else
+                                    <a href="{{ route('mutasi.edit', $item->id_mutasi) }}"
+                                    class="py-1 px-2 bg-amber-500 hover:bg-amber-700 shadow-sm shadow-amber-400 text-white rounded"
+                                    title="Edit">
+                                        <i class="fas fa-pen"></i>
                                     </a>
+                                @endif
+
+                                {{-- VERIFIKASI --}}
+                                @php
+                                    $userRole = auth()->user()->role;
+                                @endphp
+
+                                @if ($userRole === 'admin')
+                                    @if (in_array($item->status_verifikasi, ['disetujui','ditolak']))
+                                        <button
+                                            type="button"
+                                            disabled
+                                            class="py-1 px-2 bg-indigo-300 text-white rounded cursor-not-allowed opacity-60"
+                                            title="Verifikasi sudah final">
+                                            <i class="fa-regular fa-circle-check"></i>
+                                        </button>
+                                    @else
+                                        <a href="{{ route('mutasi.verifikasi', $item->id_mutasi) }}"
+                                        class="py-1 px-2 bg-indigo-500 hover:bg-indigo-700 shadow-sm shadow-indigo-400 text-white rounded"
+                                        title="Verifikasi">
+                                            <i class="fa-regular fa-circle-check"></i>
+                                        </a>
+                                    @endif
                                 @else
                                     <button
                                         type="button"
                                         disabled
                                         class="py-1 px-2 bg-indigo-300 text-white rounded cursor-not-allowed opacity-60"
-                                        title="Hanya admin yang dapat melakukan verifikasi"
-                                    >
+                                        title="Hanya admin yang dapat melakukan verifikasi">
                                         <i class="fa-regular fa-circle-check"></i>
                                     </button>
                                 @endif
+
                             </div>
+
                         </td>
                     </tr>
                     @empty
