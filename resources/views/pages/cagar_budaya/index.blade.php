@@ -39,7 +39,7 @@
         {{-- Table --}}
         <table class="w-full border-collapse">
                     <thead>
-                        <tr class="border-b border-gray-200">
+                        <tr class="border-b border-gray-200 text-sm">
                             <th class="py-2 text-center">No.</th>
 
                             {{-- Nama --}}
@@ -179,7 +179,7 @@
                             </th>
 
                             {{-- Status Penetapan --}}
-                            <th class="py-2 text-center relative">
+                            <th class="p-2 text-center relative">
                                 <div class="flex items-center justify-center gap-2">
                                     <span>Status Penetapan</span>
                                     <button type="button"
@@ -244,7 +244,7 @@
                     </thead>
                     <tbody>
                         @forelse ($data as $index => $row)
-                        <tr class="
+                        <tr class=" text-sm
                                 border-none
                                 {{ $row->status_penetapan === 'terhapus'
                                     ? 'bg-gray-200 text-gray-700'
@@ -265,7 +265,7 @@
                             </td>
 
                             <td class="py-3 text-center">Rp.{{ number_format($row->nilai_perolehan, 2, ',', '.') }}</td>
-                            <td class="flex py-3 gap-2 justify-center">
+                            <td class="flex p-3 gap-2 justify-center">
 
                                 <a href="{{ route('cagar_budaya.detail', $row->id_cagar_budaya) }}" class="py-1 px-2 bg-teal-500 hover:bg-teal-700 shadow-sm shadow-teal-400 text-white rounded-lg">
                                     <i class="fas fa-circle-info"></i>

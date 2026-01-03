@@ -6,6 +6,9 @@ use App\Models\CagarBudaya;
 use App\Models\MutasiData;
 use App\Constants\CagarBudayaBitmask;
 use App\Constants\CagarBudayaFilter;
+use App\Models\Pemugaran;
+use App\Models\Mutasi;
+use App\Models\Penghapusan;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -151,7 +154,25 @@ class CagarBudayaController extends Controller
     public function detail($id)
     {
         $data = CagarBudaya::findOrFail($id);
-        return view('pages.cagar_budaya.detail', compact('data'));
+
+        $pemugaran = Pemugaran::where('id_cagar_budaya', $data->id_cagar_budaya)
+            ->orderBy('tanggal_pengajuan', 'desc')
+            ->get();
+
+        $mutasi = Mutasi::where('id_cagar_budaya', $data->id_cagar_budaya)
+            ->orderBy('tanggal_pengajuan', 'desc')
+            ->get();
+
+        $penghapusan = Penghapusan::where('id_cagar_budaya', $data->id_cagar_budaya)
+            ->orderBy('id_penghapusan', 'desc')
+            ->get();
+
+        return view('pages.cagar_budaya.detail', compact(
+            'data',
+            'pemugaran',
+            'mutasi',
+            'penghapusan'
+        ));
     }
 
     /**
