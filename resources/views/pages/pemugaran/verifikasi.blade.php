@@ -250,33 +250,33 @@
             {{-- Ini adalah 2 field khusus yang otomatis tercatat sebagai update data ke tabel cagar budaya di field nilai_perolehan dan kondisi--}}
             <div class="grid grid-cols-3 gap-4 pt-3">
                 {{-- Nilai Perolehan Baru --}}
-            <div>
-                <label class="text-sm font-medium">Nilai Perolehan Baru</label>
-                <input type="number"
-                    id="nilaiPerolehanBaru"
-                    class="w-full mt-1 border rounded-md p-2 bg-gray-100 text-gray-400 cursor-not-allowed"
-                    placeholder="Rp."
-                    readonly>
-
-                <input type="hidden"
-                    name="nilai_perolehan"
-                    id="nilaiPerolehanHidden">
-            </div>
-
-            {{-- Kondisi Baru --}}
-            <div>
-                <label class="text-sm font-medium">Kondisi Baru</label>
-                <select id="kondisiBaru"
+                <div>
+                    <label class="text-sm font-medium">Nilai Perolehan Baru</label>
+                    <input type="number"
+                        id="nilaiPerolehanBaru"
                         class="w-full mt-1 border rounded-md p-2 bg-gray-100 text-gray-400 cursor-not-allowed"
-                        disabled>
-                    <option value="">Pilih Kondisi Baru</option>
-                    <option value="baik">Baik</option>
-                </select>
+                        placeholder="Rp."
+                        readonly>
 
-                <input type="hidden"
-                    name="kondisi_baru"
-                    id="kondisiBaruHidden">
-            </div>
+                    <input type="hidden"
+                        name="nilai_perolehan"
+                        id="nilaiPerolehanHidden">
+                </div>
+
+                {{-- Kondisi Baru --}}
+                <div>
+                    <label class="text-sm font-medium">Kondisi Baru</label>
+                    <select id="kondisiBaru"
+                            class="w-full mt-1 border rounded-md p-2 bg-gray-100 text-gray-400 cursor-not-allowed"
+                            disabled>
+                        <option value="">Pilih Kondisi Baru</option>
+                        <option value="baik">Baik</option>
+                    </select>
+
+                    <input type="hidden"
+                        name="kondisi_baru"
+                        id="kondisiBaruHidden">
+                </div>
 
             </div>
             {{-- End Baris 3 --}}
