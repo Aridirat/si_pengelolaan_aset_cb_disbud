@@ -156,14 +156,20 @@ class CagarBudayaController extends Controller
         $data = CagarBudaya::findOrFail($id);
 
         $pemugaran = Pemugaran::where('id_cagar_budaya', $data->id_cagar_budaya)
+            ->where('status_pemugaran', 'selesai')
+            ->where('status_verifikasi', 'disetujui')
             ->orderBy('tanggal_pengajuan', 'desc')
             ->get();
 
         $mutasi = Mutasi::where('id_cagar_budaya', $data->id_cagar_budaya)
+            ->where('status_mutasi', 'selesai')
+            ->where('status_verifikasi', 'disetujui')
             ->orderBy('tanggal_pengajuan', 'desc')
             ->get();
 
         $penghapusan = Penghapusan::where('id_cagar_budaya', $data->id_cagar_budaya)
+            ->where('status_penghapusan', 'selesai')
+            ->where('status_verifikasi', 'disetujui')
             ->orderBy('id_penghapusan', 'desc')
             ->get();
 
@@ -174,6 +180,7 @@ class CagarBudayaController extends Controller
             'penghapusan'
         ));
     }
+
 
     /**
      * Menampilkan form edit data cagar budaya.

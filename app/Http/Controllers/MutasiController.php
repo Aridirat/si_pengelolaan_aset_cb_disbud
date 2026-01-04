@@ -58,7 +58,16 @@ class MutasiController extends Controller
     // ================= CREATE =================
     public function create()
     {
-        $cagarBudaya = CagarBudaya::orderBy('nama_cagar_budaya')->get();
+        $cagarBudaya = CagarBudaya::where('status_penetapan', 'aktif')
+        ->whereDoesntHave('mutasi', function ($query) {
+            $query->where('status_mutasi', 'diproses')
+                ->orWhere('status_verifikasi', 'menunggu');
+        })
+        ->orderBy('nama_cagar_budaya')
+        ->get();
+
+
+        // $cagarBudaya = CagarBudaya::orderBy('nama_cagar_budaya')->get();
         $penanggungJawab = User::orderBy('nama')->get();
 
         return view('pages.mutasi.create', compact(
