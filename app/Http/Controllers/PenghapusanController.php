@@ -66,8 +66,13 @@ class PenghapusanController extends Controller
     public function create()
     {
         $cagarBudaya = CagarBudaya::where('status_penetapan', 'aktif')
-            ->orderBy('nama_cagar_budaya')
-            ->get();
+        ->whereDoesntHave('penghapusan', function ($query) {
+            $query->where('status_penghapusan', 'diproses')
+                ->orWhere('status_verifikasi', 'menunggu');
+        })
+        ->orderBy('nama_cagar_budaya')
+        ->get();
+
         $penanggungJawab = User::orderBy('nama')->get();
 
         return view('pages.penghapusan.create', compact(

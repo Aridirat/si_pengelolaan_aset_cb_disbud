@@ -66,14 +66,14 @@ class PemugaranController extends Controller
 
     public function create()
     {
-        $cagarBudaya = CagarBudaya::whereIn('kondisi', [
-                'rusak berat',
-                'rusak ringan'
-            ])
-            ->where('status_penetapan', 'aktif')
-            ->orderBy('nama_cagar_budaya')
-            ->get();
-
+        $cagarBudaya = CagarBudaya::where('status_penetapan', 'aktif')
+        ->whereIn('kondisi', ['rusak berat', 'rusak ringan'])
+        ->whereDoesntHave('pemugaran', function ($query) {
+            $query->where('status_pemugaran', 'diproses')
+                ->orWhere('status_verifikasi', 'menunggu');
+        })
+        ->orderBy('nama_cagar_budaya')
+        ->get();
 
         $penanggungJawab = User::orderBy('nama')->get();
 
