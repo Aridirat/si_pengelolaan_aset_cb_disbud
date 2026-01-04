@@ -44,6 +44,26 @@
                         Rp {{ number_format($pemugaran->biaya_pemugaran ?? 0, 0, ',', '.') }}
                     </p>
                 </div>
+                {{-- Kondisi Baru --}}
+                <div>
+                    <p class="text-gray-500">Kondisi Baru</p>
+                    <p class="font-medium">
+                        {{ $pemugaran->kondisi_baru ?? '-' }}
+                    </p>
+                </div>
+
+                {{-- Nilai Perolehan Baru --}}
+                <div>
+                    <p class="text-gray-500">Nilai Perolehan Baru</p>
+                    <p class="font-medium">
+                        @if($pemugaran->nilai_perolehan_baru)
+                            Rp {{ number_format($pemugaran->nilai_perolehan_baru, 0, ',', '.') }}
+                        @else
+                            -
+                        @endif
+                    </p>
+                </div>
+
             </div>
 
             {{-- Proposal Pengajuan --}}

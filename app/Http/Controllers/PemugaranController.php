@@ -233,18 +233,32 @@ class PemugaranController extends Controller
                 'nilai_perolehan' => 'required|numeric',
                 'kondisi_baru' => 'required|string',
             ]);
+            
 
             $cagarBudaya = CagarBudaya::findOrFail($pemugaran->id_cagar_budaya);
-
+            
             $nilaiLama = [
                 'nilai_perolehan' => $cagarBudaya->nilai_perolehan,
                 'kondisi' => $cagarBudaya->kondisi,
             ];
-
+            
+            
             $nilaiBaru = [
                 'nilai_perolehan' => $request->nilai_perolehan,
                 'kondisi' => $request->kondisi_baru,
             ];
+
+            // SIMPAN SNAPSHOT KE PEMUGARAN
+            $pemugaran->update([
+                'nilai_perolehan_baru' => $request->nilai_perolehan,
+                'kondisi_baru' => $request->kondisi_baru,
+            ]);
+
+            // update cagar budaya (data utama)
+            $cagarBudaya->update([
+                'nilai_perolehan' => $request->nilai_perolehan,
+                'kondisi' => $request->kondisi_baru,
+            ]);
 
             $cagarBudaya->update($nilaiBaru);
 
