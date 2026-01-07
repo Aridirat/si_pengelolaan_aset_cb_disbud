@@ -46,6 +46,8 @@ $tanggalIndonesia = Carbon::parse($tanggal)
                 <th>Status Verifikasi</th>
                 <th>Tgl Verifikasi</th>
                 <th>Tgl Selesai</th>
+                <th>Kondisi Baru</th>
+                <th>Nilai Perolehan Baru</th>
                 <th>Biaya Pemugaran</th>
             </tr>
         </thead>
@@ -81,25 +83,32 @@ $tanggalIndonesia = Carbon::parse($tanggal)
                     <td class="text-center">
                         {{ $item->tanggal_verifikasi?->format('d/m/Y') ?? '-' }}
                     </td>
-
+                    
+                    
                     <td class="text-center">
                         {{ $item->tanggal_selesai?->format('d/m/Y') ?? '-' }}
                     </td>
+                    <td class="text-center">
+                        {{ $item->kondisi_baru ?? '-' }}
+                    </td>
 
+                    <td class="text-right">
+                        Rp {{ number_format($item->nilai_perolehan_baru ?? 0, 0, ',', '.') }}
+                    </td>
                     <td class="text-right">
                         Rp {{ number_format($item->biaya_pemugaran ?? 0, 0, ',', '.') }}
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="10" class="text-center">
+                    <td colspan="12" class="text-center">
                         Data pemugaran tidak tersedia
                     </td>
                 </tr>
             @endforelse
             @if ($pemugaran->count())
             <tr class="total-row">
-                <td colspan="9" class="text-right" style="font-weight: bold;">
+                <td colspan="11" class="text-right" style="font-weight: bold;">
                     TOTAL BIAYA PEMUGARAN
                 </td>
                 <td class="text-right" style="font-weight: bold;">

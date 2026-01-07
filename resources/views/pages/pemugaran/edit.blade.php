@@ -85,14 +85,28 @@
                     </select>
                 </div>
 
-                {{-- Biaya --}}
+                {{-- BIAYA PEMUGARAN --}}
                 <div>
                     <label class="text-sm font-medium">Biaya Pemugaran</label>
-                    <input type="number"
-                           name="biaya_pemugaran"
-                           value="{{ $pemugaran->biaya_pemugaran }}"
-                           class="w-full mt-1 border border-gray-300 rounded-md p-2">
+
+                    {{-- Input tampilan --}}
+                    <input type="text"
+                        id="biaya_pemugaran_display"
+                        placeholder="Rp"
+                        value="{{ $pemugaran->biaya_pemugaran }}"
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2">
+
+                    {{-- Input asli (numeric, dikirim ke backend) --}}
+                    <input type="hidden"
+                        name="biaya_pemugaran"
+                        id="biaya_pemugaran"
+                        value="{{ $pemugaran->biaya_pemugaran }}">
+
+                    @error('biaya_pemugaran')
+                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
+
 
                 {{-- Proposal --}}
                 <div>
@@ -196,4 +210,38 @@
     </form>
 
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    function formatRibuan(value) {
+        return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    function setupRupiahInput(displayId, hiddenId) {
+        const display = document.getElementById(displayId);
+        const hidden = document.getElementById(hiddenId);
+
+        if (!display || !hidden) return;
+
+        // Format nilai awal (saat edit)
+        if (hidden.value) {
+            display.value = formatRibuan(hidden.value.replace(/\D/g, ''));
+        }
+
+        // Saat user mengetik
+        display.addEventListener('input', function () {
+            let raw = this.value.replace(/\D/g, '');
+            hidden.value = raw;
+            this.value = formatRibuan(raw);
+        });
+    }
+
+    // Aktifkan untuk biaya pemugaran
+    setupRupiahInput('biaya_pemugaran_display', 'biaya_pemugaran');
+
+});
+</script>
+
+
 @endsection

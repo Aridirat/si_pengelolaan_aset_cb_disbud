@@ -266,16 +266,16 @@
             <tbody>
                 @forelse ($pemugaran as $item)
                 <tr class="text-center hover:bg-gray-100">
-                    <td class="py-2">{{ $loop->iteration }}</td>
-                    <td class="py-2">
+                    <td class="p-2">{{ $loop->iteration }}</td>
+                    <td class="p-2">
                         {{ $item->cagarBudaya->nama_cagar_budaya ?? '-' }}
                     </td>
-                    <td class="py-2">{{ $item->kondisi }}</td>
-                    <td class="py-2">{{ $item->tipe_pemugaran }}</td>
-                    <td class="py-2">
+                    <td class="p-2">{{ $item->kondisi }}</td>
+                    <td class="p-2">{{ $item->tipe_pemugaran }}</td>
+                    <td class="p-2">
                         {{ $item->tanggal_pengajuan?->parse($item->tanggal_pengajuan)->locale('id')->translatedFormat('l, d/m/Y') }}
                     </td>
-                    <td class="py-2">
+                    <td class="p-2">
                         @php
                             $statusPemugaran = strtolower($item->status_pemugaran);
 
@@ -287,12 +287,12 @@
                             };
                         @endphp
 
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $warnaPemugaran }}">
+                        <span class="px-3 p-1 rounded-full text-xs font-semibold {{ $warnaPemugaran }}">
                             {{ ucfirst($item->status_pemugaran) }}
                         </span>
                     </td>
 
-                    <td class="py-2">
+                    <td class="p-2">
                         @php
                             $statusVerifikasi = strtolower($item->status_verifikasi);
 
@@ -309,13 +309,13 @@
                         </span>
                     </td>
 
-                    <td class="py-2">
+                    <td class="p-2">
                         {{ $item->tanggal_selesai?->parse($item->tanggal_selesai)->locale('id')->translatedFormat('l, d/m/Y') ?? '-' }}
                     </td>
-                    <td class="py-2">
+                    <td class="p-2">
                         Rp {{ number_format($item->biaya_pemugaran, 0, ',', '.') }}
                     </td>
-                    <td class="py-2 text-center">
+                    <td class="p-2 text-center">
                         <div class="flex justify-center gap-1">
 
                             {{-- DETAIL (SELALU AKTIF) --}}

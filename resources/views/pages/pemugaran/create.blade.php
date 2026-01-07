@@ -110,14 +110,26 @@
                 @enderror
             </div>
 
-            {{-- Biaya --}}
+            {{-- BIAYA PEMUGARAN --}}
             <div>
                 <label class="text-sm font-medium">Biaya Pemugaran</label>
-                <input type="number" name="biaya_pemugaran" placeholder="Rp" class="w-full mt-1 border border-gray-300 rounded-md p-2">
+
+                {{-- Input tampilan --}}
+                <input type="text"
+                    id="biaya_pemugaran_display"
+                    placeholder="Rp"
+                    class="w-full mt-1 border border-gray-300 rounded-md p-2">
+
+                {{-- Input asli (numeric, dikirim ke backend) --}}
+                <input type="hidden"
+                    name="biaya_pemugaran"
+                    id="biaya_pemugaran">
+
                 @error('biaya_pemugaran')
-                  <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
+
 
             {{-- Proposal --}}
               <div>
@@ -213,5 +225,19 @@ document.getElementById('cagarBudayaSelect').addEventListener('change', function
     document.getElementById('kondisi').value = kondisi ?? '';
 });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const displayInput = document.getElementById('biaya_pemugaran_display');
+    const hiddenInput = document.getElementById('biaya_pemugaran');
+
+    displayInput.addEventListener('input', function () {
+        let value = this.value.replace(/\D/g, '');
+        hiddenInput.value = value;
+        this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    });
+});
+</script>
+
 
 @endsection

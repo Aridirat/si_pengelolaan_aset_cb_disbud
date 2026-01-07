@@ -24,6 +24,78 @@ $tanggalIndonesia = Carbon::parse($tanggal)
 @endphp
 <p style="text-align:center;">Tanggal Cetak: {{ $tanggalIndonesia }}</p>
 
+<table style="width:60%; margin: 5px auto; border-collapse: collapse;">
+
+    @if($jumlahTotal > 0)
+    <tr>
+        <td style="border:1px solid #000; padding:6px; text-align:left;">
+            Jumlah Total Data Cagar Budaya
+        </td>
+        <td style="border:1px solid #000; padding:6px; text-align:right;">
+            {{ $jumlahTotal }} Data
+        </td>
+    </tr>
+    @endif
+
+    @if($jumlahBaik > 0)
+    <tr>
+        <td style="border:1px solid #000; padding:6px; text-align:left;">
+            Kondisi Baik
+        </td>
+        <td style="border:1px solid #000; padding:6px; text-align:right;">
+            {{ $jumlahBaik }} Data
+        </td>
+    </tr>
+    @endif
+
+    @if($jumlahRusakRingan > 0)
+    <tr>
+        <td style="border:1px solid #000; padding:6px; text-align:left;">
+            Kondisi Rusak Ringan
+        </td>
+        <td style="border:1px solid #000; padding:6px; text-align:right;">
+            {{ $jumlahRusakRingan }} Data
+        </td>
+    </tr>
+    @endif
+
+    @if($jumlahRusakBerat > 0)
+    <tr>
+        <td style="border:1px solid #000; padding:6px; text-align:left;">
+            Kondisi Rusak Berat
+        </td>
+        <td style="border:1px solid #000; padding:6px; text-align:right;">
+            {{ $jumlahRusakBerat }} Data
+        </td>
+    </tr>
+    @endif
+
+    @if($jumlahAktif > 0)
+    <tr>
+        <td style="border:1px solid #000; padding:6px; text-align:left;">
+            Status Aktif
+        </td>
+        <td style="border:1px solid #000; padding:6px; text-align:right;">
+            {{ $jumlahAktif }} Data
+        </td>
+    </tr>
+    @endif
+
+    @if($jumlahTerhapus > 0)
+    <tr>
+        <td style="border:1px solid #000; padding:6px; text-align:left;">
+            Status Terhapus
+        </td>
+        <td style="border:1px solid #000; padding:6px; text-align:right;">
+            {{ $jumlahTerhapus }} Data
+        </td>
+    </tr>
+    @endif
+
+</table>
+
+
+
 <table>
     <thead>
         <tr>
