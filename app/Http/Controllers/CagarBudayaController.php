@@ -383,13 +383,30 @@ class CagarBudayaController extends Controller
         $tanggal = Carbon::now();
         $tanggalFormat = $tanggal->format('dmy');
 
+        $jumlahTotal = $data->count();
+
+        $jumlahBaik = $data->where('kondisi', 'baik')->count();
+        $jumlahRusakRingan = $data->where('kondisi', 'rusak ringan')->count();
+        $jumlahRusakBerat = $data->where('kondisi', 'rusak berat')->count();
+
+        $jumlahAktif = $data->where('status_penetapan', 'aktif')->count();
+        $jumlahTerhapus = $data->where('status_penetapan', 'terhapus')->count();
+
+
         $pdf = Pdf::loadView('pages.cagar_budaya.cetak_pdf', [
             'data' => $data,
             'totalNilai' => $totalNilai,
-            'tanggal' => now()->format('d F Y'),
+            'jumlahTotal' => $jumlahTotal,
+            'jumlahBaik' => $jumlahBaik,
+            'jumlahRusakRingan' => $jumlahRusakRingan,
+            'jumlahRusakBerat' => $jumlahRusakBerat,
+            'jumlahAktif' => $jumlahAktif,
+            'jumlahTerhapus' => $jumlahTerhapus,
+            'tanggal' => now(),
             'penandatangan' => Auth::user()->id,
             'namaPenandatangan' => Auth::user()->nama,
         ])->setPaper('A4', 'landscape');
+
 
         $namaFile = $tanggalFormat . '_Laporan_Pencatatan_Cagar_Budaya.pdf';
 

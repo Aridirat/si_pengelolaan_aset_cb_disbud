@@ -252,11 +252,14 @@
                 {{-- Nilai Perolehan Baru --}}
                 <div>
                     <label class="text-sm font-medium">Nilai Perolehan Baru</label>
-                    <input type="number"
-                        id="nilaiPerolehanBaru"
-                        class="w-full mt-1 border rounded-md p-2 bg-gray-100 text-gray-400 cursor-not-allowed"
-                        placeholder="Rp."
-                        readonly>
+                    <input type="text"
+                            id="nilaiPerolehanBaru"
+                            inputmode="numeric"
+                            autocomplete="off"
+                            class="w-full mt-1 border rounded-md p-2 bg-gray-100 text-gray-400 cursor-not-allowed"
+                            placeholder="Rp."
+                            readonly>
+
 
                     <input type="hidden"
                         name="nilai_perolehan"
@@ -295,6 +298,7 @@
     </form>
 
 </div>
+
 
 <script>
     window.STATUS_VERIFIKASI_FINAL = @json(
@@ -440,9 +444,19 @@
         /* ======================
         SYNC KE HIDDEN INPUT
         ====================== */
-        nilaiInput.addEventListener('input', () => {
-            nilaiHidden.value = nilaiInput.value;
+        nilaiInput.addEventListener('input', function (e) {
+            let value = e.target.value;
+
+            // Hapus semua karakter selain angka
+            let angkaBersih = value.replace(/\./g, '');
+
+            // Simpan ke hidden input (tanpa titik)
+            nilaiHidden.value = angkaBersih;
+
+            // Tampilkan kembali dengan format ribuan
+            e.target.value = formatRibuan(angkaBersih);
         });
+
 
         kondisiSelect.addEventListener('change', () => {
             kondisiHidden.value = kondisiSelect.value;
@@ -462,4 +476,11 @@
     });
 </script>
 
+<script>
+    function formatRibuan(angka) {
+        return angka
+            .replace(/\D/g, '')
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+</script>
 @endsection

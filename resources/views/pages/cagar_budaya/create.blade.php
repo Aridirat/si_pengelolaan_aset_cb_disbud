@@ -212,20 +212,28 @@
                     @enderror
                     </div>
 
-                    {{-- NILAI --}}
+                    {{-- NILAI PEROLEHAN --}}
                     <div>
                         <label class="block text-sm font-medium mb-1">
                             Nilai Perolehan
                         </label>
-                        <input type="number"
-                               name="nilai_perolehan"
-                               min="0"
-                               class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring focus:ring-gray-300"
-                               placeholder="Rp">
+
+                        {{-- Input tampilan (dengan format ribuan) --}}
+                        <input type="text"
+                            id="nilai_perolehan_display"
+                            class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring focus:ring-gray-300"
+                            placeholder="Rp">
+
+                        {{-- Input asli (tanpa format, dikirim ke backend) --}}
+                        <input type="hidden"
+                            name="nilai_perolehan"
+                            id="nilai_perolehan">
+
                         @error('nilai_perolehan')
                             <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+
 
                     {{-- DOKUMEN --}}
                     <div>
@@ -319,4 +327,23 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const displayInput = document.getElementById('nilai_perolehan_display');
+        const hiddenInput = document.getElementById('nilai_perolehan');
+
+        displayInput.addEventListener('input', function () {
+            // Ambil angka saja
+            let value = this.value.replace(/\D/g, '');
+
+            // Simpan nilai asli ke hidden input
+            hiddenInput.value = value;
+
+            // Format ribuan dengan titik
+            this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        });
+    });
+</script>
+
 @endsection
