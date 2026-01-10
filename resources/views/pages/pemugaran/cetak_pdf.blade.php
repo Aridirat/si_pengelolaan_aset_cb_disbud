@@ -27,11 +27,110 @@ $tanggalIndonesia = Carbon::parse($tanggal)
     ->isoFormat('D MMMM YYYY');
 @endphp
     {{-- Header --}}
+
+    {{-- KOP SURAT --}}
+    <table width="100%" style="border-collapse: collapse; margin-bottom: 10px;">
+        <tr>
+            <td style="text-align:center; border:none;">
+                <div style="font-size:14pt; font-weight:bold;">
+                    PEMERINTAH KABUPATEN BADUNG
+                </div>
+                <div style="font-size:16pt; font-weight:bold; margin-top:2px;">
+                    DINAS KEBUDAYAAN
+                </div>
+                <div style="font-size:11pt; margin-top:4px;">
+                    Pusat Pemerintahan Kabupaten Badung Mangupraja Mandala
+                </div>
+                <div style="font-size:11pt;">
+                    Jalan Raya Sempidi Mengwi – Kabupaten Badung Provinsi Bali (80351)
+                </div>
+                <div style="font-size:11pt;">
+                    Telp. (0361) 9009273 &nbsp; Faks. (0361) 9009274
+                </div>
+                <div style="font-size:11pt;">
+                    <i>
+                        Website: www.badungkab.go.id
+                    </i>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+    <!-- GARIS KOP -->
+    <hr style="border:0; border-top:4px solid #000; margin-top:8px;">
+    <hr style="border:0; border-top:1px solid #000;">
+
     <div class="header" style="text-align:center;">
         <h2>LAPORAN DATA PEMUGARAN CAGAR BUDAYA</h2>
-        <p>Dinas Kebudayaan Kabupaten Badung</p>
-        <p>Tanggal Cetak: {{ $tanggalIndonesia }}</p>
+        <p style="font-size: 10pt">Tanggal Cetak: {{ $tanggalIndonesia }}</p>
     </div>
+
+    @php
+    $dataRingkasan = [];
+
+    if ($totalData > 0) $dataRingkasan[] = ['Total data pemugaran', $totalData];
+    if ($kondisiRusakRingan > 0) $dataRingkasan[] = ['Kondisi rusak ringan', $kondisiRusakRingan];
+    if ($kondisiRusakBerat > 0) $dataRingkasan[] = ['Kondisi rusak berat', $kondisiRusakBerat];
+    if ($tipeKonsolidasi > 0) $dataRingkasan[] = ['Tipe konsolidasi', $tipeKonsolidasi];
+    if ($tipeRehabilitasi > 0) $dataRingkasan[] = ['Tipe rehabilitasi', $tipeRehabilitasi];
+    if ($tipeRestorasi > 0) $dataRingkasan[] = ['Tipe restorasi', $tipeRestorasi];
+    if ($tipeRekonstruksi > 0) $dataRingkasan[] = ['Tipe rekonstruksi', $tipeRekonstruksi];
+    if ($statusPending > 0) $dataRingkasan[] = ['Status pending', $statusPending];
+    if ($statusDiproses > 0) $dataRingkasan[] = ['Status diproses', $statusDiproses];
+    if ($statusSelesai > 0) $dataRingkasan[] = ['Status selesai', $statusSelesai];
+    if ($verifMenunggu > 0) $dataRingkasan[] = ['Verifikasi menunggu', $verifMenunggu];
+    if ($verifDitolak > 0) $dataRingkasan[] = ['Verifikasi ditolak', $verifDitolak];
+    if ($verifDisetujui > 0) $dataRingkasan[] = ['Verifikasi disetujui', $verifDisetujui];
+
+    $kolomKiri  = array_slice($dataRingkasan, 0, 6);
+    $kolomKanan = array_slice($dataRingkasan, 6);
+    @endphp
+
+    <table style="width:50%; font-size:8pt; border-collapse:collapse; margin-bottom:15px; border:none;">
+        <tr>
+            {{-- KOLOM KIRI --}}
+            <td style="width:50%; vertical-align:top; border:none;">
+                <table style="width:100%; border-collapse:collapse; border:none;">
+                    @foreach($kolomKiri as $item)
+                    <tr>
+                        <td style="width:60%; border:none; text-align:left;">
+                            {{ $item[0] }}
+                        </td>
+                        <td style="width:5%; border:none; text-align:left;">
+                            :
+                        </td>
+                        <td style="width:35%; border:none; text-align:left;">
+                            {{ $item[1] }} data
+                        </td>
+                    </tr>
+                    @endforeach
+                </table>
+            </td>
+
+            {{-- KOLOM KANAN --}}
+            <td style="width:50%; vertical-align:top; border:none;">
+                <table style="width:100%; border-collapse:collapse; border:none;">
+                    @foreach($kolomKanan as $item)
+                    <tr>
+                        <td style="width:60%; border:none; text-align:left;">
+                            {{ $item[0] }}
+                        </td>
+                        <td style="width:5%; border:none; text-align:left;">
+                            :
+                        </td>
+                        <td style="width:35%; border:none; text-align:left;">
+                            {{ $item[1] }} data
+                        </td>
+                    </tr>
+                    @endforeach
+                </table>
+            </td>
+        </tr>
+    </table>
+
+
+
 
     {{-- Tabel Data --}}
     <table>

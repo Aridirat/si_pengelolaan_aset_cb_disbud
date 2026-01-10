@@ -103,7 +103,7 @@ class CagarBudayaController extends Controller
             'lokasi' => 'required|string',
             'tanggal_pertama_pencatatan' => 'required|date',
             'nilai_perolehan' => 'required|numeric',
-            'status_penetapan' => 'required|in:aktif,terhapus',
+            'status_penetapan' => 'required|in:aktif,terhapus,mutasi keluar',
             'status_kepemilikan' => 'required|in:pemerintah,pribadi',
             'kondisi' => 'required|in:baik,rusak ringan,rusak berat',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048', // 2 MB
@@ -391,6 +391,7 @@ class CagarBudayaController extends Controller
 
         $jumlahAktif = $data->where('status_penetapan', 'aktif')->count();
         $jumlahTerhapus = $data->where('status_penetapan', 'terhapus')->count();
+        $jumlahKeluar = $data->where('status_penetapan', 'mutasi keluar')->count();
 
 
         $pdf = Pdf::loadView('pages.cagar_budaya.cetak_pdf', [
@@ -402,6 +403,7 @@ class CagarBudayaController extends Controller
             'jumlahRusakBerat' => $jumlahRusakBerat,
             'jumlahAktif' => $jumlahAktif,
             'jumlahTerhapus' => $jumlahTerhapus,
+            'jumlahKeluar' => $jumlahKeluar,
             'tanggal' => now(),
             'penandatangan' => Auth::user()->id,
             'namaPenandatangan' => Auth::user()->nama,

@@ -29,6 +29,7 @@ class DashboardController extends Controller
             'rusak_berat' => CagarBudaya::where('kondisi', 'rusak berat')->count(),
             'aktif' => CagarBudaya::where('status_penetapan', 'aktif')->count(),
             'terhapus' => CagarBudaya::where('status_penetapan', 'terhapus')->count(),
+            'mutasi keluar' => CagarBudaya::where('status_penetapan', 'mutasi keluar')->count(),
         ];
 
         /* =========================

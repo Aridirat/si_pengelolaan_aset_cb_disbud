@@ -58,13 +58,15 @@ class MutasiController extends Controller
     // ================= CREATE =================
     public function create()
     {
-        $cagarBudaya = CagarBudaya::where('status_penetapan', 'aktif')
-        ->whereDoesntHave('mutasi', function ($query) {
-            $query->where('status_mutasi', 'diproses')
-                ->orWhere('status_verifikasi', 'menunggu');
-        })
-        ->orderBy('nama_cagar_budaya')
-        ->get();
+        $cagarBudaya = CagarBudaya::whereIn('status_penetapan', ['aktif', 'mutasi keluar'])
+            ->whereDoesntHave('mutasi', function ($query) {
+                $query->where('status_mutasi', 'diproses')
+                    ->orWhere('status_verifikasi', 'menunggu');
+            })
+            ->orderBy('nama_cagar_budaya')
+            ->get();
+
+
 
 
         // $cagarBudaya = CagarBudaya::orderBy('nama_cagar_budaya')->get();
@@ -191,23 +193,36 @@ class MutasiController extends Controller
     {
         $mutasi = Mutasi::findOrFail($id);
 
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDASI DASAR
+        |--------------------------------------------------------------------------
+        */
         $validated = $request->validate([
-            'status_mutasi'        => 'required|in:pending,diproses,selesai',
-            'status_verifikasi'    => 'required|in:menunggu,disetujui,ditolak',
-            'dokumen_pengesahan'   => 'nullable|file|mimes:pdf|max:5120',
+            'status_mutasi'      => 'required|in:pending,diproses,selesai',
+            'status_verifikasi'  => 'required|in:menunggu,disetujui,ditolak',
+            'dokumen_pengesahan' => 'nullable|file|mimes:pdf|max:5120',
         ]);
 
+        /*
+        |--------------------------------------------------------------------------
+        | TANGGAL VERIFIKASI
+        |--------------------------------------------------------------------------
+        */
         $tanggalVerifikasi = in_array(
             $request->status_verifikasi,
-            ['disetujui','ditolak']
+            ['disetujui', 'ditolak']
         ) ? now() : null;
 
-
-        // Upload dokumen pengesahan (jika ada)
+        /*
+        |--------------------------------------------------------------------------
+        | UPLOAD DOKUMEN PENGESAHAN
+        |--------------------------------------------------------------------------
+        */
         if ($request->hasFile('dokumen_pengesahan')) {
             $dokumenFile = $request->file('dokumen_pengesahan');
 
-            $timestamp = Carbon::now()->format('mdyHisu');
+            $timestamp   = Carbon::now()->format('mdyHisu');
             $dokumenName = $timestamp . '_' . $dokumenFile->getClientOriginalName();
 
             $dokumenPath = $dokumenFile->storeAs(
@@ -219,48 +234,115 @@ class MutasiController extends Controller
             $validated['dokumen_pengesahan'] = $dokumenPath;
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE DATA MUTASI
+        |--------------------------------------------------------------------------
+        */
         $mutasi->update([
             'status_mutasi'      => $request->status_mutasi,
             'status_verifikasi'  => $request->status_verifikasi,
             'tanggal_verifikasi' => $tanggalVerifikasi,
-            'dokumen_pengesahan' => $validated['dokumen_pengesahan']
+            'dokumen_pengesahan' =>
+                $validated['dokumen_pengesahan']
                 ?? $mutasi->dokumen_pengesahan,
         ]);
 
-        // JIKA DISETUJUI → UPDATE CAGAR BUDAYA + MUTASI
+        /*
+        |--------------------------------------------------------------------------
+        | JIKA VERIFIKASI DISETUJUI
+        |--------------------------------------------------------------------------
+        */
         if ($request->status_verifikasi === 'disetujui') {
 
+            /*
+            |--------------------------------------------------
+            | VALIDASI TAMBAHAN
+            |--------------------------------------------------
+            */
             $request->validate([
-                'status_kepemilikan' => 'required|string',
+                'status_kepemilikan' => 'required|in:pemerintah,pribadi',
             ]);
 
             $cagarBudaya = CagarBudaya::findOrFail($mutasi->id_cagar_budaya);
 
+            /*
+            |--------------------------------------------------
+            | TENTUKAN STATUS PENETAPAN FINAL (RULE BISNIS)
+            |--------------------------------------------------
+            */
+            $asal   = $mutasi->kepemilikan_asal;
+            $tujuan = $mutasi->kepemilikan_tujuan;
+
+            if ($asal === 'pribadi' && $tujuan === 'pemerintah') {
+                // Mutasi masuk → aktif
+                $statusPenetapan = 'aktif';
+
+            } elseif ($asal === 'pemerintah' && $tujuan === 'pribadi') {
+                // Mutasi keluar
+                $statusPenetapan = 'mutasi keluar';
+
+            } elseif ($asal === 'pemerintah' && $tujuan === 'pemerintah') {
+                // Bisa dipilih
+                $request->validate([
+                    'status_penetapan' => 'required|in:aktif,mutasi keluar',
+                ]);
+
+                $statusPenetapan = $request->status_penetapan;
+
+            } else {
+                abort(400, 'Kombinasi kepemilikan tidak valid');
+            }
+
+            /*
+            |--------------------------------------------------
+            | SIMPAN NILAI LAMA & BARU (AUDIT TRAIL)
+            |--------------------------------------------------
+            */
             $nilaiLama = [
                 'status_kepemilikan' => $cagarBudaya->status_kepemilikan,
+                'status_penetapan'   => $cagarBudaya->status_penetapan,
             ];
 
             $nilaiBaru = [
                 'status_kepemilikan' => $request->status_kepemilikan,
+                'status_penetapan'   => $statusPenetapan,
             ];
 
+            /*
+            |--------------------------------------------------
+            | UPDATE CAGAR BUDAYA
+            |--------------------------------------------------
+            */
             $cagarBudaya->update($nilaiBaru);
 
+            /*
+            |--------------------------------------------------
+            | SIMPAN KE MUTASI DATA
+            |--------------------------------------------------
+            */
             MutasiData::create([
-                'id_cagar_budaya' => $cagarBudaya->id_cagar_budaya,
-                'id' => Auth::id(),
-                'tanggal_mutasi_data' => now(),
-                'bitmask' =>
-                    CagarBudayaBitmask::FIELDS['status_kepemilikan'],
-                'nilai_lama' => json_encode($nilaiLama),
-                'nilai_baru' => json_encode($nilaiBaru),
+                'id_cagar_budaya'    => $cagarBudaya->id_cagar_budaya,
+                'id'                 => Auth::id(),
+                'tanggal_mutasi_data'=> now(),
+                'bitmask'            =>
+                    CagarBudayaBitmask::FIELDS['status_kepemilikan']
+                    | CagarBudayaBitmask::FIELDS['status_penetapan'],
+                'nilai_lama'         => json_encode($nilaiLama),
+                'nilai_baru'         => json_encode($nilaiBaru),
             ]);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | REDIRECT
+        |--------------------------------------------------------------------------
+        */
         return redirect()
             ->route('mutasi.index')
             ->with('success', 'Mutasi berhasil diverifikasi.');
     }
+
 
     public function detail(Mutasi $mutasi)
     {
@@ -279,7 +361,7 @@ class MutasiController extends Controller
             ->when($request->kepemilikan_asal, fn ($q) =>
                 $q->where('kepemilikan_asal', $request->kepemilikan_asal)
             )
-            ->when($request->kepemilikanikan_tujuan ?? null, fn ($q) =>
+            ->when($request->kepemilikan_tujuan ?? null, fn ($q) =>
                 $q->where('kepemilikan_tujuan', $request->kepemilikan_tujuan)
             )
             ->when($request->status_mutasi, fn ($q) =>
@@ -300,13 +382,47 @@ class MutasiController extends Controller
         $namaPenandatangan = Auth::user()->nama;
         $penandatangan = Auth::user()->id;
 
+        // JUMLAH DATA
+        $totalData = $mutasi->count();
+
+        // KEPEMILIKAN ASAL
+        $asalPemerintah = $mutasi->where('kepemilikan_asal', 'pemerintah')->count();
+        $asalPribadi = $mutasi->where('kepemilikan_asal', 'pribadi')->count();
+
+        // KEPEMILIKAN TUJUAN
+        $tujuanPemerintah = $mutasi->where('kepemilikan_tujuan', 'pemerintah')->count();
+        $tujuanPribadi = $mutasi->where('kepemilikan_tujuan', 'pribadi')->count();
+
+        // STATUS MUTASI
+        $mutasiPending = $mutasi->where('status_mutasi', 'pending')->count();
+        $mutasiDiproses = $mutasi->where('status_mutasi', 'diproses')->count();
+        $mutasiSelesai = $mutasi->where('status_mutasi', 'selesai')->count();
+
+        // STATUS VERIFIKASI
+        $verifMenunggu = $mutasi->where('status_verifikasi', 'menunggu')->count();
+        $verifDitolak = $mutasi->where('status_verifikasi', 'ditolak')->count();
+        $verifDisetujui = $mutasi->where('status_verifikasi', 'disetujui')->count();
+
+        
         $pdf = Pdf::loadView('pages.mutasi.cetak_pdf', compact(
             'mutasi',
             'totalNilai',
             'tanggalIndonesia',
             'namaPenandatangan',
-            'penandatangan'
+            'penandatangan',
+            'totalData',
+            'asalPemerintah',
+            'asalPribadi',
+            'tujuanPemerintah',
+            'tujuanPribadi',
+            'mutasiPending',
+            'mutasiDiproses',
+            'mutasiSelesai',
+            'verifMenunggu',
+            'verifDitolak',
+            'verifDisetujui'
         ))->setPaper('a4', 'landscape');
+
 
         return $pdf->stream('laporan-mutasi.pdf');
     }

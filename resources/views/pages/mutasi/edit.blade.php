@@ -73,15 +73,34 @@
                 {{-- Pemilik Tujuan --}}
                 <div>
                     <label class="text-sm font-medium">Pemilik Tujuan</label>
-                    <select name="kepemilikan_tujuan" class="w-full mt-1 border border-gray-300 rounded-md p-2">
-                        <option value="pemerintah" {{ $mutasi->kepemilikan_tujuan == 'pemerintah' ? 'selected' : '' }}>
+                    <select
+                        name="kepemilikan_tujuan"
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2
+                            {{ $mutasi->kepemilikan_asal === 'pribadi'
+                                    ? 'bg-gray-100 cursor-not-allowed'
+                                    : '' }}"
+                        {{ $mutasi->kepemilikan_asal === 'pribadi' ? 'disabled' : '' }}>
+
+                        <option value="pemerintah"
+                            {{ $mutasi->kepemilikan_tujuan == 'pemerintah' ? 'selected' : '' }}>
                             Pemerintah
                         </option>
-                        <option value="pribadi" {{ $mutasi->kepemilikan_tujuan == 'pribadi' ? 'selected' : '' }}>
+
+                        <option value="pribadi"
+                            {{ $mutasi->kepemilikan_tujuan == 'pribadi' ? 'selected' : '' }}>
                             Pribadi
                         </option>
                     </select>
+
+                    {{-- HIDDEN INPUT AGAR TETAP TERKIRIM --}}
+                    @if ($mutasi->kepemilikan_asal === 'pribadi')
+                        <input
+                            type="hidden"
+                            name="kepemilikan_tujuan"
+                            value="{{ $mutasi->kepemilikan_tujuan }}">
+                    @endif
                 </div>
+
 
                 {{-- Tanggal Pengajuan --}}
                 <div>

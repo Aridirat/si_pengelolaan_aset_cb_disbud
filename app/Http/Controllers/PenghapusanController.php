@@ -276,16 +276,53 @@ class PenghapusanController extends Controller
         $namaPenandatangan = Auth::user()->nama;
         $penandatangan     = Auth::user()->id;
 
+        /* ======================
+        | TOTAL DATA
+        ====================== */
+        $totalData = $penghapusan->count();
+
+        /* ======================
+        | KONDISI PENGHAPUSAN
+        ====================== */
+        $kondisiMusnah       = $penghapusan->where('kondisi', 'musnah')->count();
+        $kondisiHilang       = $penghapusan->where('kondisi', 'hilang')->count();
+        $kondisiBerubahWujud = $penghapusan->where('kondisi', 'berubah wujud')->count();
+
+        /* ======================
+        | STATUS PENGHAPUSAN
+        ====================== */
+        $statusPending   = $penghapusan->where('status_penghapusan', 'pending')->count();
+        $statusDiproses  = $penghapusan->where('status_penghapusan', 'diproses')->count();
+        $statusSelesai   = $penghapusan->where('status_penghapusan', 'selesai')->count();
+
+        /* ======================
+        | STATUS VERIFIKASI
+        ====================== */
+        $verifMenunggu  = $penghapusan->where('status_verifikasi', 'menunggu')->count();
+        $verifDitolak   = $penghapusan->where('status_verifikasi', 'ditolak')->count();
+        $verifDisetujui = $penghapusan->where('status_verifikasi', 'disetujui')->count();
+
         $pdf = Pdf::loadView(
             'pages.penghapusan.cetak_pdf',
             compact(
                 'penghapusan',
                 'totalNilai',
+                'totalData',
+                'kondisiMusnah',
+                'kondisiHilang',
+                'kondisiBerubahWujud',
+                'statusPending',
+                'statusDiproses',
+                'statusSelesai',
+                'verifMenunggu',
+                'verifDitolak',
+                'verifDisetujui',
                 'tanggalIndonesia',
                 'namaPenandatangan',
                 'penandatangan'
             )
         )->setPaper('a4', 'landscape');
+
 
         return $pdf->stream('laporan-penghapusan.pdf');
     }

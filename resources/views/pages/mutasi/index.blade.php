@@ -54,7 +54,7 @@
                             <div id="filter-asal"
                                  class="filter-dropdown hidden absolute mt-2 bg-white border rounded shadow z-40 w-44">
                                 <form method="GET" class="p-3">
-                                    <input type="hidden" name="kepemilikan_tujuan" value="{{ request('kepemilikan_tujuan') }}">
+                                    <input type="hidden" name="kepemilikan_asal" value="{{ request('kepemilikan_asal') }}">
                                     <input type="hidden" name="status_mutasi" value="{{ request('status_mutasi') }}">
 
                                     <label class="flex items-center gap-2 py-1">
@@ -96,7 +96,7 @@
                             <div id="filter-tujuan"
                                  class="filter-dropdown hidden absolute mt-2 bg-white border rounded shadow z-40 w-44">
                                 <form method="GET" class="p-3">
-                                    <input type="hidden" name="kepemilikan_asal" value="{{ request('kepemilikan_asal') }}">
+                                    <input type="hidden" name="kepemilikan_tujuan" value="{{ request('kepemilikan_tujuan') }}">
                                     <input type="hidden" name="status_mutasi" value="{{ request('status_mutasi') }}">
 
                                     <label class="flex items-center gap-2 py-1">
