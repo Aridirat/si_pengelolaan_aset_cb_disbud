@@ -86,15 +86,35 @@ class MutasiDataController extends Controller
 
         $mutasiData = $query->get();
 
+        /* ===============================
+        HITUNG JUMLAH PER FIELD
+        =============================== */
+        $fieldCounts = [];
+
+        foreach ($mutasiData as $item) {
+            $changedFields = CagarBudayaBitmask::decodeBitmask($item->bitmask);
+
+            foreach ($changedFields as $field) {
+                // jika user memilih field tertentu
+                if (!empty($fields) && !in_array($field, $fields)) {
+                    continue;
+                }
+
+                $fieldCounts[$field] = ($fieldCounts[$field] ?? 0) + 1;
+            }
+        }
+
         return Pdf::loadView('pages.mutasi_data.cetak_pdf', [
             'mutasiData' => $mutasiData,
             'selectedFields' => $fields,
+            'fieldCounts' => $fieldCounts, // <<< KIRIM KE VIEW
             'tanggal' => now()->locale('id')->isoFormat('D MMMM YYYY'),
             'penandatangan' => Auth::user()->id,
             'namaPenandatangan' => Auth::user()->nama,
         ])->setPaper('A4','landscape')
         ->stream();
     }
+
 
 
 }

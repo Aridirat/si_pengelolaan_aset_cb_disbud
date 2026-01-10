@@ -3,18 +3,76 @@
 <head>
     <meta charset="utf-8">
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 11px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #000; padding: 6px; text-align: center; }
-        th { background-color: #f2f2f2; }
-        .text-right { text-align: right; }
-        .no-border { border: none; }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 11pt;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 6px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .no-border {
+            border: none;
+        }
     </style>
+
+
 </head>
 <body>
 
-<h2 style="text-align:center;">LAPORAN DATA CAGAR BUDAYA</h2>
-<p style="text-align:center;">Dinas Kebudayaan Kabupaten Badung</p>
+    <table width="100%" style="border-collapse: collapse; margin-bottom: 10px;">
+        <tr>
+            <td style="text-align:center; border:none;">
+                <div style="font-size:14pt; font-weight:bold;">
+                    PEMERINTAH KABUPATEN BADUNG
+                </div>
+                <div style="font-size:16pt; font-weight:bold; margin-top:2px;">
+                    DINAS KEBUDAYAAN
+                </div>
+                <div style="font-size:11pt; margin-top:4px;">
+                    Pusat Pemerintahan Kabupaten Badung Mangupraja Mandala
+                </div>
+                <div style="font-size:11pt;">
+                    Jalan Raya Sempidi Mengwi – Kabupaten Badung Provinsi Bali (80351)
+                </div>
+                <div style="font-size:11pt;">
+                    Telp. (0361) 9009273 &nbsp; Faks. (0361) 9009274
+                </div>
+                <div style="font-size:11pt;">
+                    <i>
+                        Website: www.badungkab.go.id
+                    </i>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+<!-- GARIS KOP -->
+<hr style="border:0; border-top:4px solid #000; margin-top:8px;">
+<hr style="border:0; border-top:1px solid #000;">
+
+<h3 style="text-align:center;">
+        LAPORAN DATA CAGAR BUDAYA
+</h3>
+
 @php
 use Carbon\Carbon;
 
@@ -24,74 +82,60 @@ $tanggalIndonesia = Carbon::parse($tanggal)
 @endphp
 <p style="text-align:center;">Tanggal Cetak: {{ $tanggalIndonesia }}</p>
 
-<table style="width:60%; margin: 5px auto; border-collapse: collapse;">
-
+<table style="width:60%; font-size:11pt; border-collapse: collapse;">
     @if($jumlahTotal > 0)
     <tr>
-        <td style="border:1px solid #000; padding:6px; text-align:left;">
-            Jumlah Total Data Cagar Budaya
+        <td style="width:25%; border:none; text-align:left;">
+            Data cagar budaya
         </td>
-        <td style="border:1px solid #000; padding:6px; text-align:right;">
-            {{ $jumlahTotal }} Data
+        <td style="width:3%; border:none; text-align:left;">
+            :
+        </td>
+        <td style="width:52%; border:none; text-align:left;">
+            {{ $jumlahTotal }} data
         </td>
     </tr>
     @endif
 
     @if($jumlahBaik > 0)
     <tr>
-        <td style="border:1px solid #000; padding:6px; text-align:left;">
-            Kondisi Baik
-        </td>
-        <td style="border:1px solid #000; padding:6px; text-align:right;">
-            {{ $jumlahBaik }} Data
-        </td>
+        <td style="border:none; text-align:left;">Kondisi baik</td>
+        <td style="border:none; text-align:left;">:</td>
+        <td style="border:none; text-align:left;">{{ $jumlahBaik }} data</td>
     </tr>
     @endif
 
     @if($jumlahRusakRingan > 0)
     <tr>
-        <td style="border:1px solid #000; padding:6px; text-align:left;">
-            Kondisi Rusak Ringan
-        </td>
-        <td style="border:1px solid #000; padding:6px; text-align:right;">
-            {{ $jumlahRusakRingan }} Data
-        </td>
+        <td style="border:none; text-align:left;">Kondisi rusak ringan</td>
+        <td style="border:none; text-align:left;">:</td>
+        <td style="border:none; text-align:left;">{{ $jumlahRusakRingan }} data</td>
     </tr>
     @endif
 
     @if($jumlahRusakBerat > 0)
     <tr>
-        <td style="border:1px solid #000; padding:6px; text-align:left;">
-            Kondisi Rusak Berat
-        </td>
-        <td style="border:1px solid #000; padding:6px; text-align:right;">
-            {{ $jumlahRusakBerat }} Data
-        </td>
+        <td style="border:none; text-align:left;">Kondisi rusak berat</td>
+        <td style="border:none; text-align:left;">:</td>
+        <td style="border:none; text-align:left;">{{ $jumlahRusakBerat }} data</td>
     </tr>
     @endif
 
     @if($jumlahAktif > 0)
     <tr>
-        <td style="border:1px solid #000; padding:6px; text-align:left;">
-            Status Aktif
-        </td>
-        <td style="border:1px solid #000; padding:6px; text-align:right;">
-            {{ $jumlahAktif }} Data
-        </td>
+        <td style="border:none; text-align:left;">Status penetapan aktif</td>
+        <td style="border:none; text-align:left;">:</td>
+        <td style="border:none; text-align:left;">{{ $jumlahAktif }} data</td>
     </tr>
     @endif
 
     @if($jumlahTerhapus > 0)
     <tr>
-        <td style="border:1px solid #000; padding:6px; text-align:left;">
-            Status Terhapus
-        </td>
-        <td style="border:1px solid #000; padding:6px; text-align:right;">
-            {{ $jumlahTerhapus }} Data
-        </td>
+        <td style="border:none; text-align:left;">Status penetapan terhapus</td>
+        <td style="border:none; text-align:left;">:</td>
+        <td style="border:none; text-align:left;">{{ $jumlahTerhapus }} data</td>
     </tr>
     @endif
-
 </table>
 
 

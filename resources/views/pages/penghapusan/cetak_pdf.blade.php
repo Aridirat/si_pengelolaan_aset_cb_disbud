@@ -19,11 +19,86 @@
 <body>
 
 {{-- Header --}}
+{{-- KOP SURAT --}}
+    <table width="100%" style="border-collapse: collapse; margin-bottom: 10px;">
+        <tr>
+            <td style="text-align:center; border:none;">
+                <div style="font-size:14pt; font-weight:bold;">
+                    PEMERINTAH KABUPATEN BADUNG
+                </div>
+                <div style="font-size:16pt; font-weight:bold; margin-top:2px;">
+                    DINAS KEBUDAYAAN
+                </div>
+                <div style="font-size:11pt; margin-top:4px;">
+                    Pusat Pemerintahan Kabupaten Badung Mangupraja Mandala
+                </div>
+                <div style="font-size:11pt;">
+                    Jalan Raya Sempidi Mengwi – Kabupaten Badung Provinsi Bali (80351)
+                </div>
+                <div style="font-size:11pt;">
+                    Telp. (0361) 9009273 &nbsp; Faks. (0361) 9009274
+                </div>
+                <div style="font-size:11pt;">
+                    <i>
+                        Website: www.badungkab.go.id
+                    </i>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <!-- GARIS KOP -->
+    <hr style="border:0; border-top:4px solid #000; margin-top:8px;">
+    <hr style="border:0; border-top:1px solid #000;">
 <div style="text-align:center;">
     <h2>LAPORAN DATA PENGHAPUSAN CAGAR BUDAYA</h2>
-    <p>Dinas Kebudayaan Kabupaten Badung</p>
     <p>Tanggal Cetak: {{ $tanggalIndonesia }}</p>
 </div>
+
+@php
+$dataRingkasan = array_filter([
+    ['Total data penghapusan', $totalData],
+    ['Kondisi musnah', $kondisiMusnah],
+    ['Kondisi hilang', $kondisiHilang],
+    ['Kondisi berubah wujud', $kondisiBerubahWujud],
+    ['Status pending', $statusPending],
+    ['Status diproses', $statusDiproses],
+    ['Status selesai', $statusSelesai],
+    ['Verifikasi menunggu', $verifMenunggu],
+    ['Verifikasi ditolak', $verifDitolak],
+    ['Verifikasi disetujui', $verifDisetujui],
+], fn($item) => $item[1] > 0);
+
+$kolomKiri  = array_slice($dataRingkasan, 0, 6);
+$kolomKanan = array_slice($dataRingkasan, 6);
+@endphp
+
+<table style="width:50%; font-size:8pt; border-collapse:collapse; margin-bottom:15px; border:none;">
+    <tr>
+        <td style="width:50%; vertical-align:top; border:none;">
+            <table style="width:100%; border-collapse:collapse; border:none;">
+                @foreach($kolomKiri as $item)
+                <tr>
+                    <td style="width:50%; border:none; text-align:left;">{{ $item[0] }}</td>
+                    <td style="width:5%; border:none; text-align:left;">:</td>
+                    <td style="width:35%; border:none; text-align:left;">{{ $item[1] }} data</td>
+                </tr>
+                @endforeach
+            </table>
+        </td>
+
+        <td style="width:50%; vertical-align:top; border:none;">
+            <table style="width:100%; border-collapse:collapse; border:none;">
+                @foreach($kolomKanan as $item)
+                <tr>
+                    <td style="width:50%; border:none; text-align:left;">{{ $item[0] }}</td>
+                    <td style="width:5%; border:none; text-align:left;">:</td>
+                    <td style="width:35%; border:none; text-align:left;">{{ $item[1] }} data</td>
+                </tr>
+                @endforeach
+            </table>
+        </td>
+    </tr>
+</table>
 
 <br>
 

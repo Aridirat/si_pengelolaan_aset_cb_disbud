@@ -345,13 +345,55 @@ class PemugaranController extends Controller
         | DATA TANDA TANGAN
         ====================== */
 
+        $totalData = $pemugaran->count();
+
+        /* KONDISI */
+        $kondisiRusakRingan = $pemugaran->where('kondisi', 'rusak ringan')->count();
+        $kondisiRusakBerat  = $pemugaran->where('kondisi', 'rusak berat')->count();
+
+        /* TIPE PEMUGARAN */
+        $tipeKonsolidasi   = $pemugaran->where('tipe_pemugaran', 'konsolidasi')->count();
+        $tipeRehabilitasi  = $pemugaran->where('tipe_pemugaran', 'rehabilitasi')->count();
+        $tipeRestorasi     = $pemugaran->where('tipe_pemugaran', 'restorasi')->count();
+        $tipeRekonstruksi  = $pemugaran->where('tipe_pemugaran', 'rekonstruksi')->count();
+
+        /* STATUS PEMUGARAN */
+        $statusPending   = $pemugaran->where('status_pemugaran', 'pending')->count();
+        $statusDiproses  = $pemugaran->where('status_pemugaran', 'diproses')->count();
+        $statusSelesai   = $pemugaran->where('status_pemugaran', 'selesai')->count();
+
+        /* STATUS VERIFIKASI */
+        $verifMenunggu   = $pemugaran->where('status_verifikasi', 'menunggu')->count();
+        $verifDitolak    = $pemugaran->where('status_verifikasi', 'ditolak')->count();
+        $verifDisetujui  = $pemugaran->where('status_verifikasi', 'disetujui')->count();
+
+
         $pdf = Pdf::loadView('pages.pemugaran.cetak_pdf', [
-            'pemugaran' => $pemugaran,
-            'totalBiaya' => $totalBiaya,
-            'tanggal' => now()->format('d F Y'),
-            'penandatangan' => Auth::user()->id,
-            'namaPenandatangan' => Auth::user()->nama,
+            'pemugaran'           => $pemugaran,
+            'totalBiaya'          => $totalBiaya,
+            'totalData'           => $totalData,
+
+            'kondisiRusakRingan'  => $kondisiRusakRingan,
+            'kondisiRusakBerat'   => $kondisiRusakBerat,
+
+            'tipeKonsolidasi'     => $tipeKonsolidasi,
+            'tipeRehabilitasi'    => $tipeRehabilitasi,
+            'tipeRestorasi'       => $tipeRestorasi,
+            'tipeRekonstruksi'    => $tipeRekonstruksi,
+
+            'statusPending'       => $statusPending,
+            'statusDiproses'      => $statusDiproses,
+            'statusSelesai'       => $statusSelesai,
+
+            'verifMenunggu'       => $verifMenunggu,
+            'verifDitolak'        => $verifDitolak,
+            'verifDisetujui'      => $verifDisetujui,
+
+            'tanggal'             => now()->format('d F Y'),
+            'penandatangan'       => Auth::user()->id,
+            'namaPenandatangan'   => Auth::user()->nama,
         ])->setPaper('A4', 'landscape');
+
 
         return $pdf->stream('laporan-pemugaran.pdf');
     }

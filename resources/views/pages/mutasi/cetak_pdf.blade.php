@@ -17,11 +17,134 @@
 </head>
 <body>
     {{-- Header --}}
-    <div class="header" style="text-align:center;">
-        <h2>LAPORAN DATA MUTASI CAGAR BUDAYA</h2>
-        <p>Dinas Kebudayaan Kabupaten Badung</p>
-        <p>Tanggal Cetak: {{ $tanggalIndonesia }}</p>
-    </div>
+    <table width="100%" style="border-collapse: collapse; margin-bottom: 10px;">
+        <tr>
+            <td style="text-align:center; border:none;">
+                <div style="font-size:14pt; font-weight:bold;">
+                    PEMERINTAH KABUPATEN BADUNG
+                </div>
+                <div style="font-size:16pt; font-weight:bold; margin-top:2px;">
+                    DINAS KEBUDAYAAN
+                </div>
+                <div style="font-size:11pt; margin-top:4px;">
+                    Pusat Pemerintahan Kabupaten Badung Mangupraja Mandala
+                </div>
+                <div style="font-size:11pt;">
+                    Jalan Raya Sempidi Mengwi – Kabupaten Badung Provinsi Bali (80351)
+                </div>
+                <div style="font-size:11pt;">
+                    Telp. (0361) 9009273 &nbsp; Faks. (0361) 9009274
+                </div>
+                <div style="font-size:11pt;">
+                    <i>Website: www.badungkab.go.id</i>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+<hr style="border:0; border-top:4px solid #000; margin-top:8px;">
+<hr style="border:0; border-top:1px solid #000;">
+
+<h2 style="text-align:center;">
+    LAPORAN DATA MUTASI CAGAR BUDAYA
+</h2>
+<p style="text-align:center; font-size: 11pt;">
+    Tanggal Cetak: {{ $tanggalIndonesia }}
+</p>
+
+<table style="width:60%; font-size:11pt; border-collapse: collapse; margin-bottom:15px;">
+
+    @if($totalData > 0)
+    <tr>
+        <td style="width:25%; border:none; text-align:left;">Total data mutasi</td>
+        <td style="width:3%; border:none; text-align:left;">:</td>
+        <td style="width:52%; border:none; text-align:left;">
+            {{ $totalData }} data
+        </td>
+    </tr>
+    @endif
+
+    @if($asalPemerintah > 0)
+    <tr>
+        <td style="border:none; text-align:left;">Pemilik asal pemerintah</td>
+        <td style="border:none; text-align:left;">:</td>
+        <td style="border:none; text-align:left;">
+            {{ $asalPemerintah }} data
+        </td>
+    </tr>
+    @endif
+
+    @if($asalPribadi > 0)
+    <tr>
+        <td style="border:none; text-align:left;">Pemilik asal pribadi</td>
+        <td style="border:none; text-align:left;">:</td>
+        <td style="border:none; text-align:left;">
+            {{ $asalPribadi }} data
+        </td>
+    </tr>
+    @endif
+
+    @if($mutasiPending > 0)
+    <tr>
+        <td style="border:none; text-align:left;">Status mutasi pending</td>
+        <td style="border:none; text-align:left;">:</td>
+        <td style="border:none; text-align:left;">
+            {{ $mutasiPending }} data
+        </td>
+    </tr>
+    @endif
+
+    @if($mutasiDiproses > 0)
+    <tr>
+        <td style="border:none; text-align:left;">Status mutasi diproses</td>
+        <td style="border:none; text-align:left;">:</td>
+        <td style="border:none; text-align:left;">
+            {{ $mutasiDiproses }} data
+        </td>
+    </tr>
+    @endif
+
+    @if($mutasiSelesai > 0)
+    <tr>
+        <td style="border:none; text-align:left;">Status mutasi selesai</td>
+        <td style="border:none; text-align:left;">:</td>
+        <td style="border:none; text-align:left;">
+            {{ $mutasiSelesai }} data
+        </td>
+    </tr>
+    @endif
+
+    @if($verifMenunggu > 0)
+    <tr>
+        <td style="border:none; text-align:left;">Verifikasi menunggu</td>
+        <td style="border:none; text-align:left;">:</td>
+        <td style="border:none; text-align:left;">
+            {{ $verifMenunggu }} data
+        </td>
+    </tr>
+    @endif
+
+    @if($verifDitolak > 0)
+    <tr>
+        <td style="border:none; text-align:left;">Verifikasi ditolak</td>
+        <td style="border:none; text-align:left;">:</td>
+        <td style="border:none; text-align:left;">
+            {{ $verifDitolak }} data
+        </td>
+    </tr>
+    @endif
+
+    @if($verifDisetujui > 0)
+    <tr>
+        <td style="border:none; text-align:left;">Verifikasi disetujui</td>
+        <td style="border:none; text-align:left;">:</td>
+        <td style="border:none; text-align:left;">
+            {{ $verifDisetujui }} data
+        </td>
+    </tr>
+    @endif
+
+</table>
 
 <table>
     <thead>

@@ -244,12 +244,16 @@
                     </thead>
                     <tbody>
                         @forelse ($data as $index => $row)
-                        <tr class=" text-sm
-                                border-none
-                                {{ $row->status_penetapan === 'terhapus'
-                                    ? 'bg-gray-200 text-gray-700'
-                                    : 'hover:bg-gray-100' }}
+                        <tr class="text-sm border-none
+                                @if ($row->status_penetapan === 'terhapus')
+                                    bg-gray-200 text-gray-700
+                                @elseif ($row->status_penetapan === 'mutasi keluar')
+                                    bg-amber-100 text-amber-800
+                                @else
+                                    hover:bg-gray-100
+                                @endif
                             ">
+
                             <td class="py-3 text-center">{{ $data->firstItem() + $index }}</td>
                             <td class="py-3 text-center">{{ $row->nama_cagar_budaya }}</td>
                             <td class="py-3 text-center">{{ $row->kategori }}</td>
@@ -257,9 +261,14 @@
                             <td class="py-3 text-center">{{ $row->kondisi }}</td>
                             <td class="py-3 text-center">
                                 <span class="px-2 py-1 rounded text-xs font-semibold
-                                    {{ $row->status_penetapan == 'aktif'
-                                        ? 'bg-green-100 text-green-700'
-                                        : 'bg-gray-100 text-gray-600' }}">
+                                    @if ($row->status_penetapan === 'aktif')
+                                        bg-green-100 text-green-700
+                                    @elseif ($row->status_penetapan === 'mutasi keluar')
+                                        bg-amber-200 text-amber-800
+                                    @else
+                                        bg-gray-100 text-gray-600
+                                    @endif
+                                ">
                                     {{ $row->status_penetapan }}
                                 </span>
                             </td>
@@ -270,7 +279,7 @@
                                 <a href="{{ route('cagar_budaya.detail', $row->id_cagar_budaya) }}" class="py-1 px-2 bg-teal-500 hover:bg-teal-700 shadow-sm shadow-teal-400 text-white rounded-lg">
                                     <i class="fas fa-circle-info"></i>
                                 </a>
-                                @if ($row->status_penetapan === 'terhapus')
+                                @if ($row->status_penetapan !== 'aktif')
                                     <button
                                         type="button"
                                         disabled

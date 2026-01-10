@@ -28,9 +28,11 @@
                             <option 
                                 value="{{ $cb->id_cagar_budaya }}"
                                 data-kepemilikan="{{ $cb->status_kepemilikan }}"
+                                data-status-penetapan="{{ $cb->status_penetapan }}"
                             >
                                 {{ $cb->nama_cagar_budaya }}
                             </option>
+
                         @endforeach
                     </select>
                 @error('id_cagar_budaya')
@@ -81,15 +83,20 @@
                 {{-- Pemilik Tujuan --}}
                 <div>
                     <label class="text-sm font-medium">Pemilik Tujuan</label>
-                    <select name="kepemilikan_tujuan" class="w-full mt-1 border border-gray-300 rounded-md p-2">
+                    <select
+                        name="kepemilikan_tujuan"
+                        id="kepemilikanTujuan"
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2">
                         <option value="">Pilih kepemilikan tujuan</option>
                         <option value="pemerintah">Pemerintah</option>
                         <option value="pribadi">Pribadi</option>
                     </select>
-                @error('kepemilikan_tujuan')
-                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-                @enderror
+
+                    @error('kepemilikan_tujuan')
+                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
+
 
                 {{-- Tanggal Pengajuan --}}
                 <div>
@@ -195,22 +202,68 @@
 </div>
 
 <script>
-    document.getElementById('cagarBudayaSelect').addEventListener('change', function () {
-        const selected = this.options[this.selectedIndex];
-        const kepemilikan = selected.getAttribute('data-kepemilikan');
+document.addEventListener('DOMContentLoaded', function () {
 
-        const hiddenInput = document.getElementById('kepemilikanAsal');
-        const displaySelect = document.getElementById('kepemilikanAsalDisplay');
+    const cagarSelect   = document.getElementById('cagarBudayaSelect');
+    const asalHidden    = document.getElementById('kepemilikanAsal');
+    const asalDisplay   = document.getElementById('kepemilikanAsalDisplay');
+    const tujuanSelect  = document.getElementById('kepemilikanTujuan');
 
-        if (kepemilikan) {
-            hiddenInput.value = kepemilikan;
-            displaySelect.value = kepemilikan;
-        } else {
-            hiddenInput.value = '';
-            displaySelect.value = '';
+    function lockTujuanPemerintah() {
+        tujuanSelect.value = 'pemerintah';
+        tujuanSelect.classList.add(
+            'bg-gray-100',
+            'pointer-events-none',
+            'cursor-not-allowed'
+        );
+    }
+
+    function unlockTujuan() {
+        tujuanSelect.classList.remove(
+            'bg-gray-100',
+            'pointer-events-none',
+            'cursor-not-allowed'
+        );
+    }
+
+    function applyRules() {
+        const selected = cagarSelect.options[cagarSelect.selectedIndex];
+        if (!selected) return;
+
+        const asal   = selected.dataset.kepemilikan ?? '';
+        const status = selected.dataset.statusPenetapan ?? '';
+
+        // set asal
+        asalHidden.value  = asal;
+        asalDisplay.value = asal;
+
+        /*
+        |----------------------------------
+        | RULE BISNIS
+        |----------------------------------
+        */
+
+        // 1. Asal pribadi → tujuan pemerintah (LOCK)
+        if (asal === 'pribadi') {
+            lockTujuanPemerintah();
+            return;
         }
-    });
+
+        // 2. Asal pemerintah + status mutasi_keluar → tujuan pemerintah (LOCK)
+        if (asal === 'pemerintah' && status === 'mutasi keluar') {
+            lockTujuanPemerintah();
+            return;
+        }
+
+        // 3. Default → boleh dipilih
+        unlockTujuan();
+    }
+
+    cagarSelect.addEventListener('change', applyRules);
+});
 </script>
+
+
 
 
 @endsection

@@ -40,6 +40,12 @@
                             {{ $cagarBudaya['terhapus'] ?? 0 }}
                         </p>
                     </div>
+                    <div class="bg-white py-2 px-2 rounded-lg shadow transition duration-300 ease-in-out hover:scale-105">
+                        <p class="font-medium text-sm text-left">Status Mutasi Keluar</p>
+                        <p class="text-3xl font-bold mt-2 text-center">
+                            {{ $cagarBudaya['mutasi keluar'] ?? 0 }}
+                        </p>
+                    </div>
                 </div>
             </section>
 

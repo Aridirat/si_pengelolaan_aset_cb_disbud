@@ -15,6 +15,7 @@ class CagarBudayaFilter
     public const STATUS_PENETAPAN = [
         'aktif',
         'terhapus',
+        'mutasi keluar',
     ];
 
     public const KONDISI = [

@@ -165,6 +165,7 @@
             <hr class="text-gray-200">
             
             <div class="bg-white py-3 px-6 grid grid-cols-2 gap-6">
+                {{-- Kepemilikan Baru --}}
                 <div>
                     <label class="text-sm font-medium">Pemilik Baru</label>
 
@@ -179,11 +180,59 @@
                         name="status_kepemilikan"
                         value="{{ $mutasi->kepemilikan_tujuan }}">
                 </div>
+
+                @php
+                    $asal   = $mutasi->kepemilikan_asal;
+                    $tujuan = $mutasi->kepemilikan_tujuan;
+
+                    $autoStatus = null;
+                    $editable = false;
+
+                    if ($asal === 'pribadi' && $tujuan === 'pemerintah') {
+                        $autoStatus = 'aktif';
+                    } elseif ($asal === 'pemerintah' && $tujuan === 'pribadi') {
+                        $autoStatus = 'mutasi keluar';
+                    } elseif ($asal === 'pemerintah' && $tujuan === 'pemerintah') {
+                        $editable = true;
+                    }
+                @endphp
+
+                {{-- Status Penetapan --}}
+                <div>
+                    <label class="text-sm font-medium">Status Penetapan</label>
+
+                    @if ($editable)
+                        {{-- Bisa dipilih --}}
+                        <select name="status_penetapan"
+                            id="statusPenetapanSelect"
+                            class="w-full mt-1 border border-gray-300 rounded-md p-2">
+
+                            <option value="">Pilih status penetapan</option>
+                            <option value="aktif">Mutasi Masuk (Aktif)</option>
+                            <option value="mutasi keluar">Mutasi Keluar</option>
+                        </select>
+                    @else
+                        {{-- Otomatis --}}
+                        <input type="text"
+                            class="w-full mt-1 border rounded-md p-2 bg-gray-100"
+                            value="{{ $autoStatus === 'aktif'
+                                        ? 'Mutasi Masuk (Aktif)'
+                                        : 'Mutasi Keluar' }}"
+                            readonly>
+
+                        <input type="hidden"
+                            name="status_penetapan"
+                            id="statusPenetapanHidden"
+                            value="{{ $autoStatus }}">
+
+                    @endif
+                </div>
+
             </div>
 
 
             {{-- Tombol --}}
-            <div class="flex justify-end pb-6 col-start-2">
+            <div class="flex justify-end py-6 pe-6 col-start-2">
                 <button type="submit"
                         class="btn px-10 py-2 bg-indigo-500 hover:bg-indigo-600 shadow shadow-indigo-400 text-white font-semibold rounded-lg">
                     Verifikasi
@@ -245,6 +294,48 @@
         handleStatusMutasi();
         handleStatusVerifikasi();
     });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const statusVerifikasi = document.getElementById('statusVerifikasi');
+    const statusHidden     = document.getElementById('statusVerifikasiHidden');
+
+    const penetapanSelect  = document.getElementById('statusPenetapanSelect');
+    const penetapanHidden  = document.getElementById('statusPenetapanHidden');
+
+    function syncStatusPenetapan() {
+
+        const isApproved = statusHidden.value === 'disetujui';
+
+        // CASE: editable (select)
+        if (penetapanSelect) {
+            penetapanSelect.disabled = !isApproved;
+
+            if (!isApproved) {
+                penetapanSelect.classList.add('bg-gray-100', 'cursor-not-allowed');
+            } else {
+                penetapanSelect.classList.remove('bg-gray-100', 'cursor-not-allowed');
+            }
+        }
+
+        // CASE: otomatis (hidden)
+        if (penetapanHidden && !isApproved) {
+            // safety: jangan kirim nilai sebelum disetujui
+            penetapanHidden.value = penetapanHidden.value;
+        }
+    }
+
+    // jalan saat load
+    syncStatusPenetapan();
+
+    // jalan saat status verifikasi berubah
+    statusVerifikasi.addEventListener('change', function () {
+        statusHidden.value = this.value;
+        syncStatusPenetapan();
+    });
+});
 </script>
 
 @endsection
