@@ -55,7 +55,7 @@
             <div>
                 <label class="text-sm font-medium">Status Verifikasi</label>
                 <select id="statusVerifikasi"
-                        class="w-full mt-1 border rounded-md p-2 bg-gray-100"
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100"
                         disabled>
                     @foreach (['menunggu','disetujui','ditolak'] as $status)
                         <option value="{{ $status }}"
@@ -171,7 +171,7 @@
 
                     {{-- Tampilan saja --}}
                     <input type="text"
-                        class="w-full mt-1 border rounded-md p-2 bg-gray-100"
+                        class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100"
                         value="{{ ucfirst($mutasi->kepemilikan_tujuan) }}"
                         readonly>
 
@@ -199,7 +199,7 @@
 
                 {{-- Status Penetapan --}}
                 <div>
-                    <label class="text-sm font-medium">Status Penetapan</label>
+                    <label class="text-sm font-medium">Status Penetapan Baru</label>
 
                     @if ($editable)
                         {{-- Bisa dipilih --}}
@@ -214,7 +214,7 @@
                     @else
                         {{-- Otomatis --}}
                         <input type="text"
-                            class="w-full mt-1 border rounded-md p-2 bg-gray-100"
+                            class="w-full mt-1 border border-gray-300 rounded-md p-2 bg-gray-100"
                             value="{{ $autoStatus === 'aktif'
                                         ? 'Mutasi Masuk (Aktif)'
                                         : 'Mutasi Keluar' }}"
