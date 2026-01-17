@@ -86,7 +86,7 @@ $tanggalIndonesia = Carbon::parse($tanggal)
     @if($jumlahTotal > 0)
     <tr>
         <td style="width:25%; border:none; text-align:left;">
-            Data cagar budaya
+            Total data cagar budaya
         </td>
         <td style="width:3%; border:none; text-align:left;">
             :

@@ -85,6 +85,7 @@ class MutasiDataController extends Controller
         }
 
         $mutasiData = $query->get();
+        $totalMutasi = $mutasiData->count();
 
         /* ===============================
         HITUNG JUMLAH PER FIELD
@@ -107,7 +108,8 @@ class MutasiDataController extends Controller
         return Pdf::loadView('pages.mutasi_data.cetak_pdf', [
             'mutasiData' => $mutasiData,
             'selectedFields' => $fields,
-            'fieldCounts' => $fieldCounts, // <<< KIRIM KE VIEW
+            'fieldCounts' => $fieldCounts,
+            'totalMutasi' => $totalMutasi,
             'tanggal' => now()->locale('id')->isoFormat('D MMMM YYYY'),
             'penandatangan' => Auth::user()->id,
             'namaPenandatangan' => Auth::user()->nama,

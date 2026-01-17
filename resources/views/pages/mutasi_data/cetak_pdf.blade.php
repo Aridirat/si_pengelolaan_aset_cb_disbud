@@ -58,11 +58,21 @@
 <p style="text-align:center;">Tanggal Cetak: {{ $tanggal }}</p>
 
 <table style="width:60%; font-size:11px; border-collapse: collapse; margin-bottom:15px;">
+    <tr>
+        <td style="width:40%; border:none; text-align:left;">
+            Jumlah total mutasi data
+        </td>
+        <td style="width:5%; border:none;">:</td>
+        <td style="width:55%; border:none; text-align:left;">
+            {{ $totalMutasi }} data
+        </td>
+    </tr>
+
     @foreach ($fieldCounts as $field => $jumlah)
         @if($jumlah > 0)
         <tr>
             <td style="width:40%; border:none; text-align:left;">
-                Jumlah {{ ucwords(str_replace('_',' ', $field)) }}
+                {{ ucfirst(strtolower('jumlah mutasi ' . str_replace('_',' ', $field))) }}
             </td>
             <td style="width:5%; border:none;">:</td>
             <td style="width:55%; border:none; text-align:left;">
