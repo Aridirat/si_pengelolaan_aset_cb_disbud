@@ -32,7 +32,7 @@
                 </button>
 
                 <h3 class="font-semibold text-lg mb-4 text-gray-800">
-                    Pilih Field Mutasi yang Akan Dicetak
+                    Pilih Field Mutasi yang akan Dicetak
                 </h3>
 
                 <form method="GET" action="{{ route('mutasi_data.cetak.pdf') }}" target="_blank">

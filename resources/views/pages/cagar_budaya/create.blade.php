@@ -137,13 +137,28 @@
                         <label class="block text-sm font-medium mb-1">
                             Lokasi
                         </label>
-                        <input type="text"
-                               name="lokasi"
-                               class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring focus:ring-gray-300"
-                               placeholder="Desa, Kecamatan">
-                            @error('lokasi')
-                                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                            @enderror
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="kecamatan"
+                                    class="w-full px-3 py-2 rounded-lg border border-gray-300">
+                                <option value="">Pilih Kecamatan</option>
+                                @foreach($wilayah as $kec => $desa)
+                                    <option value="{{ $kec }}">{{ $kec }}</option>
+                                @endforeach
+                            </select>
+
+                            <select id="desa"
+                                    class="w-full px-3 py-2 rounded-lg border border-gray-300">
+                                <option value="">Pilih Desa</option>
+                            </select>
+                        </div>
+
+                        {{-- Hidden input yang benar-benar dikirim --}}
+                        <input type="hidden" name="lokasi" id="lokasi">
+
+                        @error('lokasi')
+                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- STATUS PENETAPAN --}}
@@ -345,5 +360,39 @@
         });
     });
 </script>
+
+<script>
+    const wilayah = @json($wilayah);
+
+    const kecamatanSelect = document.getElementById('kecamatan');
+    const desaSelect = document.getElementById('desa');
+    const lokasiInput = document.getElementById('lokasi');
+
+    kecamatanSelect.addEventListener('change', function() {
+        desaSelect.innerHTML = '<option value="">Pilih Desa</option>';
+
+        const kec = this.value;
+        if (wilayah[kec]) {
+            wilayah[kec].forEach(function(desa) {
+                const opt = document.createElement('option');
+                opt.value = desa;
+                opt.textContent = desa;
+                desaSelect.appendChild(opt);
+            });
+        }
+
+        lokasiInput.value = '';
+    });
+
+    desaSelect.addEventListener('change', function() {
+        const desa = this.value;
+        const kec = kecamatanSelect.value;
+
+        if (desa && kec) {
+            lokasiInput.value = desa + ', ' + kec;
+        }
+    });
+</script>
+
 
 @endsection

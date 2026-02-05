@@ -139,8 +139,8 @@
                             </th>
 
                             {{-- Kondisi --}}
-                            <th class="py-2 text-center relative">
-                                <div class="flex items-center justify-center gap-2"></div>
+                            <th class="p-2 text-center relative">
+                                <div class="flex items-center justify-center gap-2">
                                     <span>Kondisi</span>
                                     <button type="button"
                                         class="filter-toggle text-sky-500 hover:text-sky-700"
@@ -149,6 +149,7 @@
                                         <i class="fas fa-filter"></i>
                                     </button>
                                 </div>
+                                
 
                                 <div id="filter-kondisi" class="filter-dropdown hidden absolute mt-2 left-0 bg-white border rounded shadow z-40 w-44">
                                     <form method="GET" class="p-3" id="form-filter-kondisi">

@@ -224,18 +224,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!display || !hidden) return;
 
-        // Format nilai awal (saat edit)
+        // Hilangkan .00 saat load awal
         if (hidden.value) {
-            display.value = formatRibuan(hidden.value.replace(/\D/g, ''));
+            let val = hidden.value.split('.')[0];
+            display.value = formatRibuan(val);
+            hidden.value = val;
         }
 
-        // Saat user mengetik
         display.addEventListener('input', function () {
             let raw = this.value.replace(/\D/g, '');
             hidden.value = raw;
             this.value = formatRibuan(raw);
         });
     }
+
 
     // Aktifkan untuk biaya pemugaran
     setupRupiahInput('biaya_pemugaran_display', 'biaya_pemugaran');

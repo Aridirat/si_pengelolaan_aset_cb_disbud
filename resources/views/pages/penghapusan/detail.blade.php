@@ -8,6 +8,67 @@
         <i class="fas fa-angle-left"></i> Kembali
     </a>
 
+    {{-- Road Map Verifikasi --}}
+    <div class="bg-white rounded-xl p-6 mb-5">
+        <p class="font-semibold mb-4">Status Verifikasi</p>
+
+        @php
+            $steps = ['pending','diproses','selesai','verifikasi'];
+            $statusPem = $penghapusan->status_penghapusan;
+            $statusVer = $penghapusan->status_verifikasi;
+
+            // Tentukan warna utama
+            if ($statusVer == 'disetujui') {
+                $color = 'green';
+            } elseif ($statusVer == 'ditolak') {
+                $color = 'red';
+            } else {
+                $color = 'green';
+            }
+        @endphp
+
+        <div class="flex items-center space-x-6">
+            @foreach($steps as $step)
+                <div class="flex flex-col items-center">
+                    <div class="
+                        w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold
+                        {{ 
+                            ($step != 'verifikasi' && array_search($step, ['pending','diproses','selesai']) 
+                            <= array_search($statusPem, ['pending','diproses','selesai']))
+                            || ($step == 'verifikasi' && $statusVer != 'menunggu')
+                            ? 'bg-' . $color . '-500 text-white'
+                            : 'bg-gray-300 text-gray-600'
+                        }}">
+                        {{ $loop->iteration }}
+                    </div>
+
+                    <span class="text-sm mt-1 capitalize">
+                        {{ $step == 'verifikasi' ? ucfirst($statusVer) : ucfirst($step) }}
+                    </span>
+                </div>
+
+                @if(!$loop->last)
+                    <div class="
+                        flex-1 h-1
+                        {{ 
+                            // Jalur dari pending selalu hijau
+                            array_search($step, ['pending','diproses','selesai','verifikasi']) 
+                            >= 0 &&
+                            (
+                                $statusVer != 'menunggu' ||
+                                array_search($step, ['pending','diproses','selesai']) 
+                                <= array_search($statusPem, ['pending','diproses','selesai'])
+                            )
+                            ? 'bg-' . $color . '-500'
+                            : 'bg-gray-300'
+                        }}">
+                    </div>
+                @endif
+
+            @endforeach
+        </div>
+    </div>
+
     {{-- Card --}}
     <div class="bg-white rounded-xl p-6">
 

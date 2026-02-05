@@ -40,6 +40,9 @@
                         @enderror
                 </div>
 
+                
+                {{-- Status --}}
+                @if(auth()->user()->id !== $user->id)
                 {{-- Role --}}
                 <div>
                     <label class="block font-bold text-gray-700 mb-1">Role</label>
@@ -53,9 +56,6 @@
                             <span class="text-red-500">{{ $message }}</span>
                         @enderror
                 </div>
-
-                {{-- Status --}}
-                @if(auth()->user()->id !== $user->id)
                 <div>
                     <label class="block font-bold text-gray-700 mb-1">Status</label>
                     <select name="status_aktif"

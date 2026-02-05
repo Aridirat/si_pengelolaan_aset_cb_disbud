@@ -89,7 +89,43 @@ class CagarBudayaController extends Controller
     
     public function create()
     {
-        return view('pages.cagar_budaya.create');
+        $wilayah = [
+            'Abiansemal' => [
+                'Abiansemal','Angantaka','Ayunan','Blahkiuh','Bongkasa',
+                'Bongkasa Pertiwi','Darmasaba','Dauh Yeh Cani','Jagapati',
+                'Mambal','Mekar Bhuana','Punggul','Sangeh','Sedang',
+                'Selat','Sibang Gede','Sibang Kaja','Taman'
+            ],
+
+            'Kuta' => [
+                'Kedonganan','Tuban','Kuta','Legian','Seminyak'
+            ],
+
+            'Kuta Selatan' => [
+                'Pecatu','Ungasan','Kutuh','Benoa',
+                'Tanjung Benoa','Jimbaran'
+            ],
+
+            'Kuta Utara' => [
+                'Canggu','Dalung','Tibubeneng',
+                'Kerobokan','Kerobokan Kelod','Kerobokan Kaja'
+            ],
+
+            'Mengwi' => [
+                'Baha','Buduk','Cemagi','Gulingan','Kekeran','Kuwum',
+                'Mengwi','Mengwitani','Munggu','Penarungan','Pererenan',
+                'Sembung','Sobangan','Tumbak Bayuh','Werdi Bhuwana',
+                'Abianbase','Kapal','Lukluk','Sading','Sempidi'
+            ],
+
+            'Petang' => [
+                'Belok','Carang Sari','Pangsan','Getasan','Pelaga',
+                'Petang','Sulangai'
+            ],
+        ];
+
+
+        return view('pages.cagar_budaya.create', compact('wilayah'));
     }
     /**
      * Menyimpan data cagar budaya baru.
